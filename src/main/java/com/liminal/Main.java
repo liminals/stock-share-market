@@ -29,5 +29,9 @@ public class Main extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
-
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.getRequestDispatcher("myapp/jsps/gamepage.jsp").forward(request, response);
+	}
 }
