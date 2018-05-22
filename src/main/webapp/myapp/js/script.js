@@ -12,12 +12,12 @@ function countTurns() {
 
 function updateStockPrices() {
 	var allStocksURL = serviceUrl + 'rest/stock/all';
-	console.log('calling stock sesrvice');
 	$.ajax(allStocksURL, {
 		dataType : 'json',
 		success : function(data) {
 			allStocksJSON = data;
 			updateStockDash(data);
+			// loadJSONData();
 		},
 		error : function() {
 			console.log('An error occured!');
@@ -29,7 +29,7 @@ function updateStockDash(data) {
 	var result = '<ul>';
 	$.each(data, function(key, value) {
 		result += '<li>';
-		result += '<h4>' + value.name + ' [' + value.short_name + ']' + '</h4>';
+		result += '<h5>' + value.name + ' [' + value.short_name + ']' + '</h5>';
 		result += '<p>' + value.current_price + '</p>';
 		result += '</li>';
 	});
@@ -37,7 +37,7 @@ function updateStockDash(data) {
 	$('#stockGraph').html(result);
 }
 
-/*$('#searchStock').on('input propertychange paste', function() {
+$('#searchStock').on('input propertychange paste', function() {
 	var searchValue = $.trim($(this).val());
 	var reg = new RegExp(searchValue, 'i');
 	if (searchValue != '') {
@@ -51,6 +51,8 @@ function updateStockDash(data) {
 			}
 		});
 		result += '</ul>';
-		$('#serachResults').html(result);
+		$('#searchResults').html(result);
+	} else {
+		$('#searchResults').html("");
 	}
-});*/
+});
