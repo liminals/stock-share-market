@@ -21,6 +21,7 @@ public class StockService {
 	@GET
 	@Path("/all")
 	public List<Stock> getAll(){
+		System.out.println("getAll stocks called!");
 		return dao.getAll();
 	}
 }
