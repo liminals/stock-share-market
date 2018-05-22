@@ -1,0 +1,25 @@
+body {
+	background: #799456;
+}
+
+h1 {
+	color: red;
+}
+
+#stockDashboard {
+	width: 1024px;
+	margin: 0 auto;
+	border: 1px solid black;
+}
+
+#searchStockDiv {
+	margin: 2px;
+	border-bottom: 1px solid red;
+}
+
+#stockGraph {
+	margin-top: 3px;
+	border-top: 1px solid black;
+	width: 400px;
+	height: 400px;
+}
