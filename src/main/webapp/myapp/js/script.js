@@ -17,7 +17,7 @@ function updateStockPrices() {
 		success : function(data) {
 			allStocksJSON = data;
 			updateStockDash(data);
-			// loadJSONData();
+			loadJSONData();
 		},
 		error : function() {
 			console.log('An error occured!');
