@@ -4,7 +4,7 @@ public class Stock {
 	private int id;
 	private String sector;
 	private String name;
-	private double current_price;
+	private float current_price;
 
 	public int getId() {
 		return id;
@@ -30,11 +30,11 @@ public class Stock {
 		this.name = name;
 	}
 
-	public double getCurrent_price() {
+	public float getCurrent_price() {
 		return current_price;
 	}
 
-	public void setCurrent_price(double current_price) {
+	public void setCurrent_price(float current_price) {
 		this.current_price = current_price;
 	}
 

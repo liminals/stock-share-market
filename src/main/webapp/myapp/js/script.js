@@ -23,6 +23,16 @@ function loadInitialStocks() {
 			console.log('An error occured!');
 		}
 	});
+	var gameURL = serviceUrl + 'rest/game/start';
+	$.ajax(gameURL, {
+		type: 'post',
+		success : function(data) {
+			console.log(data);
+		},
+		error : function() {
+			console.log('An error occured!');
+		}
+	});
 }
 
 $('#searchStock').on('input propertychange paste', function() {
@@ -47,9 +57,11 @@ $('#searchStock').on('input propertychange paste', function() {
 
 // update the price of a single stock
 function updateNewStockPrices() {
-	var updatePriceStock = serviceUrl + 'rest/stock/updateprice/';
+	// var updatePriceStock = serviceUrl + 'rest/stock/updateprice/';
+	var updatePriceStock = serviceUrl + 'rest/game/getNewPrice';
 	$.each(allStocksJSON, function(k, v) {
 		var data = JSON.stringify(v);
+		console.log(data);
 		$.ajax(updatePriceStock, {
 			type: 'post',
 			data: data,

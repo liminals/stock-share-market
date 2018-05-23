@@ -54,8 +54,18 @@ public class StockDAO {
 	// update the price of single stock
 	// need to create price algorithm
 	public Stock updatePrice(Stock s) {
-		double newPrice = (s.getCurrent_price() * 1.5) / 3;
+		// float newPrice = (s.getCurrent_price() * 1.5) / 3f;
+		float newPrice = s.getCurrent_price() * 3f / 1.5f;
 		s.setCurrent_price(newPrice);
+		String sql = "update stock set current_price=? where id=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setFloat(1, s.getCurrent_price());
+			pstmt.setInt(2, s.getId());
+			int r = pstmt.executeUpdate();
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
 		return s;
 	}
 }
