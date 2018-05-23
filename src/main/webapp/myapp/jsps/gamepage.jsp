@@ -17,7 +17,8 @@
 	<h3 id="currentTurn">Current Turn</h3>
 	<h4>Stocks</h4>
 	
-	<button onclick="updateStockPrices()">Load</button>
+	<button onclick="loadInitialStocks()">Load</button>
+	<button onclick="updateNewStockPrices()">Update</button>
 	<div id="stockDashboard">
 		<div id="searchStockDiv">
 			<label>Search Stocks </label>
@@ -26,7 +27,7 @@
 		</div>
 		<canvas id="stockGraph"></canvas>
 	</div>
-	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/Chart.bundle.js"%>"></script>
+	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/Chart.bundle.min.js"%>"></script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/jquery-3.3.1.min.js"%>"></script>
 	<script type="text/javascript">
 		var serviceUrl = "<%= serviceUrl%>";

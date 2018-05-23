@@ -29,6 +29,7 @@ public class StockDAO {
 		}
 	}
 	
+	// initial return of all the stocks
 	public List<Stock> getAll(){
 		List<Stock> stocks = new ArrayList<Stock>();
 		String sql = "select * from stock";
@@ -41,12 +42,20 @@ public class StockDAO {
 				s.setSector(rs.getString(2));
 				s.setName(rs.getString(3));
 				s.setCurrent_price(rs.getFloat(4));
-				s.setShort_name(rs.getString(5));
 				stocks.add(s);
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
 		return stocks;
+	}
+	
+	// T14
+	// update the price of single stock
+	// need to create price algorithm
+	public Stock updatePrice(Stock s) {
+		double newPrice = (s.getCurrent_price() * 1.5) / 3;
+		s.setCurrent_price(newPrice);
+		return s;
 	}
 }

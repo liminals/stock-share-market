@@ -4,8 +4,7 @@ public class Stock {
 	private int id;
 	private String sector;
 	private String name;
-	private float current_price;
-	private String short_name;
+	private double current_price;
 
 	public int getId() {
 		return id;
@@ -31,26 +30,17 @@ public class Stock {
 		this.name = name;
 	}
 
-	public float getCurrent_price() {
+	public double getCurrent_price() {
 		return current_price;
 	}
 
-	public void setCurrent_price(float current_price) {
+	public void setCurrent_price(double current_price) {
 		this.current_price = current_price;
-	}
-
-	public String getShort_name() {
-		return short_name;
-	}
-
-	public void setShort_name(String short_name) {
-		this.short_name = short_name;
 	}
 
 	@Override
 	public String toString() {
-		return "Stock [id=" + id + ", sector=" + sector + ", name=" + name + ", current_price=" + current_price
-				+ ", short_name=" + short_name + "]";
+		return "Stock [id=" + id + ", sector=" + sector + ", name=" + name + ", current_price=" + current_price + "]";
 	}
 
 }
