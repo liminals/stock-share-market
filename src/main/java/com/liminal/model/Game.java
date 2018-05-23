@@ -2,9 +2,14 @@ package com.liminal.model;
 
 import java.util.List;
 
+import com.liminal.controller.GameTimer;
+
 public class Game {
+	private GameTimer gameTimer;
+	private List<Stock> stocks;
 	private int turns;
 	private int currentTurn;
+	private Event currentEvent;
 	private List<String> marketTrend;
 	private List<Integer> marketValue;
 	private List<String> financeTrend;
@@ -15,6 +20,33 @@ public class Game {
 	private List<Integer> healthcareValue;
 	private List<String> technologyTrend;
 	private List<Integer> technologyValue;
+	private List<Boolean> eventStream;
+	
+	
+	public List<Stock> getStocks() {
+		return stocks;
+	}
+
+	public void setStocks(List<Stock> stocks) {
+		this.stocks = stocks;
+	}
+
+	public GameTimer getGameTimer() {
+		return gameTimer;
+	}
+	
+	public Event getCurrentEvent() {
+		return currentEvent;
+	}
+
+	public void setCurrentEvent(Event currentEvent) {
+		this.currentEvent = currentEvent;
+	}
+
+
+	public void setGameTimer(GameTimer gameTimer) {
+		this.gameTimer = gameTimer;
+	}
 	public int getTurns() {
 		return turns;
 	}
@@ -86,6 +118,12 @@ public class Game {
 	}
 	public void setTechnologyValue(List<Integer> technologyValue) {
 		this.technologyValue = technologyValue;
+	}
+	public List<Boolean> getEventStream() {
+		return eventStream;
+	}
+	public void setEventStream(List<Boolean> eventStream) {
+		this.eventStream = eventStream;
 	}
 	
 }

@@ -50,22 +50,46 @@ public class StockDAO {
 		return stocks;
 	}
 	
-	// T14
-	// update the price of single stock
-	// need to create price algorithm
 	public Stock updatePrice(Stock s) {
-		// float newPrice = (s.getCurrent_price() * 1.5) / 3f;
-		float newPrice = s.getCurrent_price() * 3f / 1.5f;
-		s.setCurrent_price(newPrice);
 		String sql = "update stock set current_price=? where id=?";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setFloat(1, s.getCurrent_price());
 			pstmt.setInt(2, s.getId());
-			int r = pstmt.executeUpdate();
+			pstmt.executeUpdate();
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
 		return s;
+	}
+	
+	public List<String> getSectors() {
+		String sql = "select sector from stock";
+		List<String> sectors = new ArrayList<>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				sectors.add(rs.getString(1));
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return sectors;
+	}
+	
+	public List<Integer> getStocks() {
+		String sql = "select id from stock";
+		List<Integer> stocks = new ArrayList<>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				stocks.add(rs.getInt(1));
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return stocks;
 	}
 }

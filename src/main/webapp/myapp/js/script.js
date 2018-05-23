@@ -1,13 +1,27 @@
-var turn = 1;
-var timer = setInterval(countTurns, 1000 * 2);
+var turn;
+var totalTurns;
+var timer = setInterval(countTurns, 1000 * 10);
 var allStocksJSON;
-console.log(serviceUrl);
+var labelData = [];
+var gameJSON;
+
+(function initialLoading() {
+	var gameUrl = serviceUrl + 'rest/game/start'; 
+	$.ajax(gameUrl, {
+		type: 'post',
+		success: function(gameData) {
+			gameJSON = gameData;
+			$('#currentTurn').text('Current Turn: ' + gameJSON.currentTurn);
+			labelData.push(gameJSON.currentTurn);
+		}
+	});
+	loadInitialStocks();
+})();
 
 function countTurns() {
-	if (turn == 5)
+	if (turn == 35)
 		clearInterval(timer);
-	$('#currentTurn').text('Current Turn: ' + turn++);
-	// loadInitialStocks();
+	canRequestData();
 }
 
 // loads the initial stock data from database, only one time
@@ -18,16 +32,6 @@ function loadInitialStocks() {
 		success : function(data) {
 			allStocksJSON = data;
 			loadJSONData();
-		},
-		error : function() {
-			console.log('An error occured!');
-		}
-	});
-	var gameURL = serviceUrl + 'rest/game/start';
-	$.ajax(gameURL, {
-		type: 'post',
-		success : function(data) {
-			console.log(data);
 		},
 		error : function() {
 			console.log('An error occured!');
@@ -56,23 +60,84 @@ $('#searchStock').on('input propertychange paste', function() {
 });
 
 // update the price of a single stock
+// need to be automatic delete this
 function updateNewStockPrices() {
-	// var updatePriceStock = serviceUrl + 'rest/stock/updateprice/';
 	var updatePriceStock = serviceUrl + 'rest/game/getNewPrice';
-	$.each(allStocksJSON, function(k, v) {
-		var data = JSON.stringify(v);
-		console.log(data);
-		$.ajax(updatePriceStock, {
-			type: 'post',
-			data: data,
-			dataType : 'json',
-			contentType: 'application/json',
-			success : function(newStockData) {
-				updateStockPrice(newStockData);
-			},
-			error : function() {
-				console.log('An error occured!');
+	var stocksJSON = JSON.stringify(allStocksJSON);
+	$.ajax(updatePriceStock, {
+		type: 'post',
+		data: stocksJSON,
+		dataType: 'json',
+		contentType: 'application/json',
+		success: function(newStocksData) {
+			$.each(newStocksData, function(k, v) {
+				updateStockPrice(v);
+				//console.log(v);
+			});
+		},
+		error: function() {
+			console.log('An error occured!');
+		}
+	});
+	checkForEvents();
+}
+
+// check for events
+function checkForEvents() {
+	var eventUrl = serviceUrl + 'rest/game/event';
+	$.ajax(eventUrl, {
+		type: 'get',
+		dataType: 'json',
+		success: function(data) {
+			if (data !== undefined) {
+				var ul = '<ul>' + data.name;
+				ul += '<li> value:    ' + data.value + '</li>';
+				ul += '<li> duration: ' + data.duration + '</li>';
+				ul += '</ul>';
+				$('#eventDetails').html(ul);
+				console.log(data);
 			}
-		});
+		},
+		error: function() {
+			console.log('error');
+		}
+	});
+}
+
+function canRequestData() {
+	var url = serviceUrl + 'rest/game/turn/' + gameJSON.currentTurn;
+	$.ajax(url, {
+		type: 'get',
+		dataType: 'json',
+		success: function(data) {
+			if (data) {
+				updateTurn();
+				updateNewStockPrices();
+			}
+			console.log(data);
+		},
+		error: function() {
+			console.log('error');
+		}
+	})
+}
+
+function updateTurn() {
+	var turnUrl = serviceUrl + 'rest/game/updateTurn';
+	var gameData = JSON.stringify(gameJSON);
+	$.ajax(turnUrl, {
+		type: 'post',
+		dataType: 'json',
+		data: gameData,
+		contentType: 'application/json',
+		success: function(gameData) {
+			gameJSON = gameData;
+			console.log(gameData);
+			if (turn != gameJSON.currentTurn){
+				turn = gameJSON.currentTurn;
+				$('#currentTurn').text('Current Turn: ' + turn);
+				labelData.push(turn);
+			}
+		}
 	});
 }

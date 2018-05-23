@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.liminal.controller.GameController;
+import com.liminal.controller.GameTimer;
 import com.liminal.model.Game;
 
 public class GameSingleton {
@@ -17,10 +19,18 @@ public class GameSingleton {
 
 	private GameSingleton() {
 		game = new Game();
-		game.setTurns(20);
-		game.setCurrentTurn(0);
+		game.setTurns(35);
+		game.setCurrentTurn(1);
 		randomGenerator = new Random();
 		initialLoading(game.getTurns());
+	}
+	
+	public void setGameTimer() {
+		this.game.setGameTimer(new GameTimer(GameSingleton.instance));
+	}
+	
+	public void startGameTimer() {
+		this.game.getGameTimer().startTimer();
 	}
 
 	public static GameSingleton getInstance() {
@@ -30,6 +40,9 @@ public class GameSingleton {
 		return instance;
 	}
 	
+	public void destroyInstance() {
+		this.instance = null;
+	}
 	public Game getGame() {
 		return this.game;
 	}
@@ -47,6 +60,8 @@ public class GameSingleton {
 		game.setUtilitiesValue(setTrendValues(game.getUtilitiesValue(), game.getUtilitiesTrend()));
 		game.setHealthcareValue(setTrendValues(game.getHealthcareValue(), game.getHealthcareTrend()));
 		game.setTechnologyValue(setTrendValues(game.getTechnologyValue(), game.getTechnologyTrend()));
+		
+		game.setEventStream(makeEventStream(game.getEventStream()));
 	}
 	
 	// only set the initial trend value
@@ -94,10 +109,23 @@ public class GameSingleton {
 		return trendArray;
 	}
  	
-	public void setTurn(int turn) {
-		this.game.setCurrentTurn(turn);
+	// return initial event stream
+	private List<Boolean> makeEventStream(List<Boolean> stream) {
+		stream = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			stream.add(false);
+		}
+		stream.add(true);
+		return stream;
 	}
-	public int getTurn() {
-		return this.game.getCurrentTurn();
+	
+	// run this after an event ended
+	private List<Boolean> updateEventStream(List<Boolean> stream) {
+		int currentTurn = this.game.getCurrentTurn() - 1;
+		for (int i = currentTurn; i < currentTurn + 9; i++) {
+			stream.add(false);
+		}
+		stream.add(true);
+		return stream;
 	}
 }
