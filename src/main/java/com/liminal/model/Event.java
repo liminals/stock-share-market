@@ -1,6 +1,7 @@
 package com.liminal.model;
 
 public class Event {
+	private int id;
 	private int stockId;
 	private String name;
 	private String type;
@@ -10,6 +11,13 @@ public class Event {
 	
 	public enum Type {
 		STOCK, SECTOR
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getId() {
+		return this.id;
 	}
 	public int getStockId() {
 		return stockId;

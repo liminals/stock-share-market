@@ -8,23 +8,30 @@ package com.liminal.controller;
 import java.util.List;
 import java.util.Random;
 
-import com.liminal.dao.GameSingleton;
+import org.json.JSONObject;
+
 import com.liminal.dao.StockDAO;
 import com.liminal.model.Event;
+import com.liminal.model.Game;
 import com.liminal.model.Stock;
 
 public class GameController {
 	private Random randomGenerator;
-	private GameSingleton gs;
+	private Game game;
 	private StockDAO stockDAO;
-
-	public void setGameSingleton(GameSingleton gs) {
-		this.gs = gs;
+	
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	
+	public Game getGame() {
+		return this.game;
 	}
 
-	public GameController() {
-		randomGenerator = new Random();
-		stockDAO = new StockDAO();
+	public GameController(Game game) {
+		this.game = game;
+		this.randomGenerator = new Random();
+		this.stockDAO = new StockDAO();
 	}
 	
 	private int getRandomTrend() {
@@ -32,23 +39,9 @@ public class GameController {
 		int max = 2;
 		return randomGenerator.nextInt(max + 1 - min) + min;
 	}
-	
-	private int getSectorTrend(String sector) {
-		int value;
-		if (sector.equalsIgnoreCase("Finance")) {
-			value = getFinanceValue(this.gs.getGame().getCurrentTurn());
-		} else if (sector.equalsIgnoreCase("Utilities")){
-			value = getUtilitiesValue(this.gs.getGame().getCurrentTurn());
-		} else if (sector.equalsIgnoreCase("Healthcare")){
-			value = getHealthcareValue(this.gs.getGame().getCurrentTurn());
-		} else {
-			value = getTechnologyValue(this.gs.getGame().getCurrentTurn());
-		}
-		return value;
-	}
-	
+		
 	private int getEventScore(Stock s) {
-		Event currentEvent = this.gs.getGame().getCurrentEvent();
+		Event currentEvent = this.game.getCurrentEvent();
 		if (currentEvent != null) {
 			String type = currentEvent.getType();
 			if (type.equals(Event.Type.SECTOR.toString()) && currentEvent.getSector().equalsIgnoreCase(s.getSector())) {
@@ -65,9 +58,9 @@ public class GameController {
 	// Added events
 	private Stock updatePrice(Stock s) {
 		int stockValue = 0;
-		int marketValue = getMarketValue(this.gs.getGame().getCurrentTurn());
+		int marketValue = getMarketValue(game.getCurrentTurn());
 		int randomValue = getRandomTrend();
-		int sectorValue = getSectorTrend(s.getSector());
+		int sectorValue = getSectorValue(game.getCurrentTurn(), s.getSector());
 		int eventValue = getEventScore(s);
 		stockValue = marketValue + randomValue + sectorValue + eventValue;
 		
@@ -88,7 +81,7 @@ public class GameController {
 	
 	// this will update the price in game object
 	private void updateStockInGame(Stock s) {
-		List<Stock> stocks = this.gs.getGame().getStocks();
+		List<Stock> stocks = game.getStocks();
 		for (Stock st : stocks) {
 			if (st.getId() == s.getId()) {
 				st.setCurrent_price(s.getCurrent_price());
@@ -97,7 +90,7 @@ public class GameController {
 	}
 	
 	public Stock getUpdatedStock(Stock s) {
-		List<Stock> stocks = this.gs.getGame().getStocks();
+		List<Stock> stocks = game.getStocks();
 		for (Stock st : stocks) {
 			if (st.getId() == s.getId()) {
 				s.setCurrent_price(st.getCurrent_price());
@@ -113,27 +106,22 @@ public class GameController {
 	
 	//getters for trend values
 	private int getMarketValue(int turn) {
-		return this.gs.getGame().getMarketValue().get(turn);
-	}
-	private int getFinanceValue(int turn) {
-		return this.gs.getGame().getFinanceValue().get(turn);
-	}
-	private int getUtilitiesValue(int turn) {
-		return this.gs.getGame().getUtilitiesValue().get(turn);
-	}
-	private int getHealthcareValue(int turn) {
-		return this.gs.getGame().getHealthcareValue().get(turn);
-	}
-	private int getTechnologyValue(int turn) {
-		return this.gs.getGame().getTechnologyValue().get(turn);
+		JSONObject marketValues = new JSONObject(game.getMarketValue());
+		return marketValues.getInt(String.valueOf(turn));
 	}
 	
-	// this will generate the event and produce the next bits in the event stream
-	public void generateEvent(List<Boolean> stream, int currentTurn) {
-		if (stream.size() > currentTurn) {
-			boolean eventExists = stream.get(currentTurn);
+	private int getSectorValue(int turn, String sector) {
+		JSONObject sectorValues = new JSONObject(game.getSectorValue());
+		JSONObject sectorValue = sectorValues.getJSONObject(sector);
+		return sectorValue.getInt(String.valueOf(turn));
+	}
+		
+	public void generateEvent(String stream, int currentTurn) {
+		JSONObject streamJSON = new JSONObject(stream);
+		if (streamJSON.length() >= currentTurn) {
+			boolean eventExists = streamJSON.getBoolean(String.valueOf(currentTurn));
 			Event event;
-			if (eventExists && gs.getGame().getCurrentEvent() == null) {
+			if (eventExists && game.getCurrentEvent() == null) {
 				event = new Event();
 				float prob = randomGenerator.nextFloat();
 				if (prob <= 0.33) {
@@ -171,34 +159,39 @@ public class GameController {
 						event.setValue(dur);
 					}
 				}
-				this.gs.getGame().setCurrentEvent(event);
+				game.setCurrentEvent(event);
 				for (int i = 0; i < event.getDuration() - 1; i++) {
-					stream.add(currentTurn + i + 1, true);
+					streamJSON.put(String.valueOf(currentTurn + i + 1), true);
 				}
-			} else if (eventExists && gs.getGame().getCurrentEvent() != null) {
-				int duration = this.gs.getGame().getCurrentEvent().getDuration();
-				this.gs.getGame().getCurrentEvent().setDuration(--duration);
+				stream = streamJSON.toString();
+			} else if (eventExists && game.getCurrentEvent() != null) {
+				int duration = game.getCurrentEvent().getDuration();
+				game.getCurrentEvent().setDuration(--duration);
 			}
 		} else {
-			this.gs.getGame().setCurrentEvent(null);
-			updateEventStreamAfterEvent(stream, currentTurn);
+			game.setCurrentEvent(null);
+			stream = updateEventStreamAfterEvent(streamJSON.toString(), currentTurn);
 		}
+		game.setEventStream(stream);
 	}
 	
 	// this will populate the rest of the array
-	public void updateEventStreamAfterEvent(List<Boolean> stream, int currentTurn) {
-		for (int i = 0; i < 10; i++) {
-			stream.add(false);
+	public String updateEventStreamAfterEvent(String stream, int currentTurn) {
+		JSONObject streamJSON = new JSONObject(stream);
+		int length = streamJSON.length();
+		for (int i = length; i < length + 10; i++) {
+			streamJSON.put(String.valueOf(i), false);
 		}
-		stream.add(true);
+		streamJSON.put(String.valueOf(length + 10), true);
+		return streamJSON.toString();
 	}
 	
 	public void loadStocksFromDB() {
-		this.gs.getGame().setStocks(stockDAO.getAll());
+		game.setStocks(stockDAO.getAll());
 	}
 	
 	// main game timer
 	public void startTimer() {
-		this.gs.getGame().getGameTimer().startTimer();
+		game.getGameTimer().startTimer();
 	}
 }

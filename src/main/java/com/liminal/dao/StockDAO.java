@@ -39,8 +39,8 @@ public class StockDAO {
 			while (rs.next()) {
 				Stock s = new Stock();
 				s.setId(rs.getInt(1));
-				s.setSector(rs.getString(2));
-				s.setName(rs.getString(3));
+				s.setSector(rs.getString(3));
+				s.setName(rs.getString(2));
 				s.setCurrent_price(rs.getFloat(4));
 				stocks.add(s);
 			}

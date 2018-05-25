@@ -1,8 +1,16 @@
 package com.liminal.model;
 
 public class ClientTurn {
+	private int gameId;
 	private int totalTurns;
 	private int currentTurn;
+	
+	public int getGameId() {
+		return gameId;
+	}
+	public void setGameId(int gameId) {
+		this.gameId = gameId;
+	}
 	public int getTotalTurns() {
 		return totalTurns;
 	}

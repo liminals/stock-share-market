@@ -4,19 +4,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.liminal.dao.GameSingleton;
+import com.liminal.model.Game;
 
 public class GameTimer {
 	
 	private Timer timer;
-	private long timeout = 1000 * 60;
-	private GameSingleton gameSingleton;
+	private long timeout = 1000 * 8;
 	private GameController gameController;
+	private Game game;
 	
-	public GameTimer(GameSingleton gs) {
+	public GameTimer(Game game) {
+		this.game = game;
 		this.timer = new Timer();
-		this.gameSingleton = gs;
-		this.gameController = new GameController();
-		this.gameController.setGameSingleton(this.gameSingleton);
+		this.gameController = new GameController(game);
 	}
 	
 	// backend server timer
@@ -24,22 +24,23 @@ public class GameTimer {
 		@Override
 		public void run() {
 			// current turn
-			int currentTurn = gameSingleton.getGame().getCurrentTurn();
-			gameController.generateEvent(gameSingleton.getGame().getEventStream(), currentTurn - 1);
+			int currentTurn = game.getCurrentTurn();
+			gameController.generateEvent(game.getEventStream(), currentTurn);
 			
 			//update the turn
-			gameSingleton.getGame().setCurrentTurn(currentTurn + 1);
-			System.out.println("[NEW][TURN]" + gameSingleton.getGame().getCurrentTurn());
-			gameController.updateStocksPrice(gameSingleton.getGame().getStocks());
-			if (gameSingleton.getGame().getCurrentTurn() == gameSingleton.getGame().getTurns()) {
+			game.setCurrentTurn(currentTurn + 1);
+			System.out.println("[" + game.getId() + "]" + "[NEW][TURN]" + game.getCurrentTurn());
+			if (game.getCurrentTurn() >= game.getTurns()) {
 				System.out.println("cancelling");
+				System.out.println("[" + game.getId() + "]" + "[ENDED]" + game.getCurrentTurn());
 				cancel();
-				gameSingleton.destroyInstance();
+			} else {
+				gameController.updateStocksPrice(game.getStocks());
 			}
 		}
 	};
 	
 	public void startTimer() {
-		timer.scheduleAtFixedRate(updateTurnTask, 1000 * 3, timeout);
+		timer.scheduleAtFixedRate(updateTurnTask, 1000 * 8, timeout);
 	}
 }

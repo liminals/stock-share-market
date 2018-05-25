@@ -1,25 +1,25 @@
 var turn;
 var totalTurns;
-var timer = setInterval(countTurns, 1000 * 10);
+var timer = setInterval(countTurns, 1000 * 3);
 var allStocksJSON;
 var labelData = [];
 var gameJSON;
 
 (function initialLoading() {
-	var gameUrl = serviceUrl + 'rest/game/start'; 
+	var gameUrl = serviceUrl + 'rest/game/start/30'; 
 	$.ajax(gameUrl, {
 		type: 'post',
 		success: function(gameData) {
 			gameJSON = gameData;
 			$('#currentTurn').text('Current Turn: ' + gameJSON.currentTurn);
 			labelData.push(gameJSON.currentTurn);
+			loadInitialStocks();
 		}
 	});
-	loadInitialStocks();
 })();
 
 function countTurns() {
-	if (turn == 35)
+	if (turn == gameJSON.totalTurns)
 		clearInterval(timer);
 	canRequestData();
 }
@@ -62,7 +62,8 @@ $('#searchStock').on('input propertychange paste', function() {
 // update the price of a single stock
 // need to be automatic delete this
 function updateNewStockPrices() {
-	var updatePriceStock = serviceUrl + 'rest/game/getNewPrice';
+	var gameid = gameJSON.gameId;
+	var updatePriceStock = serviceUrl + 'rest/game/' + gameid + '/getNewPrice';
 	var stocksJSON = JSON.stringify(allStocksJSON);
 	$.ajax(updatePriceStock, {
 		type: 'post',
@@ -75,7 +76,8 @@ function updateNewStockPrices() {
 				//console.log(v);
 			});
 		},
-		error: function() {
+		error: function(error) {
+			console.log(error);
 			console.log('An error occured!');
 		}
 	});
@@ -84,7 +86,7 @@ function updateNewStockPrices() {
 
 // check for events
 function checkForEvents() {
-	var eventUrl = serviceUrl + 'rest/game/event';
+	var eventUrl = serviceUrl + 'rest/game/' +  gameJSON.gameId + '/event';
 	$.ajax(eventUrl, {
 		type: 'get',
 		dataType: 'json',
@@ -96,6 +98,8 @@ function checkForEvents() {
 				ul += '</ul>';
 				$('#eventDetails').html(ul);
 				console.log(data);
+			} else {
+				$('#eventDetails').html('');
 			}
 		},
 		error: function() {
@@ -105,7 +109,7 @@ function checkForEvents() {
 }
 
 function canRequestData() {
-	var url = serviceUrl + 'rest/game/turn/' + gameJSON.currentTurn;
+	var url = serviceUrl + 'rest/game/' + gameJSON.gameId + '/turn/' + gameJSON.currentTurn;
 	$.ajax(url, {
 		type: 'get',
 		dataType: 'json',
@@ -123,7 +127,7 @@ function canRequestData() {
 }
 
 function updateTurn() {
-	var turnUrl = serviceUrl + 'rest/game/updateTurn';
+	var turnUrl = serviceUrl + 'rest/game/' + gameJSON.gameId +'/updateTurn';
 	var gameData = JSON.stringify(gameJSON);
 	$.ajax(turnUrl, {
 		type: 'post',

@@ -10,42 +10,25 @@ public class Game {
 	private int turns;
 	private int currentTurn;
 	private Event currentEvent;
-	private List<String> marketTrend;
-	private List<Integer> marketValue;
-	private List<String> financeTrend;
-	private List<Integer> financeValue;
-	private List<String> utilitiesTrend;
-	private List<Integer> utilitiesValue;
-	private List<String> healthcareTrend;
-	private List<Integer> healthcareValue;
-	private List<String> technologyTrend;
-	private List<Integer> technologyValue;
-	private List<Boolean> eventStream;
+	private int id;
+	private String startBy;
+	private String eventStream;
+	private String marketTrend;
+	private String sectorTrends;
+	private String marketValue;
+	private String sectorValue;
 	
-	
-	public List<Stock> getStocks() {
-		return stocks;
-	}
-
-	public void setStocks(List<Stock> stocks) {
-		this.stocks = stocks;
-	}
-
 	public GameTimer getGameTimer() {
 		return gameTimer;
 	}
-	
-	public Event getCurrentEvent() {
-		return currentEvent;
-	}
-
-	public void setCurrentEvent(Event currentEvent) {
-		this.currentEvent = currentEvent;
-	}
-
-
 	public void setGameTimer(GameTimer gameTimer) {
 		this.gameTimer = gameTimer;
+	}
+	public List<Stock> getStocks() {
+		return stocks;
+	}
+	public void setStocks(List<Stock> stocks) {
+		this.stocks = stocks;
 	}
 	public int getTurns() {
 		return turns;
@@ -59,71 +42,53 @@ public class Game {
 	public void setCurrentTurn(int currentTurn) {
 		this.currentTurn = currentTurn;
 	}
-	public List<String> getMarketTrend() {
-		return marketTrend;
+	public Event getCurrentEvent() {
+		return currentEvent;
 	}
-	public void setMarketTrend(List<String> marketTrend) {
-		this.marketTrend = marketTrend;
+	public void setCurrentEvent(Event currentEvent) {
+		this.currentEvent = currentEvent;
 	}
-	public List<Integer> getMarketValue() {
-		return marketValue;
+	public int getId() {
+		return id;
 	}
-	public void setMarketValue(List<Integer> marketValue) {
-		this.marketValue = marketValue;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public List<String> getFinanceTrend() {
-		return financeTrend;
+	public String getStartBy() {
+		return startBy;
 	}
-	public void setFinanceTrend(List<String> financeTrend) {
-		this.financeTrend = financeTrend;
+	public void setStartBy(String startBy) {
+		this.startBy = startBy;
 	}
-	public List<Integer> getFinanceValue() {
-		return financeValue;
-	}
-	public void setFinanceValue(List<Integer> financeValue) {
-		this.financeValue = financeValue;
-	}
-	public List<String> getUtilitiesTrend() {
-		return utilitiesTrend;
-	}
-	public void setUtilitiesTrend(List<String> utilitiesTrend) {
-		this.utilitiesTrend = utilitiesTrend;
-	}
-	public List<Integer> getUtilitiesValue() {
-		return utilitiesValue;
-	}
-	public void setUtilitiesValue(List<Integer> utilitiesValue) {
-		this.utilitiesValue = utilitiesValue;
-	}
-	public List<String> getHealthcareTrend() {
-		return healthcareTrend;
-	}
-	public void setHealthcareTrend(List<String> healthcareTrend) {
-		this.healthcareTrend = healthcareTrend;
-	}
-	public List<Integer> getHealthcareValue() {
-		return healthcareValue;
-	}
-	public void setHealthcareValue(List<Integer> healthcareValue) {
-		this.healthcareValue = healthcareValue;
-	}
-	public List<String> getTechnologyTrend() {
-		return technologyTrend;
-	}
-	public void setTechnologyTrend(List<String> technologyTrend) {
-		this.technologyTrend = technologyTrend;
-	}
-	public List<Integer> getTechnologyValue() {
-		return technologyValue;
-	}
-	public void setTechnologyValue(List<Integer> technologyValue) {
-		this.technologyValue = technologyValue;
-	}
-	public List<Boolean> getEventStream() {
+	public String getEventStream() {
 		return eventStream;
 	}
-	public void setEventStream(List<Boolean> eventStream) {
+	public void setEventStream(String eventStream) {
 		this.eventStream = eventStream;
+	}
+	public String getMarketTrend() {
+		return marketTrend;
+	}
+	public void setMarketTrend(String marketTrend) {
+		this.marketTrend = marketTrend;
+	}
+	public String getSectorTrends() {
+		return sectorTrends;
+	}
+	public void setSectorTrends(String sectorTrends) {
+		this.sectorTrends = sectorTrends;
+	}
+	public String getMarketValue() {
+		return marketValue;
+	}
+	public void setMarketValue(String marketValue) {
+		this.marketValue = marketValue;
+	}
+	public String getSectorValue() {
+		return sectorValue;
+	}
+	public void setSectorValue(String sectorValue) {
+		this.sectorValue = sectorValue;
 	}
 	
 }
