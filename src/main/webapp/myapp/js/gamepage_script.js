@@ -13,6 +13,7 @@ if (clientTurnJSON.currentTurn > 0) {
 if (clientTurnJSON.currentTurn > 0) {
 	// for host
 	initialLoading();
+	$("#totalTurns").html('Total Turns: ' + clientTurnJSON.totalTurns);
 } else {
 	// for client
 	alert('Please wait until the host starts the game!!!');
@@ -127,6 +128,7 @@ function checkForEvents() {
 	});
 }
 
+// this makes requests when only turn is updated in server
 function canRequestData() {
 	var url = serviceUrl + 'rest/game/' + clientTurnJSON.gameId + '/turn/' + clientTurnJSON.currentTurn;
 	$.ajax(url, {

@@ -22,7 +22,8 @@
 	%>
 
 	<h1>Game Page</h1>
-	<h3 id="currentTurn">Current Turns</h3>
+	<h3 id="currentTurn">Current Turn:</h3>
+	<h3 id="totalTurns"> Total Turns :</h3>
 	<h4>Stocks</h4>
 	
 	<button onclick="updateNewStockPrices()">Update</button> 
