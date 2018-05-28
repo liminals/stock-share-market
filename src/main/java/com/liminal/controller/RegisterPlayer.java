@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -36,21 +37,33 @@ public class RegisterPlayer extends HttpServlet {
 		// TODO Auto-generated method stub
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String verify = request.getParameter("verify");
 		String serviceUrl = request.getParameter("serviceUrl");
 		String targetUrl = serviceUrl + "player/register";
 		
-		Player p = new Player();
-		p.setUsername(username);
-		p.setPassword(password);
-
-		Client client = ClientBuilder.newClient();
-		Response serviceResponse = client.target(targetUrl).request().post(Entity.json(p));
-		
-		if (serviceResponse.getStatus() == 200) {
-			Player resPlayer = serviceResponse.readEntity(Player.class);
-			// if id = 0, username exists else success
-			//request.getSession().setAttribute("HostedGame", serviceResponse.readEntity(GameHostingData.class));
-			//request.getRequestDispatcher("index.jsp").forward(request, response);
+		if (verify.equalsIgnoreCase(password)) {
+			Player p = new Player();
+			p.setUsername(username);
+			p.setPassword(password);
+	
+			Client client = ClientBuilder.newClient();
+			Response serviceResponse = client.target(targetUrl).request().post(Entity.json(p));
+			
+			if (serviceResponse.getStatus() == 200) {
+				// if id = 0, username exists else success
+				Player resPlayer = serviceResponse.readEntity(Player.class);
+				int playerId = resPlayer.getId();
+				if (playerId > 0) {
+					request.setAttribute("Registration", "Player successfully created!");
+					request.getRequestDispatcher("index.jsp").forward(request, response);
+				} else {
+					request.setAttribute("RegisterErrorMessage", "Player with same username exists");
+					request.getRequestDispatcher("index.jsp").forward(request, response);
+				}
+			}
+		} else {
+			request.setAttribute("RegisterErrorMessage", "Passwords don't match");
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
 	}
 

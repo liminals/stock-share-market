@@ -1,3 +1,4 @@
+<%@page import="com.liminal.model.Player"%>
 <%@page import="com.liminal.model.GameJoinData"%>
 <%@page import="com.liminal.model.GameHostingData"%>
 <%@page import="org.json.JSONObject"%>
@@ -6,12 +7,14 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+
+<%! GameHostingData ghd;
+	GameJoinData gjd;
+	Player p;
+%>    
 <%
 	String serviceUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/rest/";
-%>
-<%! GameHostingData ghd;
-	GameJoinData gjd;	
+	p = (Player) request.getSession().getAttribute("CurrentPlayer");
 %>
 <!DOCTYPE html>
 <html>
@@ -23,8 +26,11 @@
 <body id="mainBG">
 	<h1>Liminals</h1>
 	<h2>Stock-Share-Market Simulation Game</h2>
-
-	<div>
+	
+	<div id="playerDetails">
+		<h2> Welcome : <%= p.getUsername() %></h2>
+	</div>
+	<div id="container">
 		<!-- initial visit by player -->
 		<% if (request.getSession().getAttribute("HostedGame") == null && request.getSession().getAttribute("GameJoinData") == null) { %>
 		<div>
