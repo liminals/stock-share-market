@@ -14,7 +14,6 @@ if (clientTurnJSON.currentTurn > 0) {
 	// for host
 	getBalance();
 	initialLoading();
-	$("#totalTurns").html('Total Turns: ' + clientTurnJSON.totalTurns);
 } else {
 	// for client
 	alert('Please wait until the host starts the game!!!');
@@ -40,6 +39,7 @@ function loadInitailStocks() {
 function initialLoading() {
 	turn = clientTurnJSON.currentTurn;
 	$("#playerName").text('Player : ' + clientTurnJSON.player);
+	$("#totalTurns").html('Total Turns: ' + clientTurnJSON.totalTurns);
 	$('#currentTurn').text('Current Turn: ' + turn);
 	labelData.push(turn);
 	loadInitailStocks();
