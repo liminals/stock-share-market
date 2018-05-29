@@ -5,7 +5,6 @@ public class Player {
 	private String username;
 	private String password;
 	private int gameid;				// only when joined,hosts a game
-	private float current_balance;	// only when joined,hosts a game
 	private String status;			
 	private String game_status;		// only when joined,hosts a game
 	public enum STATUS {
@@ -38,13 +37,6 @@ public class Player {
 	public void setGameid(int gameid) {
 		this.gameid = gameid;
 	}
-	public float getCurrent_balance() {
-		return current_balance;
-	}
-	public void setCurrent_balance(float current_balance) {
-		this.current_balance = current_balance;
-	}
-	
 	public String getStatus() {
 		return status;
 	}
@@ -60,6 +52,7 @@ public class Player {
 	@Override
 	public String toString() {
 		return "Player [id=" + id + ", username=" + username + ", password=" + password + ", gameid=" + gameid
-				+ ", current_balance=" + current_balance + ", status=" + status + ", game_status=" + game_status + "]";
-	}	
+				+ ", status=" + status + ", game_status=" + game_status + "]";
+	}
+	
 }

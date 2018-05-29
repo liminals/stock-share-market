@@ -40,6 +40,9 @@ public class RegisterPlayer extends HttpServlet {
 		String verify = request.getParameter("verify");
 		String serviceUrl = request.getParameter("serviceUrl");
 		String targetUrl = serviceUrl + "player/register";
+		String accountUrl = serviceUrl + "bank/createAccount/";
+		
+		Client createAccount;
 		
 		if (verify.equalsIgnoreCase(password)) {
 			Player p = new Player();
@@ -54,8 +57,14 @@ public class RegisterPlayer extends HttpServlet {
 				Player resPlayer = serviceResponse.readEntity(Player.class);
 				int playerId = resPlayer.getId();
 				if (playerId > 0) {
-					request.setAttribute("Registration", "Player successfully created!");
-					request.getRequestDispatcher("index.jsp").forward(request, response);
+					
+					accountUrl += resPlayer.getUsername();
+					createAccount = ClientBuilder.newClient();
+					Response res = createAccount.target(accountUrl).request().post(Entity.json(""));
+					if (res.getStatus() == 200) {
+						request.setAttribute("Registration", "Player successfully created!");
+						request.getRequestDispatcher("index.jsp").forward(request, response);
+					}
 				} else {
 					request.setAttribute("RegisterErrorMessage", "Player with same username exists");
 					request.getRequestDispatcher("index.jsp").forward(request, response);

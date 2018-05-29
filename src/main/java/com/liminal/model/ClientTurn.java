@@ -7,6 +7,8 @@ public class ClientTurn {
 	private String type;
 	private String player;
 	private String game_status;
+	private String account_name;
+	
 	public enum TYPE {
 		CLIENT, HOST
 	}

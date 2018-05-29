@@ -54,7 +54,7 @@ public class HostGame extends HttpServlet {
 		
 		if (serviceResponse.getStatus() == 200) {
 			request.getSession().setAttribute("HostedGame", serviceResponse.readEntity(GameHostingData.class));
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("myapp/jsps/loggedin.jsp").forward(request, response);
 		}
 	}
 

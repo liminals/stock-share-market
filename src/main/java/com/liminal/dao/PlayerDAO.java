@@ -127,18 +127,6 @@ public class PlayerDAO {
 		}
 	}
 	
-	public void updateCurrentBalance(Player player) {
-		String sql;
-		sql = "update player set current_balance=? where id=?";
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setFloat(1, player.getCurrent_balance());
-			pstmt.setInt(2, player.getId());
-			pstmt.executeUpdate();
-		} catch(SQLException ex) {
-			ex.printStackTrace();
-		}
-	}
 	
 	public int getPlayerId(Player player) {
 		String sql;

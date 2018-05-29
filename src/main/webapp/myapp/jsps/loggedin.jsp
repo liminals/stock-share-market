@@ -37,7 +37,7 @@
 			<h3>Host a game</h3>
 			<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/HostGame" %>" method="post">
 				<input type="text" name="turns" placeholder="Fixed turns in the game">
-				<input type="text" name="createdBy" placeholder="Your name, for testing only">
+				<input type="hidden" name="createdBy" value="<%= p.getUsername() %>">
 				<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
 				<input type="submit" value="Host">
 			</form>
@@ -102,7 +102,7 @@
 		var serviceUrl = "<%= serviceUrl%>";
 	</script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/jquery-3.3.1.min.js"%>"></script>
-	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/indexpage_script.js"%>"></script>
+	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/logged_script.js"%>"></script>
 	<% if (ghd != null) {%>
 		<script type="text/javascript">
 			loadHostedGameInfo(hostedGameInfo);
