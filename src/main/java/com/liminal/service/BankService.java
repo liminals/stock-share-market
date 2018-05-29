@@ -31,4 +31,14 @@ public class BankService {
 		controller.getBalance();
 		return controller.getAccount();
 	}
+	
+	// setup player account before each game
+	@POST
+	@Path("/setAccount/{name}")
+	public void setAccountForGame(@PathParam("name") String name) {
+		controller = new BankController();
+		BankAccount account = controller.getAccountFromDB(name);
+		controller.setAccount(account);
+		controller.setAccountForGame();
+	} 
 }

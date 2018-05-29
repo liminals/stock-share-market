@@ -39,10 +39,14 @@ public class HostGame extends HttpServlet {
 		int turns = Integer.parseInt(request.getParameter("turns"));
 		String serviceUrl = request.getParameter("serviceUrl");
 		String targetUrl = serviceUrl + "game/create/";
+		String accountUrl = serviceUrl + "bank/setAccount/";
+		
 		
 		JSONObject players = new JSONObject();
 		players.put("1", createdBy);
 		players.put("2", "AI");
+		
+		accountUrl += createdBy;
 		
 		GameHostingData gcd = new GameHostingData();
 		gcd.setTurns(turns);
@@ -53,6 +57,10 @@ public class HostGame extends HttpServlet {
 		Response serviceResponse = client.target(targetUrl).request().post(Entity.json(gcd));
 		
 		if (serviceResponse.getStatus() == 200) {
+			// setup account for each game
+			Client accountReq = ClientBuilder.newClient();
+			Response res = accountReq.target(accountUrl).request().post(Entity.json(""));
+			
 			request.getSession().setAttribute("HostedGame", serviceResponse.readEntity(GameHostingData.class));
 			request.getRequestDispatcher("myapp/jsps/loggedin.jsp").forward(request, response);
 		}
