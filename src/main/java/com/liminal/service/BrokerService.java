@@ -7,7 +7,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.liminal.controller.BankController;
 import com.liminal.controller.BrokerController;
+import com.liminal.model.BankAccount;
 import com.liminal.model.BrokerAccount;
 import com.liminal.model.BrokerTransaction;
 
@@ -15,6 +17,7 @@ import com.liminal.model.BrokerTransaction;
 public class BrokerService {
 	
 	private BrokerController controller;
+	private BankController bankController;
 	
 	@POST
 	@Path("/createAccount/{name}")
@@ -38,7 +41,12 @@ public class BrokerService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public BrokerTransaction buyStocks(BrokerTransaction transaction, @PathParam("player") String player) {
+		bankController = new BankController();
 		controller = new BrokerController();
+		
+		BankAccount bankAccount = bankController.getAccountFromDB(player);
+		controller.setBankAccount(bankAccount);
+		
 		BrokerAccount account = controller.getAccountFromDB(player);
 		controller.setAccount(account);
 		return controller.buy(transaction);

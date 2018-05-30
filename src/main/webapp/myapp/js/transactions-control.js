@@ -66,6 +66,9 @@ buttonBuy.on('click', function(){
 		contentType: 'application/json',
 		success: function(data) {
 			console.log(data);
+			if (data.status == 'INSUFFICIENT_FUNDS') {
+				alert('Transaction Failed!. Insufficient funds.')
+			}
 		}
 	});
 });
