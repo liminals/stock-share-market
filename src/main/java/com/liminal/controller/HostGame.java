@@ -39,14 +39,16 @@ public class HostGame extends HttpServlet {
 		int turns = Integer.parseInt(request.getParameter("turns"));
 		String serviceUrl = request.getParameter("serviceUrl");
 		String targetUrl = serviceUrl + "game/create/";
-		String accountUrl = serviceUrl + "bank/setAccount/";
+		String bankAccountUrl = serviceUrl + "bank/setAccount/";
+		String brokerAccountUrl = serviceUrl + "broker/setAccount/";
 		
 		
 		JSONObject players = new JSONObject();
 		players.put("1", createdBy);
 		players.put("2", "AI");
 		
-		accountUrl += createdBy;
+		bankAccountUrl += createdBy;
+		brokerAccountUrl += createdBy;
 		
 		GameHostingData gcd = new GameHostingData();
 		gcd.setTurns(turns);
@@ -59,7 +61,10 @@ public class HostGame extends HttpServlet {
 		if (serviceResponse.getStatus() == 200) {
 			// setup account for each game
 			Client accountReq = ClientBuilder.newClient();
-			Response res = accountReq.target(accountUrl).request().post(Entity.json(""));
+			Response res = accountReq.target(bankAccountUrl).request().post(Entity.json(""));
+			
+			Client brokerAccountReq = ClientBuilder.newClient();
+			Response res2 = brokerAccountReq.target(brokerAccountUrl).request().post(Entity.json(""));
 			
 			request.getSession().setAttribute("HostedGame", serviceResponse.readEntity(GameHostingData.class));
 			request.getRequestDispatcher("myapp/jsps/loggedin.jsp").forward(request, response);

@@ -36,3 +36,7 @@ $('#buyQty').on('input propertychange paste', function() {
 		$('#buyValue').val('');
 	}
 });
+
+buttonBuy.on('click', function(){
+	
+});
