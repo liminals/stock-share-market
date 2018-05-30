@@ -28,9 +28,6 @@
 		<h3 id="totalTurns"> Total Turns :</h3>
 		<h4>Stocks</h4>
 		
-		<!-- <button onclick="updateNewStockPrices()">Update</button> 
-		<button onclick="canRequestData()">Update</button>
-		<button onclick="countTurns()">Next</button>  -->
 		<div id="stockDashboard">
 			<div id="searchStockDiv">
 				<label>Search Stocks </label>
@@ -41,7 +38,44 @@
 			</span>
 			<canvas id="stockGraph"></canvas>
 		</div>
+		
+		<div id="stockTransaction">
+			<select id="stocks"></select>
+			<div id="stockDetails">
+				<h4 id="stockname"></h4>
+				<p id="stockprice">
+			</div>
+			<div id="buyStocksDiv">
+				<button id="buttonBuy">Buy</button>
+				<label>Value : </label>
+				<input type="text" id="buyValue" disabled="true">
+				<input type="text" id="buyQty">
+			</div>
+		</div>
 	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	<% 	ct = (ClientTurn)request.getSession().getAttribute("CurrentGame"); 
 		gjd = (GameJoinData)request.getSession().getAttribute("GameJoined");
@@ -69,5 +103,6 @@
 	</script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/gamepage_script.js"%>"></script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/chart-control.js"%>"></script>
+	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/transactions-control.js"%>"></script>
 </body>
 </html>

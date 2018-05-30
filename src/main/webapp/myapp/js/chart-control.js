@@ -11,7 +11,7 @@ function getRandomColor() {
 	return color;
 }
 
-function Stock(name, short_name) {
+function Stock(name) {
 	this.label = name;
 	this.data = [];
 	this.fill = false;
@@ -22,7 +22,7 @@ function loadJSONData() {
 	var stock;
 	$.each(allStocksJSON, function(key, value) {
 		if (stockData.length == 0 || !containsInArray(stockData, value.name)) {
-			stock = new Stock(value.name, value.short_name);
+			stock = new Stock(value.name);
 		}
 		$.each(allStocksJSON, function(k, v) {
 			if (v.name === value.name)

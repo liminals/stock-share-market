@@ -4,6 +4,7 @@ var timer;
 var allStocksJSON;
 var labelData = [];
 var clientTurnJSON;	// ClientTurn object, used by both client and server
+var stockSelect = $("#stocks"); // select box
 
 // this if for game host only
 if (clientTurnJSON.currentTurn > 0) {
@@ -29,6 +30,7 @@ function loadInitailStocks() {
 		success : function(data) {
 			allStocksJSON = data;
 			loadJSONData();
+			populateSelectBox();
 		},
 		error : function() {
 			console.log('An error occured!');
@@ -205,16 +207,20 @@ function updateTurn() {
 	});
 }
 
+// returns the current balance from server, and updates UI
 function getBalance() {
 	var url = serviceUrl + 'rest/bank/getBalance/' + clientTurnJSON.player;
 	$.ajax(url, {
 		type: 'get',
 		success: function(account) {
-			updateBalance(account);
+			$("#currentBalance").text('Current balance: ' + account.current_balance);
 		}
 	});
 }
 
-function updateBalance(account) {
-	$("#currentBalance").text('Current balance: ' + account.current_balance);
+// populate the select box for transactions
+function populateSelectBox() {
+	$.each(allStocksJSON, function(key, value) {
+		stockSelect.append('<option value=' + value.id + '>' + value.name + '</option>');
+	});
 }
