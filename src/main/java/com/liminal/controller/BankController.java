@@ -34,4 +34,14 @@ public class BankController {
 			setAccount(account);
 		}
 	}
+	
+	// returns an account from database
+	public BankAccount getAccountFromDB(String name) {
+		return bankDAO.getAccount(name);
+	}
+	
+	// returns the updated balance from database
+	public void getBalance() {
+		this.bankDAO.getBalance(account);
+	}
 }

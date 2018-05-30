@@ -20,24 +20,27 @@
 	<%
 		String serviceUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 	%>
-
-	<h1>Game Page</h1>
-	<h3 id="currentTurn">Current Turn:</h3>
-	<h3 id="totalTurns"> Total Turns :</h3>
-	<h4>Stocks</h4>
-	
-	<button onclick="updateNewStockPrices()">Update</button> 
-	<!-- <button onclick="canRequestData()">Update</button>  -->
-	<button onclick="countTurns()">Next</button>
-	<div id="stockDashboard">
-		<div id="searchStockDiv">
-			<label>Search Stocks </label>
-			<input type="text" id="searchStock">
-			<div id="searchResults"></div>
+	<div id="container">
+		<h1>Game Page</h1>
+		<h3 id="playerName"></h3>
+		<h3 id="currentBalance"></h3>
+		<h3 id="currentTurn">Current Turn:</h3>
+		<h3 id="totalTurns"> Total Turns :</h3>
+		<h4>Stocks</h4>
+		
+		<!-- <button onclick="updateNewStockPrices()">Update</button> 
+		<button onclick="canRequestData()">Update</button>
+		<button onclick="countTurns()">Next</button>  -->
+		<div id="stockDashboard">
+			<div id="searchStockDiv">
+				<label>Search Stocks </label>
+				<input type="text" id="searchStock">
+				<div id="searchResults"></div>
+			</div>
+			<span id="eventDetails">
+			</span>
+			<canvas id="stockGraph"></canvas>
 		</div>
-		<span id="eventDetails">
-		</span>
-		<canvas id="stockGraph"></canvas>
 	</div>
 	
 	<% 	ct = (ClientTurn)request.getSession().getAttribute("CurrentGame"); 

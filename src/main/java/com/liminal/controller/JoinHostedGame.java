@@ -1,6 +1,7 @@
 package com.liminal.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,7 +54,7 @@ public class JoinHostedGame extends HttpServlet {
 				request.getRequestDispatcher("myapp/jsps/gamepage.jsp").forward(request, response);
 			} else {
 				request.getSession().setAttribute("GameJoinData", resData);
-				request.getRequestDispatcher("index.jsp").forward(request, response);
+				request.getRequestDispatcher("myapp/jsps/loggedin.jsp").forward(request, response);
 			}
 		}
 	}

@@ -104,16 +104,16 @@ function loadJoinedPlayers(data) {
 
 function checkForPlayers() {
 	if (typeof hostedGameInfo !== 'undefined'){
-	var url = serviceUrl + 'game/' + hostedGameInfo.id + '/checkForPlayers';
-	$.ajax(url, {
-		type: 'get',
-		success: function(data) {
-			loadJoinedPlayers(data);
-		},
-		error: function() {
-			console.log('error in loading');
-		}
-	});
+		var url = serviceUrl + 'game/' + hostedGameInfo.id + '/checkForPlayers';
+		$.ajax(url, {
+			type: 'get',
+			success: function(data) {
+				loadJoinedPlayers(data);
+			},
+			error: function() {
+				console.log('error in loading');
+			}
+		});
 	}
 }
 

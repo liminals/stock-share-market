@@ -12,6 +12,7 @@ if (clientTurnJSON.currentTurn > 0) {
 // this if for executed when visiting page
 if (clientTurnJSON.currentTurn > 0) {
 	// for host
+	getBalance();
 	initialLoading();
 	$("#totalTurns").html('Total Turns: ' + clientTurnJSON.totalTurns);
 } else {
@@ -38,6 +39,7 @@ function loadInitailStocks() {
 // this should executed when game starts
 function initialLoading() {
 	turn = clientTurnJSON.currentTurn;
+	$("#playerName").text('Player : ' + clientTurnJSON.player);
 	$('#currentTurn').text('Current Turn: ' + turn);
 	labelData.push(turn);
 	loadInitailStocks();
@@ -80,7 +82,7 @@ $('#searchStock').on('input propertychange paste', function() {
 });
 
 // update the price of a single stock
-// need to be automatic delete this
+// updates the graph
 function updateNewStockPrices() {
 	var gameid = clientTurnJSON.gameId;
 	var updatePriceStock = serviceUrl + 'rest/game/' + gameid + '/getNewPrice';
@@ -147,7 +149,7 @@ function canRequestData() {
 	})
 }
 
-
+//run by a client to check wether the game has been started by the host
 function isGameStarted(){
 	var url = serviceUrl + 'rest/game/isStarted';
 	var gameData = JSON.stringify(clientTurnJSON);
@@ -171,12 +173,17 @@ function isGameStarted(){
 		}
 	});
 }
+
+// run by a client to check wether the game has been started by the host
 var isStartTimer;
 if(clientTurnJSON.type == 'CLIENT'){
+	$("#playerName").text('Player : ' + clientTurnJSON.player);
 	console.log('client');
-	isStartTimer = setInterval(isGameStarted, 1000 * 5);
+	isStartTimer = setInterval(isGameStarted, 1000 * 3);
 }
 
+// both client and host
+// executes each time when turn updates
 function updateTurn() {
 	var turnUrl = serviceUrl + 'rest/game/' + clientTurnJSON.gameId +'/updateTurn';
 	var gameData = JSON.stringify(clientTurnJSON);
@@ -192,7 +199,22 @@ function updateTurn() {
 				turn = clientTurnJSON.currentTurn;
 				$('#currentTurn').text('Current Turn: ' + turn);
 				labelData.push(turn);
+				getBalance();
 			}
 		}
 	});
+}
+
+function getBalance() {
+	var url = serviceUrl + 'rest/bank/getBalance/' + clientTurnJSON.player;
+	$.ajax(url, {
+		type: 'get',
+		success: function(account) {
+			updateBalance(account);
+		}
+	});
+}
+
+function updateBalance(account) {
+	$("#currentBalance").text('Current balance: ' + account.current_balance);
 }

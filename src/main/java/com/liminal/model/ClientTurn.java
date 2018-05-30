@@ -7,7 +7,6 @@ public class ClientTurn {
 	private String type;
 	private String player;
 	private String game_status;
-	private String account_name;
 	
 	public enum TYPE {
 		CLIENT, HOST
@@ -53,4 +52,10 @@ public class ClientTurn {
 	public void setCurrentTurn(int currentTurn) {
 		this.currentTurn = currentTurn;
 	}
+	@Override
+	public String toString() {
+		return "ClientTurn [gameId=" + gameId + ", totalTurns=" + totalTurns + ", currentTurn=" + currentTurn
+				+ ", type=" + type + ", player=" + player + ", game_status=" + game_status + "]";
+	}
+	
 }

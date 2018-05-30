@@ -60,7 +60,7 @@ public class BankDAO {
 	}
 	
 	public BankAccount getAccount(String name) {
-		String sql = "select * from banktransaction where name=?";
+		String sql = "select * from bankaccount where name=?";
 		BankAccount account;
 		Gson g = new Gson();
 		try {
@@ -82,5 +82,20 @@ public class BankDAO {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+	
+	public void getBalance(BankAccount account) {
+		String sql = "select current_balance from bankaccount where name=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, account.getName());
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				float balance = rs.getFloat(1);
+				account.setCurrent_balance(balance);
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

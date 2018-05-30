@@ -1,12 +1,12 @@
 package com.liminal.service;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 import com.liminal.controller.BankController;
 import com.liminal.model.BankAccount;
-import com.liminal.model.BankTransaction;
 
 @Path("/bank")
 public class BankService {
@@ -22,9 +22,13 @@ public class BankService {
 		return controller.getAccount();
 	}
 	
-	@POST
-	@Path("/deposit")
-	public void deposit(BankTransaction transaction) {
-		
+	@GET
+	@Path("/getBalance/{name}")
+	public BankAccount getBalance(@PathParam("name") String name) {
+		controller = new BankController();
+		BankAccount account = controller.getAccountFromDB(name);
+		controller.setAccount(account);
+		controller.getBalance();
+		return controller.getAccount();
 	}
 }
