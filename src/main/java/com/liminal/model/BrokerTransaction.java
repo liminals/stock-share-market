@@ -13,8 +13,6 @@ public class BrokerTransaction {
 	public enum STATUS {
 		PRICE_DO_NOT_MATCH, INSUFFICIENT_FUNDS 
 	}
-	
-	
 	public String getStatus() {
 		return status;
 	}

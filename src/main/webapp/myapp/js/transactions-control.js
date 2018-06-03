@@ -8,8 +8,8 @@ var stockprice = $("#stockprice");
 buttonBuy.prop('disabled', true);
 buttonSell.prop('disabled', true);
 
-function BrokerTransaction(name, stock, qty, price) {
-	this.name = name;
+function BrokerTransaction(type, stock, qty, price) {
+	this.type = type;
 	this.stock = stock;
 	this.qty = qty;
 	this.price = price;
@@ -52,14 +52,14 @@ $('#transactionQty').on('input propertychange paste', function() {
 });
 
 buttonBuy.on('click', function(){
-	var turn = clientTurnJSON.currentTurn;
+	var gameid = clientTurnJSON.gameId;
 	var player = clientTurnJSON.player;
 	var stock = stockname.text();
 	var qty = $('#transactionQty').val();
 	var price = parseFloat(stockprice.text());
 	
-	var reqData = new BrokerTransaction(name, stock, qty, price);
-	var url = serviceUrl + 'rest/broker/buy/' + player;
+	var reqData = new BrokerTransaction("BUY", stock, qty, price);
+	var url = serviceUrl + 'rest/broker/buy/' + gameid + '/' + player;
 	
 	var reqJson = JSON.stringify(reqData);
 	console.log(reqData);
@@ -70,9 +70,12 @@ buttonBuy.on('click', function(){
 		data: reqJson,
 		contentType: 'application/json',
 		success: function(data) {
+			clearFields();
 			console.log(data);
 			if (data.status == 'INSUFFICIENT_FUNDS') {
 				alert('Transaction Failed!. Insufficient funds.')
+			} else if (data.status == 'PRICE_DO_NOT_MATCH') {
+				alert('Transaction Failed!. Price doesn' + "'" + 't match.')
 			} else {
 				// update latest transaction in UI
 			}
@@ -80,15 +83,15 @@ buttonBuy.on('click', function(){
 	});
 });
 
-buttonSell.on('click', function(){
-	var turn = clientTurnJSON.currentTurn;
+buttonSell.on('click', function() {
+	var gameid = clientTurnJSON.gameId;
 	var player = clientTurnJSON.player;
 	var stock = stockname.text();
 	var qty = $('#transactionQty').val();
 	var price = parseFloat(stockprice.text());
 	
-	var reqData = new BrokerTransaction(name, stock, qty, price);
-	var url = serviceUrl + 'rest/broker/sell/' + player;
+	var reqData = new BrokerTransaction("SELL", stock, qty, price);
+	var url = serviceUrl + 'rest/broker/sell/' + gameid + '/' + player;
 	
 	var reqJson = JSON.stringify(reqData);
 	console.log(reqData);
@@ -99,8 +102,18 @@ buttonSell.on('click', function(){
 		data: reqJson,
 		contentType: 'application/json',
 		success: function(data) {
+			clearFields();
 			console.log(data);
-			// update latest transaction in UI
+			if (data.status == 'PRICE_DO_NOT_MATCH') {
+				alert('Transaction Failed!. Price doesn' + "'" + 't match.')
+			} else {
+				// update latest transaction in UI
+			}
 		}
 	});
 });
+
+function clearFields() {
+	stockname.val('');
+	stockprice.val('');
+}

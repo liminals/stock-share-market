@@ -1,5 +1,6 @@
 package com.liminal.dao;
 
+import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.liminal.model.Game;
 import com.liminal.model.Stock;
 
@@ -135,5 +137,24 @@ public class GameDAO {
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public List<Stock> getCurrentPricesofStock(int gameid) {
+		String sql = "select stocks from game where id=?";
+		Gson g = new Gson();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, gameid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Type listStocks = new TypeToken<List<Stock>>() {}.getType();
+				String stocks = rs.getString(1);
+				List<Stock> lss = g.fromJson(stocks, listStocks);
+				return lss;
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return null;
 	}
 }
