@@ -46,11 +46,16 @@
 				<h4 id="stockname"></h4>
 				<p id="stockprice">
 			</div>
-			<div id="buyStocksDiv">
-				<button id="buttonBuy">Buy</button>
-				<label>Value : </label>
-				<input type="text" id="buyValue" disabled="true">
-				<input type="text" id="buyQty">
+			<div id="transactionStocksDiv">
+				 <div id="transactionButtons">
+					<button id="buttonBuy">Buy</button>
+					<button id="buttonSell">Sell</button>
+				 </div>
+				 <div id="transactionFields">
+					<label>Value : </label>
+					<input type="text" id="transactionValue" disabled="true">
+					<input type="text" id="transactionQty">
+				 </div>
 			</div>
 		</div>
 	</div>
