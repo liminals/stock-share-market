@@ -61,6 +61,24 @@ public class BrokerController {
 		}
 	}
 	
+	public BrokerTransaction sell(BrokerTransaction req) {
+		BrokerTransaction transaction = new BrokerTransaction();
+		transaction.setStock(req.getStock());
+		transaction.setQty(req.getQty());
+		transaction.setType(BrokerTransaction.TYPE.SELL.toString());
+		transaction.setPrice(req.getPrice());
+
+		if (this.account.getTransactions() != null) {
+			this.account.getTransactions().add(transaction);
+		} else {
+			List<BrokerTransaction> trans = new ArrayList<>();
+			trans.add(transaction);
+			this.account.setTransactions(trans);
+		}
+		brokerDAO.updateTransactions(this.account);
+		return transaction;
+	}
+	
 	
 	
 	

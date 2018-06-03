@@ -51,4 +51,20 @@ public class BrokerService {
 		controller.setAccount(account);
 		return controller.buy(transaction);
 	}
+	
+	@POST
+	@Path("/sell/{player}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public BrokerTransaction sellStocks(BrokerTransaction transaction, @PathParam("player") String player) {
+		bankController = new BankController();
+		controller = new BrokerController();
+		
+		BankAccount bankAccount = bankController.getAccountFromDB(player);
+		controller.setBankAccount(bankAccount);
+		
+		BrokerAccount account = controller.getAccountFromDB(player);
+		controller.setAccount(account);
+		return controller.sell(transaction);
+	}
 }
