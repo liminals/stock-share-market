@@ -99,7 +99,7 @@ public class BrokerController {
 			brokerDAO.updateTransactions(this.account);
 			
 			BankTransaction bt = createBankTransaction(transaction, turn);
-			float newBankBalance = bankAccount.getCurrent_balance() - bt.getAmount();
+			float newBankBalance = bankAccount.getCurrent_balance() + bt.getAmount();
 			updateBankAccount(bt, newBankBalance);
 			return transaction;
 		} else {
@@ -130,6 +130,9 @@ public class BrokerController {
 		float value = transaction.getQty() * transaction.getPrice();
 		if (transaction.getType().equalsIgnoreCase(BrokerTransaction.TYPE.BUY.toString())) {
 			bt.setType(BankTransaction.TYPE.WITHDRAW.toString());
+			bt.setReceiver("BROKER");
+		} else {
+			bt.setType(BankTransaction.TYPE.DEPOSIT.toString());
 			bt.setReceiver("BROKER");
 		}
 		bt.setAmount(value);
