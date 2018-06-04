@@ -97,6 +97,10 @@ public class BrokerController {
 				this.account.setTransactions(trans);
 			}
 			brokerDAO.updateTransactions(this.account);
+			
+			BankTransaction bt = createBankTransaction(transaction, turn);
+			float newBankBalance = bankAccount.getCurrent_balance() - bt.getAmount();
+			updateBankAccount(bt, newBankBalance);
 			return transaction;
 		} else {
 			req.setStatus(BrokerTransaction.TYPE.SELL.toString());
