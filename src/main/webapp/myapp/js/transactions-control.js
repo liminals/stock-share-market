@@ -8,7 +8,8 @@ var stockprice = $("#stockprice");
 buttonBuy.prop('disabled', true);
 buttonSell.prop('disabled', true);
 
-function BrokerTransaction(type, stock, qty, price) {
+function BrokerTransaction(turn, type, stock, qty, price) {
+	this.turn = turn;
 	this.type = type;
 	this.stock = stock;
 	this.qty = qty;
@@ -66,8 +67,8 @@ buttonBuy.on('click', function(){
 	var qty = $('#transactionQty').val();
 	var price = parseFloat(stockprice.text());
 	
-	var reqData = new BrokerTransaction("BUY", stock, qty, price);
-	var url = serviceUrl + 'rest/broker/buy/' + gameid + '/' + player + '/' + turn;
+	var reqData = new BrokerTransaction(turn, "BUY", stock, qty, price);
+	var url = serviceUrl + 'rest/broker/buy/' + gameid + '/' + player;
 	
 	var reqJson = JSON.stringify(reqData);
 	console.log(reqData);
@@ -99,8 +100,8 @@ buttonSell.on('click', function() {
 	var qty = $('#transactionQty').val();
 	var price = parseFloat(stockprice.text());
 	
-	var reqData = new BrokerTransaction("SELL", stock, qty, price);
-	var url = serviceUrl + 'rest/broker/sell/' + gameid + '/' + player + '/' + turn;
+	var reqData = new BrokerTransaction(turn, "SELL", stock, qty, price);
+	var url = serviceUrl + 'rest/broker/sell/' + gameid + '/' + player;
 	
 	var reqJson = JSON.stringify(reqData);
 	console.log(reqData);

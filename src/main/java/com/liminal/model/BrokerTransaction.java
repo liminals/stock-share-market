@@ -2,6 +2,7 @@ package com.liminal.model;
 
 // a weak entity
 public class BrokerTransaction {
+	private int turn;
 	private String stock;
 	private String type;
 	private int qty;
@@ -12,6 +13,13 @@ public class BrokerTransaction {
 	}
 	public enum STATUS {
 		PRICE_DO_NOT_MATCH, INSUFFICIENT_FUNDS 
+	}
+	
+	public int getTurn() {
+		return turn;
+	}
+	public void setTurn(int turn) {
+		this.turn = turn;
 	}
 	public String getStatus() {
 		return status;
@@ -45,8 +53,9 @@ public class BrokerTransaction {
 	}
 	@Override
 	public String toString() {
-		return "BrokerTransaction [stock=" + stock + ", type=" + type + ", qty=" + qty + ", price=" + price
-				+ ", status=" + status + "]";
+		return "BrokerTransaction [turn=" + turn + ", stock=" + stock + ", type=" + type + ", qty=" + qty + ", price="
+				+ price + ", status=" + status + "]";
 	}
+	
 		
 }

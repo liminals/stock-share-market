@@ -1,8 +1,16 @@
 package com.liminal.model;
 
-public class Portfolio {
+public class Portfolio implements Comparable<Portfolio> {
+	private int id;
 	private String name;
 	private float value;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -17,7 +25,11 @@ public class Portfolio {
 	}
 	@Override
 	public String toString() {
-		return "Portfolio [name=" + name + ", value=" + value + "]";
+		return "Portfolio [id=" + id + ", name=" + name + ", value=" + value + "]";
 	}
+	@Override
+	public int compareTo(Portfolio o) {
+		return id - o.id;
+	}	
 	
 }

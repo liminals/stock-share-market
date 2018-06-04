@@ -3,7 +3,7 @@ package com.liminal.model;
 import java.util.List;
 
 public class BrokerAccount {
-	private String name;
+	private String name;	// id
 	private List<Portfolio> portfolio;
 	private List<BrokerTransaction> transactions;
 	
