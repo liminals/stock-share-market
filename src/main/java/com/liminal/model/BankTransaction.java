@@ -1,42 +1,26 @@
 package com.liminal.model;
 
 public class BankTransaction {
-	private int turn;
-	private String name; 	// bank account identifier 
-	private int gameid;
+	private int turn; 
 	private String type;
 	private String sender;
 	private String receiver;
-	
+	private float amount;
 	public enum TYPE {
 		DEPOSIT, WITHDRAW
 	}
-	
-	
-	public String getName() {
-		return name;
+	public float getAmount() {
+		return amount;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
-
 	public int getTurn() {
 		return turn;
 	}
-
 	public void setTurn(int turn) {
 		this.turn = turn;
 	}
-
-	public int getGameid() {
-		return gameid;
-	}
-
-	public void setGameid(int gameid) {
-		this.gameid = gameid;
-	}
-
 	public String getType() {
 		return type;
 	}
@@ -61,10 +45,5 @@ public class BankTransaction {
 		this.receiver = receiver;
 	}
 
-	@Override
-	public String toString() {
-		return "BankTransaction [turn=" + turn + ", name=" + name + ", gameid=" + gameid + ", type=" + type
-				+ ", sender=" + sender + ", receiver=" + receiver + "]";
-	}
 	
 }

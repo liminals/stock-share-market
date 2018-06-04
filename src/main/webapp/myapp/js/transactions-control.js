@@ -52,6 +52,7 @@ $('#transactionQty').on('input propertychange paste', function() {
 });
 
 buttonBuy.on('click', function(){
+	var turn = clientTurnJSON.currentTurn;
 	var gameid = clientTurnJSON.gameId;
 	var player = clientTurnJSON.player;
 	var stock = stockname.text();
@@ -59,7 +60,7 @@ buttonBuy.on('click', function(){
 	var price = parseFloat(stockprice.text());
 	
 	var reqData = new BrokerTransaction("BUY", stock, qty, price);
-	var url = serviceUrl + 'rest/broker/buy/' + gameid + '/' + player;
+	var url = serviceUrl + 'rest/broker/buy/' + gameid + '/' + player + '/' + turn;
 	
 	var reqJson = JSON.stringify(reqData);
 	console.log(reqData);
@@ -84,6 +85,7 @@ buttonBuy.on('click', function(){
 });
 
 buttonSell.on('click', function() {
+	var turn = clientTurnJSON.currentTurn;
 	var gameid = clientTurnJSON.gameId;
 	var player = clientTurnJSON.player;
 	var stock = stockname.text();
@@ -91,7 +93,7 @@ buttonSell.on('click', function() {
 	var price = parseFloat(stockprice.text());
 	
 	var reqData = new BrokerTransaction("SELL", stock, qty, price);
-	var url = serviceUrl + 'rest/broker/sell/' + gameid + '/' + player;
+	var url = serviceUrl + 'rest/broker/sell/' + gameid + '/' + player + '/' + turn;
 	
 	var reqJson = JSON.stringify(reqData);
 	console.log(reqData);

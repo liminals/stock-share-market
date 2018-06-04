@@ -111,4 +111,18 @@ public class BankDAO {
 			ex.printStackTrace();
 		}
 	}
+	
+	public void updateAccountAfterTransaction(BankAccount account) {
+		String sql = "update bankaccount set current_balance=?, transactions=? where name=?";
+		Gson g = new Gson();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setFloat(1, account.getCurrent_balance());
+			pstmt.setString(2, g.toJson(account.getTransactions()));
+			pstmt.setString(3, account.getName());
+			pstmt.executeUpdate();
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
 }

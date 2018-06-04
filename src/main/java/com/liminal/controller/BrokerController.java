@@ -1,4 +1,6 @@
 // has access to bank accounts, and broker accounts and the stock prices of game
+// the middle man between all the players and the bank
+// maintains broker as well as bank transactions
 package com.liminal.controller;
 
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import com.liminal.dao.BankDAO;
 import com.liminal.dao.BrokerDAO;
 import com.liminal.dao.GameDAO;
 import com.liminal.model.BankAccount;
+import com.liminal.model.BankTransaction;
 import com.liminal.model.BrokerAccount;
 import com.liminal.model.BrokerTransaction;
 import com.liminal.model.Stock;
@@ -39,7 +42,7 @@ public class BrokerController {
 	}
 	
 	// broker recieves BUY from client
-	public BrokerTransaction buy(BrokerTransaction req, int gameid) {
+	public BrokerTransaction buy(BrokerTransaction req, int gameid, int turn) {
 		float currentBankBalance = bankAccount.getCurrent_balance();
 		List<Stock> lsStocks = gameDAO.getCurrentPricesofStock(gameid);
 		if (checkIsPriceMatches(lsStocks, req)) {
@@ -58,7 +61,11 @@ public class BrokerController {
 					trans.add(transaction);
 					this.account.setTransactions(trans);
 				}
+				
+				float newBankBalance = currentBankBalance - value;
 				brokerDAO.updateTransactions(this.account);
+				BankTransaction bt = createBankTransaction(transaction, turn);
+				updateBankAccount(bt, newBankBalance);
 				return transaction;
 			} else {
 				req.setStatus(BrokerTransaction.TYPE.BUY.toString());
@@ -72,7 +79,8 @@ public class BrokerController {
 		}
 	}
 	
-	public BrokerTransaction sell(BrokerTransaction req, int gameid) {
+	// broker recieves SELL from client
+	public BrokerTransaction sell(BrokerTransaction req, int gameid, int turn) {
 		List<Stock> lsStocks = gameDAO.getCurrentPricesofStock(gameid);
 		if (checkIsPriceMatches(lsStocks, req)) {
 			BrokerTransaction transaction = new BrokerTransaction();
@@ -97,7 +105,7 @@ public class BrokerController {
 		}
 	}
 	
-	
+	// checks if the req price is equal as the current price in DB
 	private boolean checkIsPriceMatches(List<Stock> ls, BrokerTransaction bt) {
 		boolean match = true;
 		for (Stock s : ls) {
@@ -111,7 +119,33 @@ public class BrokerController {
 		return match;
 	}
 	
+	// creates and returns a bank transaction
+	private BankTransaction createBankTransaction(BrokerTransaction transaction, int turn) {
+		BankTransaction bt = new BankTransaction();
+		bt.setTurn(turn);
+		float value = transaction.getQty() * transaction.getPrice();
+		if (transaction.getType().equalsIgnoreCase(BrokerTransaction.TYPE.BUY.toString())) {
+			bt.setType(BankTransaction.TYPE.WITHDRAW.toString());
+			bt.setReceiver("BROKER");
+		}
+		bt.setAmount(value);
+		return bt;
+	}
 	
+	// updates the bank account after transaction
+	private void updateBankAccount(BankTransaction bt, float bankBalance) {
+		List<BankTransaction> lbt;
+		if (bankAccount.getTransactions() != null) {
+			lbt = bankAccount.getTransactions();
+			lbt.add(bt);
+		} else {
+			lbt = new ArrayList<>();
+			lbt.add(bt);
+		}
+		bankAccount.setTransactions(lbt);
+		bankAccount.setCurrent_balance(bankBalance);
+		bankDAO.updateAccountAfterTransaction(bankAccount);
+	}
 	
 	
 	/////////////////////////// DB actions
