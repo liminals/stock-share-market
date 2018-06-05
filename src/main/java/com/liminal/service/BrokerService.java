@@ -1,6 +1,9 @@
 package com.liminal.service;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -12,6 +15,7 @@ import com.liminal.controller.BrokerController;
 import com.liminal.model.BankAccount;
 import com.liminal.model.BrokerAccount;
 import com.liminal.model.BrokerTransaction;
+import com.liminal.model.Portfolio;
 
 @Path("/broker")
 public class BrokerService {
@@ -66,5 +70,13 @@ public class BrokerService {
 		BrokerAccount account = controller.getAccountFromDB(player);
 		controller.setAccount(account);
 		return controller.sell(transaction, gameid);
+	}
+	
+	// return the current portfolio to player
+	@GET
+	@Path("/portfolio/get/{player}")
+	public List<Portfolio> getPortfolio(@PathParam("player") String player) {
+		controller = new BrokerController();
+		return controller.getPortfolioFromDB(player);		
 	}
 }

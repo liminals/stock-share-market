@@ -169,20 +169,29 @@ public class BrokerController {
 		Portfolio p;
 		
 		List<Portfolio> port = account.getPortfolio();
-		// if not in portfolio
+		// portfolio is empty
 		if (port == null) {
 			port = new ArrayList<>();
 			p = new Portfolio();
 			p.setName(transaction.getStock());
 			p.setValue(transaction.getPrice() * transaction.getQty());
 			port.add(p);
+		// portfolio is not empty
 		} else {
-			// exists in portfolio
 			p = getPortfolio(port, transaction.getStock());
-			float currentValue = p.getValue();
-			float transValue = transaction.getPrice() * transaction.getQty();
-			float newValue = currentValue + transValue;
-			p.setValue(newValue);
+			// exists in portfolio
+			if (p != null) {
+				float currentValue = p.getValue();
+				float transValue = transaction.getPrice() * transaction.getQty();
+				float newValue = currentValue + transValue;
+				p.setValue(newValue);
+			// not exists in protfolio
+			} else {
+				p = new Portfolio();
+				p.setName(transaction.getStock());
+				p.setValue(transaction.getPrice() * transaction.getQty());
+				port.add(p);
+			}
 		}
 		account.setPortfolio(port);
 	}
@@ -212,5 +221,9 @@ public class BrokerController {
 	// setup the bank account for each game at the DB
 	public void setAccountForGame() {
 		this.brokerDAO.setAccountForGame(account);
+	}
+	
+	public List<Portfolio> getPortfolioFromDB(String player) {
+		return this.brokerDAO.getPortfolio(player);
 	}
 }
