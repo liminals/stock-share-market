@@ -1,10 +1,13 @@
 /*allStocksJSON;
 var stockSelect = $("#stocks");
 clientTurnJSON*/
+var portfolioJson;
 var buttonBuy = $("#buttonBuy");
 var buttonSell = $('#buttonSell');
 var stockname = $("#stockname");
 var stockprice = $("#stockprice");
+var portfolioDiv = $('#portfolioDiv');
+
 buttonBuy.prop('disabled', true);
 buttonSell.prop('disabled', true);
 
@@ -71,7 +74,6 @@ buttonBuy.on('click', function(){
 	var url = serviceUrl + 'rest/broker/buy/' + gameid + '/' + player;
 	
 	var reqJson = JSON.stringify(reqData);
-	console.log(reqData);
 	
 	$.ajax(url, {
 		type: 'post',
@@ -87,6 +89,7 @@ buttonBuy.on('click', function(){
 			} else {
 				// update transaction info
 				updateLatestTransactionUI(data);
+				getLatestPortfolio();
 			}
 		}
 	});
@@ -113,7 +116,6 @@ buttonSell.on('click', function() {
 		contentType: 'application/json',
 		success: function(data) {
 			clearFields();
-			console.log(data);
 			if (data.status == 'PRICE_DO_NOT_MATCH') {
 				alert('Transaction Failed!. Price doesn' + "'" + 't match.')
 			} else {
@@ -139,4 +141,34 @@ function updateLatestTransactionUI(data) {
 	html += data.price + ' for ';
 	html += trnsValue + ' !';
 	$('#latestTransaction').html(html);
+}
+
+// portfolio related UI
+// get the portfolio from backend
+// assign it to the portfolioJson and updates the portfolio div
+function getLatestPortfolio() {
+	var player = clientTurnJSON.player;
+	var url = serviceUrl + 'rest/broker/portfolio/get/' + player;
+	$.ajax(url, {
+		type: 'get',
+		success: function(data) {
+			portfolioJson = data;
+			updatePortfolioinUI(portfolioJson);
+		}
+	});
+}
+
+// update portfolio in the UI
+function updatePortfolioinUI(data) {
+	console.log(data);
+	var html = '<ul> Portfolio';
+	$.each(data, function(k, v) {
+		html += '<li>';
+		html +=	'<ul>' + v.name;
+		html += '<li>' + v.value + '</li>';
+		html += '</ul>';
+		html += '</li>';
+	});
+	html += '</ul>';
+	portfolioDiv.html(html);
 }
