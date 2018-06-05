@@ -16,12 +16,19 @@ function BrokerTransaction(type, stock, qty, price) {
 }
 
 
+function clearFields() {
+	stockname.text('');
+	stockprice.text('');
+	$('#transactionValue').val('');
+	$('#transactionQty').val('');
+}
+
+
 // populate the stock details
 // below in the UI
 stockSelect.change(function() {
 	console.log(this.value);
-	$('#transactionValue').val('');
-	$('#transactionQty').val('');
+	clearFields();
 	buttonBuy.prop('disabled', true);
 	buttonSell.prop('disabled', true);
 	updateStockDataForSelect(this.value);
@@ -72,13 +79,12 @@ buttonBuy.on('click', function(){
 		contentType: 'application/json',
 		success: function(data) {
 			clearFields();
-			console.log(data);
 			if (data.status == 'INSUFFICIENT_FUNDS') {
-				alert('Transaction Failed!. Insufficient funds.')
+				alert('Transaction Failed!. Insufficient Funds!');
 			} else if (data.status == 'PRICE_DO_NOT_MATCH') {
-				alert('Transaction Failed!. Price doesn' + "'" + 't match.')
+				alert('Transaction Failed!. Price doesn' + "'" + 't match!');
 			} else {
-				// update latest transaction in UI
+				// update transaction info
 			}
 		}
 	});
@@ -109,13 +115,8 @@ buttonSell.on('click', function() {
 			if (data.status == 'PRICE_DO_NOT_MATCH') {
 				alert('Transaction Failed!. Price doesn' + "'" + 't match.')
 			} else {
-				// update latest transaction in UI
+				// update transaction info
 			}
 		}
 	});
 });
-
-function clearFields() {
-	stockname.val('');
-	stockprice.val('');
-}
