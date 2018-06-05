@@ -12,14 +12,16 @@ Download them, and Please set the PATH variables accordingly. Configure Maven an
 - Bootstar 4 (in future)
 
 
-### How to run
+### How to import 
 - open eclipse
 - click File > Import
 - choose Existing Maven Projects
 - then Right click on project > Maven > Download Sources/ Download JavaDoc
 - then Right click on project > Maven > Update Project
-- then Right click on project > Run as > Maven build...
-- In the Edit Configuration window set Goals ad 'clean install'
+
+### How to run,
+- Right click on project > Run as > Maven build...
+- In the Edit Configuration window set Goals as 'clean install'
 - In the Edit Configuration window select Skip Tests
 - After 'Build Success', Right click on project > Run as > Run on server
 - Choose Tomcat8 on localhost, Then Finish
