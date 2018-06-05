@@ -56,6 +56,7 @@
 					<input type="text" id="transactionValue" disabled="true">
 					<input type="text" id="transactionQty">
 				 </div>
+				 <div id="latestTransaction"></div>
 			</div>
 		</div>
 	</div>

@@ -85,6 +85,7 @@ buttonBuy.on('click', function(){
 				alert('Transaction Failed!. Price doesn' + "'" + 't match!');
 			} else {
 				// update transaction info
+				updateLatestTransactionUI(data);
 			}
 		}
 	});
@@ -116,7 +117,25 @@ buttonSell.on('click', function() {
 				alert('Transaction Failed!. Price doesn' + "'" + 't match.')
 			} else {
 				// update transaction info
+				updateLatestTransactionUI(data);
 			}
 		}
 	});
 });
+
+// updates the last transaction in the UI
+function updateLatestTransactionUI(data) {
+	var trnsValue = data.qty * parseFloat(data.price);
+	var html = '<p>';
+	
+	if (data.type == 'BUY') {
+		html += 'Bought ';
+	} else {
+		html += 'Sold ';
+	}
+	html += data.qty + ' of ';
+	html += data.stock + ' stocks at ';
+	html += data.price + ' for ';
+	html += trnsValue + ' !';
+	$('#latestTransaction').html(html);
+}
