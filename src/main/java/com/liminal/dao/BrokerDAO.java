@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -109,5 +110,24 @@ public class BrokerDAO {
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public List<Portfolio> getPortfolio(String name) {
+		String sql = "select portfolio from brokeraccount where name=?";
+		List<Portfolio> port = new ArrayList<>();
+		Gson g = new Gson();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Type lsPort = new TypeToken<List<Portfolio>>() {}.getType();
+				String portsJson = rs.getString(1);
+				port = g.fromJson(portsJson, lsPort);
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return port;
 	}
 }
