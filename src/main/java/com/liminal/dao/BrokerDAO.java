@@ -82,14 +82,16 @@ public class BrokerDAO {
 	
 	// returns all the 
 	public void updateTransactions(BrokerAccount account) {
-		String sql = "update brokeraccount set transactions=? where name=?";
+		String sql = "update brokeraccount set portfolio=?, transactions=? where name=?";
 		Gson g = new Gson();
 		try {
 			pstmt = conn.prepareStatement(sql);
 			String trans = g.toJson(account.getTransactions());
+			String port = g.toJson(account.getPortfolio());
 			
-			pstmt.setString(1, trans);
-			pstmt.setString(2, account.getName());
+			pstmt.setString(1, port);
+			pstmt.setString(2, trans);
+			pstmt.setString(3, account.getName());
 			pstmt.executeUpdate();
 		} catch(SQLException ex) {
 			ex.printStackTrace();

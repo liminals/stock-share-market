@@ -52,6 +52,7 @@ public class BrokerController {
 			float value = req.getQty() * req.getPrice();
 			if (value < currentBankBalance) {
 				BrokerTransaction transaction = new BrokerTransaction();
+				transaction.setTurn(req.getTurn());
 				transaction.setStock(req.getStock());
 				transaction.setQty(req.getQty());
 				transaction.setType(BrokerTransaction.TYPE.BUY.toString());
@@ -66,6 +67,10 @@ public class BrokerController {
 				}
 				
 				float newBankBalance = currentBankBalance - value;
+				
+				// add portfolio
+				addToPortfolio(transaction);
+				
 				brokerDAO.updateTransactions(this.account);
 				BankTransaction bt = createBankTransaction(transaction);
 				updateBankAccount(bt, newBankBalance);
@@ -160,22 +165,35 @@ public class BrokerController {
 	
 	
 	//////////////// PortfolioRelated
-	public void addToPortfolio(BrokerTransaction transaction) {
-		Portfolio p = new Portfolio();
+	private void addToPortfolio(BrokerTransaction transaction) {
+		Portfolio p;
 		
 		List<Portfolio> port = account.getPortfolio();
+		// if not in portfolio
 		if (port == null) {
-			p.setId(1);
 			port = new ArrayList<>();
+			p = new Portfolio();
+			p.setName(transaction.getStock());
+			p.setValue(transaction.getPrice() * transaction.getQty());
+			port.add(p);
 		} else {
-			Collections.sort(port);
-			int id = port.get(port.size() - 1).getId();
-			p.setId(id);
+			// exists in portfolio
+			p = getPortfolio(port, transaction.getStock());
+			float currentValue = p.getValue();
+			float transValue = transaction.getPrice() * transaction.getQty();
+			float newValue = currentValue + transValue;
+			p.setValue(newValue);
 		}
-		p.setName(transaction.getStock());
-		p.setValue(transaction.getPrice() * transaction.getQty());
-		port.add(p);
 		account.setPortfolio(port);
+	}
+	
+	private Portfolio getPortfolio(List<Portfolio> port, String s) {
+		for (Portfolio p : port) {
+			if (p.getName().equalsIgnoreCase(s)) {
+				return p;
+			}
+		}
+		return null;
 	}
 	
 	/////////////////////////// DB actions
