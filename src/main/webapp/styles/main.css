@@ -1,0 +1,11 @@
+#mainBG {
+	background: black;
+}
+
+h1 {
+	text-align: center;	
+}
+
+h1, h2 {
+	color: red;
+}
