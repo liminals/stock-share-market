@@ -1,5 +1,5 @@
-# Limial
-## Stock-share-market simulation game
+# Liminal 
+## Stock-Share-Market simulation game
 A real time multiplayer game
 
 ### Requirements
