@@ -95,7 +95,6 @@ function updateStockDataForSell(value) {
 
 $('#transactionQty').on('input propertychange paste', function() {
 	var qty = $.trim($(this).val());
-	console.log(qty);
 	if (qty != '' && parseInt(qty) > 0) {
 		buttonBuy.prop('disabled', false);
 		$('#transactionValue').val(parseInt(qty) * parseFloat(stockprice.text()));
@@ -107,7 +106,6 @@ $('#transactionQty').on('input propertychange paste', function() {
 
 $('#sellQty').on('input propertychange paste', function() {
 	var qty = $.trim($(this).val());
-	console.log(qty);
 	if (qty != '' && parseInt(qty) > 0) {
 		buttonSell.prop('disabled', false);
 		$('#transactionValue').val(parseInt(qty) * parseFloat(stockprice.text()));
@@ -140,11 +138,13 @@ buttonBuy.on('click', function(){
 			if (data.status == 'INSUFFICIENT_FUNDS') {
 				alert('Transaction Failed!. Insufficient Funds!');
 			} else if (data.status == 'PRICE_DO_NOT_MATCH') {
-				alert('Transaction Failed!. Price doesn' + "'" + 't match!');
+				alert('Transaction Failed!. Price does not match!');
 			} else {
 				// update transaction info
 				updateLatestTransactionUI(data);
 				getLatestPortfolio();
+				getBalance();
+				getAllTransactions();
 			}
 		}
 	});
@@ -157,7 +157,6 @@ buttonSell.on('click', function() {
 	function getSellStockPrice(stock) {
 		$.each(allStocksJSON, function(k, v){
 			if(v.name == stock) {
-				console.log('matches ' + v.current_price);
 				sellingprice =  v.current_price;
 			}
 		});
@@ -172,14 +171,11 @@ buttonSell.on('click', function() {
 	// var price = getSellStockPrice(stock);
 	getSellStockPrice(stock);
 	var price = sellingprice;
-	
-	console.log(price);
-	
+		
 	var reqData = new BrokerTransaction(turn, "SELL", stock, qty, price);
 	var url = serviceUrl + 'rest/broker/sell/' + gameid + '/' + player;
 	
 	var reqJson = JSON.stringify(reqData);
-	console.log(reqData);
 	
 	$.ajax(url, {
 		type: 'post',
@@ -196,6 +192,8 @@ buttonSell.on('click', function() {
 				// update transaction info
 				updateLatestTransactionUI(data);
 				getLatestPortfolio();
+				getBalance();
+				getAllTransactions();
 			}
 		}
 	});
@@ -237,7 +235,6 @@ function getLatestPortfolio() {
 
 // update portfolio in the UI
 function updatePortfolioinUI(data) {
-	console.log(data);
 	var html = '<ul> Portfolio';
 	$.each(data, function(k, v) {
 		html += '<li>';
@@ -257,10 +254,48 @@ function populateSellSelect(data) {
 	stockSellSelect.empty();
 	$.each(data, function(key, value) {
 		var j = JSON.stringify(value);
-		console.log(j);
 	    stockSellSelect.append($("<option/>", {
 	        value: j,
 	        text: value.name
 	    }));
 	});
+}
+
+////////////// transaction related
+// get all the transactions from the backend
+function getAllTransactions() {
+	var player = clientTurnJSON.player;
+	var url = serviceUrl + 'rest/broker/transactions/' + player + '/all';
+	console.log(url);
+	
+	$.ajax(url, {
+		type: 'get',
+		success: function(data) {
+			console.log(data);
+			updateTransactionsInUI(data);
+		},
+		error: function() {
+			console.log('error when calling transactions');
+		}
+	});
+}
+
+function updateTransactionsInUI(data) {
+	var html = '<ul> Transactions History';
+	$.each(data, function(k, v){
+		html += '<li>';
+		if (v.type == 'BUY') {
+			html += 'Bought ';
+		} else {
+			html += 'Sold ';
+		}
+		html += v.qty + ' of ';
+		html += v.stock + ' stocks at ';
+		html += v.price + ' for ';
+		var value = parseFloat(v.price) * v.qty;
+		html += value + ' !';
+		html += '</li>';
+	});
+	html += '</ul>';
+	$("#transactionHistory").html(html);
 }

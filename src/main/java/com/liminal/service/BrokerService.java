@@ -79,4 +79,12 @@ public class BrokerService {
 		controller = new BrokerController();
 		return controller.getPortfolioFromDB(player);		
 	}
+	
+	@GET
+	@Path("/transactions/{player}/all")
+	public List<BrokerTransaction> getAll(@PathParam("player") String player) {
+		controller = new BrokerController();
+		return controller.getTransactionsFromDB(player);
+	}
+	
 }

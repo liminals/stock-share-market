@@ -72,6 +72,8 @@
 		</div>
 		<br/>
 		<div id="portfolioDiv"></div>
+		<br>
+		<div id="transactionHistory"></div>
 	</div>
 	
 	
