@@ -26,7 +26,7 @@
 		<h3 id="playerName"></h3>
 		<h3 id="currentBalance"></h3>
 		<h3 id="currentTurn">Current Turn:</h3>
-		<h3 id="totalTurns"> Total Turns :</h3>
+		<h3 id="totalTurns"> Total Turns !!!!:</h3>
 		<h4>Stocks</h4>
 		
 		<div id="stockDashboard">
@@ -41,25 +41,37 @@
 		</div>
 		
 		<div id="stockTransaction">
-			<select id="selectBuy"></select>
-			<div id="stockDetails">
-				<h4 id="stockname"></h4>
-				<p id="stockprice">
-			</div>
-			<div id="transactionStocksDiv">
-				 <div id="transactionButtons">
-					<button id="buttonBuy">Buy</button>
-					<button id="buttonSell">Sell</button>
-				 </div>
-				 <div id="transactionFields">
-					<label>Value : </label>
-					<input type="text" id="transactionValue" disabled="true">
+			<div id="stockBuy">
+				Buy : <select id="selectBuy"></select>
+				<button id="buttonBuy">Buy</button>
+				<div id="buyStockDetails">
+					<h4 id="stockname"></h4>
+					Price : <p id="stockprice">
+				</div>
+				<div id="buyTransactionFields">
+					<label>Value : </label> 
+					<input type="text" id="transactionValue" disabled="true"> 
 					<input type="text" id="transactionQty">
-				 </div>
-				 <span id="latestTransaction"></span>
-				 <div id="portfolioDiv"></div>
+				</div>
 			</div>
+			<br/>
+			<div id="stockSell">
+				Sell : <select id="selectSell"></select>
+				<button id="buttonSell">Sell</button>
+				<div id="sellStockDetails">
+					<h4 id="portfolioname"></h4>
+					Qty : <p id="portfolioqty">
+					Value : <p id="portfoliovalue">
+				</div>
+				<div id="sellTransactionFields">
+					<label>Sell Qty : </label>  
+					<input type="text" id="sellQty">
+				</div>
+			</div>
+			<span id="latestTransaction"></span>
 		</div>
+		<br/>
+		<div id="portfolioDiv"></div>
 	</div>
 	
 	

@@ -90,26 +90,44 @@ public class BrokerController {
 	// broker recieves SELL from client
 	public BrokerTransaction sell(BrokerTransaction req, int gameid) {
 		List<Stock> lsStocks = gameDAO.getCurrentPricesofStock(gameid);
+		List<Portfolio> portfolios = getPortfolioFromDB(account.getName());
+		Portfolio p = getPortfolio(portfolios, req.getStock());
+		
 		if (checkIsPriceMatches(lsStocks, req)) {
-			BrokerTransaction transaction = new BrokerTransaction();
-			transaction.setStock(req.getStock());
-			transaction.setQty(req.getQty());
-			transaction.setType(BrokerTransaction.TYPE.SELL.toString());
-			transaction.setPrice(req.getPrice());
+			if (p.getQty() > req.getQty()) {
+				BrokerTransaction transaction = new BrokerTransaction();
+				transaction.setTurn(req.getTurn());
+				transaction.setStock(req.getStock());
+				transaction.setQty(req.getQty());
+				transaction.setType(BrokerTransaction.TYPE.SELL.toString());
+				transaction.setPrice(req.getPrice());
 
-			if (this.account.getTransactions() != null) {
-				this.account.getTransactions().add(transaction);
+				if (this.account.getTransactions() != null) {
+					this.account.getTransactions().add(transaction);
+				} else {
+					List<BrokerTransaction> trans = new ArrayList<>();
+					trans.add(transaction);
+					this.account.setTransactions(trans);
+				}
+				
+				// remove from portfolio
+				if (p.getQty() == req.getQty()) {
+					portfolios.remove(p);
+				}
+				// update in portfolio
+				editInPortfolio(transaction, p);
+				account.setPortfolio(portfolios);
+				
+				brokerDAO.updateTransactions(this.account);
+				BankTransaction bt = createBankTransaction(transaction);
+				float newBankBalance = bankAccount.getCurrent_balance() + bt.getAmount();
+				updateBankAccount(bt, newBankBalance);
+				return transaction;
 			} else {
-				List<BrokerTransaction> trans = new ArrayList<>();
-				trans.add(transaction);
-				this.account.setTransactions(trans);
+				req.setStatus(BrokerTransaction.TYPE.SELL.toString());
+				req.setStatus(BrokerTransaction.STATUS.INSUFFICIENT_STOCKS.toString());
+				return req;
 			}
-			brokerDAO.updateTransactions(this.account);
-			
-			BankTransaction bt = createBankTransaction(transaction);
-			float newBankBalance = bankAccount.getCurrent_balance() + bt.getAmount();
-			updateBankAccount(bt, newBankBalance);
-			return transaction;
 		} else {
 			req.setStatus(BrokerTransaction.TYPE.SELL.toString());
 			req.setStatus(BrokerTransaction.STATUS.PRICE_DO_NOT_MATCH.toString());
@@ -175,6 +193,7 @@ public class BrokerController {
 			p = new Portfolio();
 			p.setName(transaction.getStock());
 			p.setValue(transaction.getPrice() * transaction.getQty());
+			p.setQty(transaction.getQty());
 			port.add(p);
 		// portfolio is not empty
 		} else {
@@ -184,16 +203,30 @@ public class BrokerController {
 				float currentValue = p.getValue();
 				float transValue = transaction.getPrice() * transaction.getQty();
 				float newValue = currentValue + transValue;
+				int oldQty = p.getQty();
+				int newQty = oldQty + transaction.getQty();
 				p.setValue(newValue);
+				p.setQty(newQty);
 			// not exists in protfolio
 			} else {
 				p = new Portfolio();
 				p.setName(transaction.getStock());
 				p.setValue(transaction.getPrice() * transaction.getQty());
+				p.setQty(transaction.getQty());
 				port.add(p);
 			}
 		}
 		account.setPortfolio(port);
+	}
+	
+	// reduces the selling qty from portfolio
+	private void editInPortfolio(BrokerTransaction transaction, Portfolio p) {
+		int newQty = p.getQty() - transaction.getQty();
+		
+		float currentValue = p.getValue();
+		float newValue = currentValue - (transaction.getQty() * transaction.getPrice());
+		p.setQty(newQty);
+		p.setValue(newValue);
 	}
 	
 	private Portfolio getPortfolio(List<Portfolio> port, String s) {
