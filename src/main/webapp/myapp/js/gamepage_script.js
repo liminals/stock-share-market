@@ -5,7 +5,7 @@ var allStocksJSON;
 var labelData = [];
 var clientTurnJSON;	// ClientTurn object, used by both client and server
 var stockBuySelect = $("#selectBuy"); // select box
-console.log('done');
+
 // this if for game host only
 if (clientTurnJSON.currentTurn > 0) {
 	 timer = setInterval(countTurns, 1000 * 4);

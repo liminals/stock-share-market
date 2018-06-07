@@ -7,6 +7,21 @@ var buttonSell = $('#buttonSell');
 var stockname = $("#stockname");
 var stockprice = $("#stockprice");
 var portfolioDiv = $('#portfolioDiv');
+var stockSellSelect = $('#selectSell');
+
+var sellStockdetails = $('#sellStockDetails');
+var sellTransactionFields = $('#sellTransactionFields');
+var buyStockdetails = $('#buyStockDetails');
+var buyTransactionFields = $('#buyTransactionFields');
+
+var portfolioname = $('#portfolioname');
+var portfoliovalue = $('#portfoliovalue');
+var portfolioqty = $('#portfolioqty');
+
+sellTransactionFields.css('display', 'none');
+buyTransactionFields.css('display', 'none');
+buyStockdetails.css('display', 'none');
+sellStockdetails.css('display', 'none');
 
 buttonBuy.prop('disabled', true);
 buttonSell.prop('disabled', true);
@@ -23,23 +38,46 @@ function BrokerTransaction(turn, type, stock, qty, price) {
 function clearFields() {
 	stockname.text('');
 	stockprice.text('');
+	portfolioname.text('');
+	portfoliovalue.text('');
+	portfolioqty.text('');
 	$('#transactionValue').val('');
 	$('#transactionQty').val('');
+	$('#sellQty').val('');
 }
 
 
 // populate the stock details
 // below in the UI
 stockBuySelect.change(function() {
-	console.log(this.value);
 	clearFields();
 	buttonBuy.prop('disabled', true);
 	buttonSell.prop('disabled', true);
-	updateStockDataForSelect(this.value);
+	updateStockDataForBuy(this.value);
+	
+	sellTransactionFields.css('display', 'none');
+	sellStockdetails.css('display', 'none');
+	buyTransactionFields.css('display', 'block');
+	buyStockdetails.css('display', 'block');
 });
 
-// update the stock details on the #stockDetails Div
-function updateStockDataForSelect(id) {
+stockSellSelect.change(function() {
+	var portname = $(this).find("option:selected").text();
+	var value = JSON.parse(this.value);
+	clearFields();
+	buttonBuy.prop('disabled', true);
+	buttonSell.prop('disabled', true);
+	
+	sellTransactionFields.css('display', 'block');
+	sellStockdetails.css('display', 'block');
+	buyTransactionFields.css('display', 'none');
+	buyStockdetails.css('display', 'none');
+	
+	updateStockDataForSell(value);
+});
+
+// update the stock details on the #stockDetails Div for buying
+function updateStockDataForBuy(id) {
 	$.each(allStocksJSON, function(k, v){
 		if (v.id == id) {
 			stockname.text(v.name);
@@ -48,16 +86,33 @@ function updateStockDataForSelect(id) {
 	});
 }
 
+// update the stock details on the #stockDetails Div for selling
+function updateStockDataForSell(value) {
+	portfolioname.text(value.name);
+	portfoliovalue.text(value.value);
+	portfolioqty.text(value.qty);
+}
+
 $('#transactionQty').on('input propertychange paste', function() {
 	var qty = $.trim($(this).val());
 	console.log(qty);
 	if (qty != '' && parseInt(qty) > 0) {
-		buttonSell.prop('disabled', false);
 		buttonBuy.prop('disabled', false);
 		$('#transactionValue').val(parseInt(qty) * parseFloat(stockprice.text()));
 	} else {
-		buttonSell.prop('disabled', true);
 		buttonBuy.prop('disabled', true);
+		$('#transactionValue').val('');
+	}
+});
+
+$('#sellQty').on('input propertychange paste', function() {
+	var qty = $.trim($(this).val());
+	console.log(qty);
+	if (qty != '' && parseInt(qty) > 0) {
+		buttonSell.prop('disabled', false);
+		$('#transactionValue').val(parseInt(qty) * parseFloat(stockprice.text()));
+	} else {
+		buttonSell.prop('disabled', true);
 		$('#transactionValue').val('');
 	}
 });
@@ -95,13 +150,30 @@ buttonBuy.on('click', function(){
 	});
 });
 
+
 buttonSell.on('click', function() {
+	var sellingprice;
+	//get price of selling stock
+	function getSellStockPrice(stock) {
+		$.each(allStocksJSON, function(k, v){
+			if(v.name == stock) {
+				console.log('matches ' + v.current_price);
+				sellingprice =  v.current_price;
+			}
+		});
+	}
+	
 	var turn = clientTurnJSON.currentTurn;
 	var gameid = clientTurnJSON.gameId;
 	var player = clientTurnJSON.player;
-	var stock = stockname.text();
-	var qty = $('#transactionQty').val();
-	var price = parseFloat(stockprice.text());
+	var stock = portfolioname.text();
+	var qty = $('#sellQty').val();
+	
+	// var price = getSellStockPrice(stock);
+	getSellStockPrice(stock);
+	var price = sellingprice;
+	
+	console.log(price);
 	
 	var reqData = new BrokerTransaction(turn, "SELL", stock, qty, price);
 	var url = serviceUrl + 'rest/broker/sell/' + gameid + '/' + player;
@@ -118,13 +190,17 @@ buttonSell.on('click', function() {
 			clearFields();
 			if (data.status == 'PRICE_DO_NOT_MATCH') {
 				alert('Transaction Failed!. Price doesn' + "'" + 't match.')
+			} else if (data.status == 'INSUFFICIENT_STOCKS') {
+				alert('Transaction Failed!. You don' + + "'" + 't have specified stock quantity!');
 			} else {
 				// update transaction info
 				updateLatestTransactionUI(data);
+				getLatestPortfolio();
 			}
 		}
 	});
 });
+
 
 // updates the last transaction in the UI
 function updateLatestTransactionUI(data) {
@@ -154,6 +230,7 @@ function getLatestPortfolio() {
 		success: function(data) {
 			portfolioJson = data;
 			updatePortfolioinUI(portfolioJson);
+			populateSellSelect(portfolioJson);
 		}
 	});
 }
@@ -165,10 +242,25 @@ function updatePortfolioinUI(data) {
 	$.each(data, function(k, v) {
 		html += '<li>';
 		html +=	'<ul>' + v.name;
-		html += '<li>' + v.value + '</li>';
+		html += '<li>Qty owned: ' + v.qty + '</li>';
+		html += '<li>Worth    : ' + v.value + '</li>';
 		html += '</ul>';
 		html += '</li>';
 	});
 	html += '</ul>';
 	portfolioDiv.html(html);
+}
+
+
+// sell stocks related
+function populateSellSelect(data) {
+	stockSellSelect.empty();
+	$.each(data, function(key, value) {
+		var j = JSON.stringify(value);
+		console.log(j);
+	    stockSellSelect.append($("<option/>", {
+	        value: j,
+	        text: value.name
+	    }));
+	});
 }

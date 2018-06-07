@@ -12,7 +12,7 @@ public class BrokerTransaction {
 		BUY, SELL
 	}
 	public enum STATUS {
-		PRICE_DO_NOT_MATCH, INSUFFICIENT_FUNDS 
+		PRICE_DO_NOT_MATCH, INSUFFICIENT_FUNDS, INSUFFICIENT_STOCKS
 	}
 	
 	public int getTurn() {
