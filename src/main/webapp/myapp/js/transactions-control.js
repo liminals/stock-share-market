@@ -98,11 +98,9 @@ $('#transactionQty').on('input propertychange paste', function() {
 	var qty = $.trim($(this).val());
 	console.log(qty);
 	if (qty != '' && parseInt(qty) > 0) {
-		buttonSell.prop('disabled', false);
 		buttonBuy.prop('disabled', false);
 		$('#transactionValue').val(parseInt(qty) * parseFloat(stockprice.text()));
 	} else {
-		buttonSell.prop('disabled', true);
 		buttonBuy.prop('disabled', true);
 		$('#transactionValue').val('');
 	}

@@ -129,12 +129,6 @@ public class BrokerController {
 				req.setStatus(BrokerTransaction.STATUS.INSUFFICIENT_STOCKS.toString());
 				return req;
 			}
-			brokerDAO.updateTransactions(this.account);
-			
-			BankTransaction bt = createBankTransaction(transaction);
-			float newBankBalance = bankAccount.getCurrent_balance() + bt.getAmount();
-			updateBankAccount(bt, newBankBalance);
-			return transaction;
 		} else {
 			req.setStatus(BrokerTransaction.TYPE.SELL.toString());
 			req.setStatus(BrokerTransaction.STATUS.PRICE_DO_NOT_MATCH.toString());
