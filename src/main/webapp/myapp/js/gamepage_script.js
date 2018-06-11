@@ -5,6 +5,7 @@ var allStocksJSON;
 var labelData = [];
 var clientTurnJSON;	// ClientTurn object, used by both client and server
 var stockBuySelect = $("#selectBuy"); // select box
+var winner;
 
 // this if for game host only
 if (clientTurnJSON.currentTurn > 0) {
@@ -56,6 +57,11 @@ function countTurns() {
 			if (data == 'true') {
 				clearInterval(timer);
 				alert('game ended');
+				if (winner != clientTurnJSON.player) {
+					alert(winner + ' wins the game!!')
+				} else {
+					alert('Congradulations!!, You won the Game!');
+				}
 			} else {
 				canRequestData();
 			}
@@ -234,6 +240,7 @@ function checkWinner() {
 		type: 'get',
 		success: function(data) {
 			console.log(data);
+			winner = data;
 			$('#currentWinner').text('Current Winner : ' + data);
 		}
 	});
