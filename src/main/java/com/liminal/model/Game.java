@@ -19,11 +19,18 @@ public class Game {
 	private String marketValue;
 	private String sectorValue;
 	private String playersJSON;
+	private String winner;
+	
 	public enum STATUS {
 		YET_TO_START, STARTED, ENDED
 	}
 	
-	
+	public String getWinner() {
+		return winner;
+	}
+	public void setWinner(String winner) {
+		this.winner = winner;
+	}
 	public String getPlayersJSON() {
 		return playersJSON;
 	}

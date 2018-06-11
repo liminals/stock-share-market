@@ -99,6 +99,22 @@ public class BankDAO {
 		}
 	}
 	
+	public float getBalanceByName(String name) {
+		String sql = "select current_balance from bankaccount where name=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				float balance = rs.getFloat(1);
+				return balance;
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return 0f;
+	}
+	
 	public void setAccountForGame(BankAccount account) {
 		String sql = "update bankaccount set current_balance=?, transactions=? where name=?";
 		try {

@@ -5,15 +5,19 @@
  * */
 package com.liminal.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.json.JSONObject;
 
+import com.liminal.dao.BankDAO;
+import com.liminal.dao.BrokerDAO;
 import com.liminal.dao.GameDAO;
 import com.liminal.dao.StockDAO;
 import com.liminal.model.Event;
 import com.liminal.model.Game;
+import com.liminal.model.Player;
+import com.liminal.model.Portfolio;
 import com.liminal.model.Stock;
 
 public class GameController {
@@ -21,6 +25,8 @@ public class GameController {
 	private Game game;
 	private StockDAO stockDAO;
 	private GameDAO gameDAO;
+	private BrokerDAO brokerDAO;
+	private BankDAO bankDAO;
 	
 	public void setGame(Game game) {
 		this.game = game;
@@ -215,6 +221,9 @@ public class GameController {
 		gameDAO.saveGame(game);
 	}
 	
+	public void updatePlayersInDB() {
+		gameDAO.updatePlayerJoin(game);
+	}
 	///////////////// game construction
 	// constructs global array objects
 	public void initialLoading(Game game) {
@@ -388,4 +397,62 @@ public class GameController {
 		return eventStream.toString();
 	}
 
+	
+	////////////////////// game winner calculations
+	/////// winner = bankbalance + portfolio value >>
+	
+	// get latest price of a stock
+	private float getLatestStockValue(String name, List<Stock> stocks) {
+		for (Stock s : stocks) {
+			if (s.getName().equalsIgnoreCase(name))
+				return s.getCurrent_price();
+		}
+		return 0f;
+	}
+	
+	// calculate player assets
+	private float getPlayerAssets(String name) {
+		brokerDAO = new BrokerDAO();
+		bankDAO = new BankDAO();
+		float assets;
+		float bank_balance = bankDAO.getBalanceByName(name);
+		List<Portfolio> lsPort = brokerDAO.getPortfolio(name);
+		
+		float portfolioworth = 0;
+		for (Portfolio p : lsPort) {
+			float latestStockPrice = getLatestStockValue(p.getName(), game.getStocks());
+			if (latestStockPrice == 0) {
+				portfolioworth += p.getValue();
+			} else {
+				portfolioworth += p.getQty() * latestStockPrice;
+			}
+			
+		}
+		assets = bank_balance + portfolioworth;
+		return assets;
+	}
+	
+	// choose and set the winner happens in each turn
+	public void chooseWinner() {
+		String playersJson = this.game.getPlayersJSON();
+		JSONObject jo = new JSONObject(playersJson);
+		List<String> players = new ArrayList<>();
+		int count = jo.length();
+		for (int i = 1; i <= count; i++) {
+			String name = jo.getString(String.valueOf(i));
+			if (!name.equalsIgnoreCase("AI")) 
+				players.add(name);
+		}
+		String current_winner = game.getWinner();
+		float max_assests = 0;
+		for (String name : players) {
+			float assests = getPlayerAssets(name);
+			if (assests > max_assests) {
+				current_winner = name;
+			}
+		}
+		game.setWinner(current_winner);
+		gameDAO.updateWinner(game.getId(), game.getWinner());
+	}
+	
 }

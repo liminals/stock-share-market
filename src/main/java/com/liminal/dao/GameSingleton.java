@@ -16,12 +16,10 @@ import com.liminal.model.GameJoinData;
 
 public class GameSingleton {
 	private static GameSingleton instance;
-	private Random randomGenerator;
 	private List<Game> games;
 
 	private GameSingleton() {
 		games = new ArrayList<>();
-		randomGenerator = new Random();
 	}
 	
 	public static GameSingleton getInstance() {

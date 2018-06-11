@@ -48,7 +48,7 @@ public class GameDAO {
 	}
 	
 	public void saveGame(Game game) {
-		String sql = "insert into game(id, currentTurn, status, createdBy, eventStream, marketTrend, sectorTrends, marketValue, sectorValues, turns) values(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into game(id, currentTurn, status, createdBy, eventStream, marketTrend, sectorTrends, marketValue, sectorValues, turns, players) values(?,?,?,?,?,?,?,?,?,?,?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, game.getId());
@@ -61,6 +61,7 @@ public class GameDAO {
 			pstmt.setString(8, game.getMarketValue());
 			pstmt.setString(9, game.getSectorValue());
 			pstmt.setInt(10, game.getTurns());
+			pstmt.setString(11, game.getPlayersJSON());
 			pstmt.executeUpdate();
 		} catch(SQLException ex) {
 			ex.printStackTrace();
@@ -156,5 +157,31 @@ public class GameDAO {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+	
+	public void updatePlayerJoin(Game game) {
+		String sql = "update game set players=? where id=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, game.getPlayersJSON());
+			pstmt.setInt(2, game.getId());
+			
+			pstmt.executeUpdate();
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void updateWinner(int gameid, String winner) {
+		String sql = "update game set winner=? where id=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, winner);
+			pstmt.setInt(2, gameid);
+			
+			pstmt.executeUpdate();
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

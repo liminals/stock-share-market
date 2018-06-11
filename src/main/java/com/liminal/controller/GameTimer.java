@@ -9,7 +9,7 @@ import com.liminal.model.Game;
 public class GameTimer {
 	
 	private Timer timer;
-	private long timeout = 1000 * 120;
+	private long timeout = 1000 * 30;
 	private GameController gameController;
 	private Game game;
 	
@@ -38,12 +38,14 @@ public class GameTimer {
 			} else {
 				System.out.println("[" + game.getId() + "]" + "[NEW][TURN]" + game.getCurrentTurn());
 				gameController.updateStocksPrice(game.getStocks());
+				gameController.chooseWinner();
 				gameController.getGameDAO().updateCurrentTurn(game);
 			}
 		}
 	};
 	
 	public void startTimer() {
-		timer.scheduleAtFixedRate(updateTurnTask, 1000 * 120, timeout);
+		System.out.println("[" + game.getId() + "]" + "[GAME][STARTED]");
+		timer.scheduleAtFixedRate(updateTurnTask, 1000 * 30, timeout);
 	}
 }

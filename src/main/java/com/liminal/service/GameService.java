@@ -21,6 +21,7 @@ import com.liminal.model.Event;
 import com.liminal.model.Game;
 import com.liminal.model.GameHostingData;
 import com.liminal.model.GameJoinData;
+import com.liminal.model.Player;
 import com.liminal.model.Stock;
 
 @Singleton
@@ -39,8 +40,13 @@ public class GameService {
 	@POST
 	@Path("/join")
 	public GameJoinData joinGame(GameJoinData gameJoinData){
-		if (gameJoinData.getStatus().equalsIgnoreCase(GameJoinData.STATUS.REQUESTING.toString())){
-			return gameSingleton.checkForJoin(gameJoinData);
+		if (gameJoinData.getStatus().equalsIgnoreCase(GameJoinData.STATUS.REQUESTING.toString())) {
+			//return gameSingleton.checkForJoin(gameJoinData);
+			GameJoinData gjd = gameSingleton.checkForJoin(gameJoinData);
+			Game g = gameSingleton.getGame(gjd.getGameId());
+			GameController gc = new GameController(g);
+			gc.updatePlayersInDB();
+			return gjd;
 		}
 		return gameJoinData;
 	}
@@ -178,6 +184,13 @@ public class GameService {
 			return true;
 		}
 		return false;
+	}
+	
+	@GET
+	@Path("/{gameid}/winner")
+	public String getWinner(@PathParam("gameid") int gameid) {
+		Game game = gameSingleton.getGame(gameid);
+		return game.getWinner();
 	}
 	
 	// this will end a game
