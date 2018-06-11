@@ -27,6 +27,7 @@
 		<h3 id="currentBalance"></h3>
 		<h3 id="currentTurn">Current Turn:</h3>
 		<h3 id="totalTurns"> Total Turns :</h3>
+		<h3 id="currentWinner"></h3>
 		<h4>Stocks</h4>
 		
 		<div id="stockDashboard">

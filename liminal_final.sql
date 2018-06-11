@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `bankaccount`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bankaccount` (
   `current_balance` float(9,4) DEFAULT NULL,
-  `transactions` varchar(3000) DEFAULT NULL,
+  `transactions` varchar(4000) DEFAULT NULL,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -37,32 +37,6 @@ CREATE TABLE `bankaccount` (
 LOCK TABLES `bankaccount` WRITE;
 /*!40000 ALTER TABLE `bankaccount` DISABLE KEYS */;
 /*!40000 ALTER TABLE `bankaccount` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `banktransaction`
---
-
-DROP TABLE IF EXISTS `banktransaction`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `banktransaction` (
-  `turn` int(3) DEFAULT NULL,
-  `gameid` int(3) DEFAULT NULL,
-  `type` varchar(10) DEFAULT NULL,
-  `sender` varchar(20) DEFAULT NULL,
-  `receiver` varchar(20) DEFAULT NULL,
-  `name` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `banktransaction`
---
-
-LOCK TABLES `banktransaction` WRITE;
-/*!40000 ALTER TABLE `banktransaction` DISABLE KEYS */;
-/*!40000 ALTER TABLE `banktransaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -137,6 +111,8 @@ CREATE TABLE `game` (
   `turns` int(3) DEFAULT NULL,
   `stocks` varchar(2000) DEFAULT NULL,
   `event` varchar(100) DEFAULT NULL,
+  `winner` varchar(30) DEFAULT NULL,
+  `players` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -212,4 +188,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-24 18:38:17
+-- Dump completed on 2018-06-25 23:19:54

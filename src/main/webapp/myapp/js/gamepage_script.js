@@ -142,6 +142,7 @@ function canRequestData() {
 			if (data) {
 				updateTurn();
 				updateNewStockPrices();
+				checkWinner();
 			}
 			console.log(data);
 		},
@@ -222,5 +223,18 @@ function getBalance() {
 function populateSelectBox() {
 	$.each(allStocksJSON, function(key, value) {
 		stockBuySelect.append('<option value=' + value.id + '>' + value.name + '</option>');
+	});
+}
+
+
+// get the winner
+function checkWinner() {
+	var url = serviceUrl + 'rest/game/' + clientTurnJSON.gameId + '/winner';
+	$.ajax(url, {
+		type: 'get',
+		success: function(data) {
+			console.log(data);
+			$('#currentWinner').text('Current Winner : ' + data);
+		}
 	});
 }
