@@ -15,7 +15,7 @@ public class GameTimer {
 	
 	public GameTimer(Game game) {
 		this.game = game;
-		this.timer = new Timer();
+		this.timer = new Timer(String.valueOf("Game: " + game.getId() + ": Timer"));
 		this.gameController = new GameController(game);
 	}
 	
@@ -33,6 +33,7 @@ public class GameTimer {
 			if (game.getCurrentTurn() >= game.getTurns()) {
 				System.out.println("cancelling");
 				System.out.println("[" + game.getId() + "]" + "[ENDED]" + game.getCurrentTurn());
+				game.setStatus(Game.STATUS.ENDED.toString());
 				cancel();
 			} else {
 				gameController.updateStocksPrice(game.getStocks());

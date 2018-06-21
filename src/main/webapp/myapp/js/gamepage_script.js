@@ -5,27 +5,8 @@ var allStocksJSON;
 var labelData = [];
 var gameJSON;
 
-(function initialLoading() {
-	var gameUrl = serviceUrl + 'rest/game/start/30'; 
-	$.ajax(gameUrl, {
-		type: 'post',
-		success: function(gameData) {
-			gameJSON = gameData;
-			$('#currentTurn').text('Current Turn: ' + gameJSON.currentTurn);
-			labelData.push(gameJSON.currentTurn);
-			loadInitialStocks();
-		}
-	});
-})();
-
-function countTurns() {
-	if (turn == gameJSON.totalTurns)
-		clearInterval(timer);
-	canRequestData();
-}
-
-// loads the initial stock data from database, only one time
-function loadInitialStocks() {
+//loads the initial stock data from database, only one time
+function loadInitailStocks() {
 	var allStocksURL = serviceUrl + 'rest/stock/all';
 	$.ajax(allStocksURL, {
 		dataType : 'json',
@@ -38,6 +19,26 @@ function loadInitialStocks() {
 		}
 	});
 }
+// this is a iife
+function initialLoading() {
+	turn = gameJSON.currentTurn;
+	$('#currentTurn').text('Current Turn: ' + turn);
+	labelData.push(turn);
+	loadInitailStocks();
+};
+
+// above
+if (gameJSON.currentTurn > 0) {
+	initialLoading();
+} else {
+	alert('Please wait until the host starts the game');
+}
+
+function countTurns() {
+	if (turn == gameJSON.totalTurns)
+		clearInterval(timer);
+	canRequestData();
+}
 
 $('#searchStock').on('input propertychange paste', function() {
 	var searchValue = $.trim($(this).val());
@@ -47,7 +48,7 @@ $('#searchStock').on('input propertychange paste', function() {
 		$.each(allStocksJSON, function(key, value) {
 			if(value.name.match(reg)) {
 				result += '<li>';
-				result += '<h4>' + value.name + ' [' + value.short_name + ']' + '</h4>';
+				result += '<h4>' + value.name + '</h4>';
 				result += '<p>' + value.current_price + '</p>';
 				result += '</li>';
 			}
@@ -73,7 +74,6 @@ function updateNewStockPrices() {
 		success: function(newStocksData) {
 			$.each(newStocksData, function(k, v) {
 				updateStockPrice(v);
-				//console.log(v);
 			});
 		},
 		error: function(error) {

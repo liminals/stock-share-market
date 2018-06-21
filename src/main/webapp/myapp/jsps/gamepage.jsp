@@ -1,5 +1,13 @@
+<%@page import="com.liminal.model.GameJoinData"%>
+<%@page import="com.liminal.controller.JoinHostedGame"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.liminal.model.ClientTurn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%! ClientTurn ct; 
+	GameJoinData gjd;
+	JSONObject jo;
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,12 +38,27 @@
 		</span>
 		<canvas id="stockGraph"></canvas>
 	</div>
+	
+	<% 	ct = (ClientTurn)request.getSession().getAttribute("CurrentGame"); 
+		gjd = (GameJoinData)request.getSession().getAttribute("GameJoinData");
+	%>
+	
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/Chart.bundle.min.js"%>"></script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/jquery-3.3.1.min.js"%>"></script>
 	<script type="text/javascript">
+		<% 	if (ct != null) {
+				jo = new JSONObject(ct);
+			} else if (gjd != null) {
+				ClientTurn jct = new ClientTurn();
+				jct.setGameId(gjd.getGameId());
+				jct.setCurrentTurn(0);
+				jo = new JSONObject(jct);
+			}
+		%>
+		var gameJSON = <%= jo%>
 		var serviceUrl = "<%= serviceUrl%>";
 	</script>
-	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/script.js"%>"></script>
+	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/gamepage_script.js"%>"></script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/chart-control.js"%>"></script>
 </body>
 </html>

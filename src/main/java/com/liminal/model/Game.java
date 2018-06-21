@@ -5,19 +5,31 @@ import java.util.List;
 import com.liminal.controller.GameTimer;
 
 public class Game {
+	private String status;
 	private GameTimer gameTimer;
 	private List<Stock> stocks;
 	private int turns;
 	private int currentTurn;
 	private Event currentEvent;
 	private int id;
-	private String startBy;
+	private String createdBy;
 	private String eventStream;
 	private String marketTrend;
 	private String sectorTrends;
 	private String marketValue;
 	private String sectorValue;
+	private String playersJSON;
+	public enum STATUS {
+		YET_TO_START, STARTED, ENDED
+	}
 	
+	
+	public String getPlayersJSON() {
+		return playersJSON;
+	}
+	public void setPlayersJSON(String playersJSON) {
+		this.playersJSON = playersJSON;
+	}
 	public GameTimer getGameTimer() {
 		return gameTimer;
 	}
@@ -54,11 +66,11 @@ public class Game {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getStartBy() {
-		return startBy;
+	public String getCreatedBy() {
+		return createdBy;
 	}
-	public void setStartBy(String startBy) {
-		this.startBy = startBy;
+	public void setCreatedBy(String startBy) {
+		this.createdBy = startBy;
 	}
 	public String getEventStream() {
 		return eventStream;
@@ -90,5 +102,10 @@ public class Game {
 	public void setSectorValue(String sectorValue) {
 		this.sectorValue = sectorValue;
 	}
-	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }
