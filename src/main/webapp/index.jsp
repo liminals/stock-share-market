@@ -75,7 +75,10 @@
 			<% ghd = (GameHostingData) request.getSession().getAttribute("HostedGame");%>
 			
 			<h3>Currently Hosting</h3>
-			<div id="hostedGameInfoArea"></div>
+			<div id="hostedGameInfoArea">
+				<div id="gameInfo"></div>
+				<div id="joinedPlayers"></div>
+			</div>
 			<script type="text/javascript">
 				<% JSONObject ob = new JSONObject(ghd); %>
 				var hostedGameInfo = <%= ob %>;

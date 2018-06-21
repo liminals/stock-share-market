@@ -139,6 +139,15 @@ public class GameService {
 		return false;
 	}
 	
+	@GET
+	@Path("/{gameid}/checkForPlayers")
+	public String checkForPlayers(@PathParam("gameid") int gameid) {
+		Game game = gameSingleton.getGame(gameid);
+		if (game != null)
+			return game.getPlayersJSON();
+		return null;
+	}
+	
 	// this will end a game
 	@POST
 	@Path("/{gameid}/end")

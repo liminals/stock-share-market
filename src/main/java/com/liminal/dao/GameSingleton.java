@@ -259,6 +259,7 @@ public class GameSingleton {
 					players.put(String.valueOf(i), gameJoinData.getPlayerName());
 					game.setPlayersJSON(players.toString());
 					gameJoinData.setStatus(GameJoinData.STATUS.ACCEPTED.toString());
+					System.out.println("Player joined!!!");
 				}
 				break;
 			}

@@ -1,6 +1,9 @@
 var timer = setInterval(checkGames, 1000 * 3);
+var checkPlayersTimer = setInterval(checkForPlayers, 1000 * 3);
+
 var selectedGame;
 var hostedGames = [];
+var joinedPlayers = [];
 
 $('#joinGame').prop('disabled', 'true');
 
@@ -84,14 +87,47 @@ function loadGamesInfo(data) {
 function loadHostedGameInfo(data) {
 	var html = '<ul>Game ' + data.id;
 	html += '<li>Turns: ' + data.turns + '</li>';
-	html += '<ul>Players: ';
-	var players = JSON.parse(data.players);
-	$.each(players, function(k, v){
-		html += '<li>' + v + '</li>';
-	});
-	html += '</ul>';
 	html += '</ul>'
-	$("#hostedGameInfoArea").html(html);
+	$("#gameInfo").html(html);
+	loadJoinedPlayers(data.players);
+}
+
+function loadJoinedPlayers(data) {
+	var html2 = '<ul>Players';
+	var players = JSON.parse(data);
+	$.each(players, function(k, v) {
+		html2 += '<li>' + v + '</li>';
+	});
+	html2 += '</ul>';
+	$("#joinedPlayers").html(html2);
+}
+
+function checkForPlayers() {
+	var url = serviceUrl + 'game/' + hostedGameInfo.id + '/checkForPlayers';
+	$.ajax(url, {
+		type: 'get',
+		success: function(data) {
+			loadJoinedPlayers(data);
+		},
+		error: function() {
+			console.log('error in loading');
+		}
+	});
+}
+
+function checkIfPlayerJoined(player, playersJson) {
+	var found = 0;
+	$.each(playersJson, function(k, value) {
+		if (player == value) {
+			found = 1;
+			console.log('found');
+		}
+	});
+	if (found == 0) {
+		console.log('pushing ' + player);
+		joinedPlayers.push(player);
+		//loadJoinedPlayers(joinedPlayers);
+	}
 }
 
 $('#joinGameId').on('input propertychange paste', function() {
