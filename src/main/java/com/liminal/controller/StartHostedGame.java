@@ -40,7 +40,7 @@ public class StartHostedGame extends HttpServlet {
 		String playersUrl = serviceUrl + "game/" + gameHostingData.getId() + "/checkForPlayers";
 		
 		Client client1 = ClientBuilder.newClient();
-		Response res = client1.target(playersUrl).request().post(Entity.json(gameHostingData));
+		Response res = client1.target(playersUrl).request().get();
 		
 		if (res.getStatus() == 200) {
 			gameHostingData.setPlayers(res.readEntity(String.class));
