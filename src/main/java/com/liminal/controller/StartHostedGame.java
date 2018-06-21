@@ -37,9 +37,17 @@ public class StartHostedGame extends HttpServlet {
 
 		String serviceUrl = request.getParameter("serviceUrl");
 		String targetUrl = serviceUrl + "game/start/";
+		String playersUrl = serviceUrl + "game/" + gameHostingData.getId() + "/checkForPlayers";
 		
-		Client client = ClientBuilder.newClient();
-		Response serviceResponse = client.target(targetUrl).request().post(Entity.json(gameHostingData));
+		Client client1 = ClientBuilder.newClient();
+		Response res = client1.target(playersUrl).request().post(Entity.json(gameHostingData));
+		
+		if (res.getStatus() == 200) {
+			gameHostingData.setPlayers(res.readEntity(String.class));
+		}
+		
+		Client client2 = ClientBuilder.newClient();
+		Response serviceResponse = client2.target(targetUrl).request().post(Entity.json(gameHostingData));
 		
 		if (serviceResponse.getStatus() == 200) {
 			request.getSession().setAttribute("CurrentGame", serviceResponse.readEntity(ClientTurn.class));
