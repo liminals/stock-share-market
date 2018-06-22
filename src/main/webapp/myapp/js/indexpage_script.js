@@ -103,6 +103,7 @@ function loadJoinedPlayers(data) {
 }
 
 function checkForPlayers() {
+	if (typeof hostedGameInfo !== 'undefined'){
 	var url = serviceUrl + 'game/' + hostedGameInfo.id + '/checkForPlayers';
 	$.ajax(url, {
 		type: 'get',
@@ -113,6 +114,7 @@ function checkForPlayers() {
 			console.log('error in loading');
 		}
 	});
+	}
 }
 
 function checkIfPlayerJoined(player, playersJson) {
