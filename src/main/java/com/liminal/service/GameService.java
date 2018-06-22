@@ -64,13 +64,19 @@ public class GameService {
 	@Path("/create")
 	public GameHostingData createGame(GameHostingData gameData) {
 		Game game = new Game();
-		game.setId(gameData.getId()); //get from db
+		
 		game.setTurns(gameData.getTurns());
 		game.setCurrentTurn(1);
 		game.setCreatedBy(gameData.getCreatedBy());
 		game.setGameTimer(new GameTimer(game));
 		game.setStatus(Game.STATUS.YET_TO_START.toString());
 		game.setPlayersJSON(gameData.getPlayers());
+		
+		GameController gameController = new GameController(game);
+		game.setId(gameController.getMaxGameId()); //get from db
+		gameController.initialLoading(game);
+		gameController.saveGameToDB();
+		
 		gameSingleton.addGame(game);
 		// go to db and save()
 		gameData.setId(game.getId());

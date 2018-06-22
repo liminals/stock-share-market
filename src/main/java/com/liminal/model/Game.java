@@ -7,7 +7,7 @@ import com.liminal.controller.GameTimer;
 public class Game {
 	private String status;
 	private GameTimer gameTimer;
-	private List<Stock> stocks;
+	private List<Stock> stocks; // contains latest price of stocks
 	private int turns;
 	private int currentTurn;
 	private Event currentEvent;
@@ -36,6 +36,7 @@ public class Game {
 	public void setGameTimer(GameTimer gameTimer) {
 		this.gameTimer = gameTimer;
 	}
+	
 	public List<Stock> getStocks() {
 		return stocks;
 	}
