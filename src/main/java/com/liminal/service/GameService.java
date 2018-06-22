@@ -91,6 +91,7 @@ public class GameService {
 		ct.setGameId(game.getId());
 		ct.setCurrentTurn(game.getCurrentTurn());
 		ct.setTotalTurns(game.getTurns());
+		ct.setPlayer(game.getCreatedBy());
 		return ct;
 	}
 	

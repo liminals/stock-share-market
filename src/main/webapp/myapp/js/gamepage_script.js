@@ -138,14 +138,15 @@ function isGameStarted(){
 		data: gameData,
 		contentType: 'application/json',
 		success: function(gameData) {
+			console.log(gameData);
 			gameJSON = gameData;
 		}
 	});
 }
-
+var isStartTimer;
 if(gameJSON.type == 'CLIENT'){
 	console.log('client');
-	isGameStarted();
+	isStartTimer = setInterval(isGameStarted(), 1000 * 3);
 }
 
 function updateTurn() {

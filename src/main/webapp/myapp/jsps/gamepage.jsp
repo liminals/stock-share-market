@@ -55,6 +55,7 @@
 				jct.setGameId(gjd.getGameId());
 				jct.setCurrentTurn(0);
 				jct.setType(ClientTurn.TYPE.CLIENT.toString());
+				jct.setPlayer(gjd.getPlayerName());
 				jo = new JSONObject(jct);
 		} %>
 		var gameJSON = <%= jo%>

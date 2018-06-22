@@ -5,11 +5,18 @@ public class ClientTurn {
 	private int totalTurns;
 	private int currentTurn;
 	private String type;
+	private String player;
 	public enum TYPE {
 		CLIENT, HOST
 	}
 	
 	
+	public String getPlayer() {
+		return player;
+	}
+	public void setPlayer(String player) {
+		this.player = player;
+	}
 	public String getType() {
 		return type;
 	}
