@@ -16,7 +16,7 @@
 	<h2>Coming Soon!</h2>
 
 	<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/Main" %>" method="post">
-		<input type="submit" value="Play!!!">
+		<input type="submit" value="Play!!!!">
 	</form>
 </body>
 </html>
