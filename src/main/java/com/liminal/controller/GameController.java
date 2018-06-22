@@ -37,6 +37,10 @@ public class GameController {
 		this.gameDAO = new GameDAO();
 	}
 	
+	public GameDAO getGameDAO() {
+		return this.gameDAO;
+	}
+	
 	private int getRandomTrend() {
 		int min = -2;
 		int max = 2;
@@ -59,7 +63,7 @@ public class GameController {
 	// this will update the price
 	// price algorithm
 	// Added events
-	private Stock updatePrice(Stock s) {
+	private void updatePrice(Stock s) {
 		int stockValue = 0;
 		int marketValue = getMarketValue(game.getCurrentTurn());
 		int randomValue = getRandomTrend();
@@ -71,15 +75,15 @@ public class GameController {
 			stockValue = 0;
 		float newPrice = s.getCurrent_price() + ((s.getCurrent_price() * stockValue) / 100);
 		s.setCurrent_price(newPrice);
-		saveNewPriceToDatabase(s);
-		return s;
 	}
 	
+	// update price of stocks in each turn
 	public void updateStocksPrice(List<Stock> stocks) {
 		for (Stock s : stocks) {
 			updatePrice(s);
 			updateStockInGame(s);
 		}
+		gameDAO.updateStocks(game);
 	}
 	
 	// this will update the price in game object
@@ -88,23 +92,20 @@ public class GameController {
 		for (Stock st : stocks) {
 			if (st.getId() == s.getId()) {
 				st.setCurrent_price(s.getCurrent_price());
+				break;
 			}
 		}
 	}
 	
-	public Stock getUpdatedStock(Stock s) {
+	// will return new price of stocks to client
+	public void getUpdatedStock(Stock s) {
 		List<Stock> stocks = game.getStocks();
 		for (Stock st : stocks) {
 			if (st.getId() == s.getId()) {
 				s.setCurrent_price(st.getCurrent_price());
-				return s;
+				break;
 			}
 		}
-		return null;
-	}
-	
-	private void saveNewPriceToDatabase(Stock s) {
-		stockDAO.updatePrice(s);
 	}
 	
 	//getters for trend values
@@ -163,19 +164,24 @@ public class GameController {
 					}
 				}
 				game.setCurrentEvent(event);
+				gameDAO.updateEvent(game);
 				for (int i = 0; i < event.getDuration() - 1; i++) {
 					streamJSON.put(String.valueOf(currentTurn + i + 1), true);
 				}
 				stream = streamJSON.toString();
+				gameDAO.updateEventStream((game));
 			} else if (eventExists && game.getCurrentEvent() != null) {
 				int duration = game.getCurrentEvent().getDuration();
 				game.getCurrentEvent().setDuration(--duration);
+				gameDAO.updateEvent(game);
 			}
 		} else {
 			game.setCurrentEvent(null);
+			gameDAO.updateEvent(game);
 			stream = updateEventStreamAfterEvent(streamJSON.toString(), currentTurn);
 		}
 		game.setEventStream(stream);
+		gameDAO.updateEventStream((game));
 	}
 	
 	// this will populate the rest of the array
@@ -198,6 +204,7 @@ public class GameController {
 	// ///////////////////////////////////////     DAOs
 	public void loadStocksFromDB() {
 		game.setStocks(stockDAO.getAll());
+		gameDAO.updateStocks(game);
 	}
 	
 	public int getMaxGameId() {

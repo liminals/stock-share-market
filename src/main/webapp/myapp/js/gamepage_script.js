@@ -7,7 +7,7 @@ var clientTurnJSON;	// ClientTurn object, used by both client and server
 
 // this if for game host only
 if (clientTurnJSON.currentTurn > 0) {
-	 timer = setInterval(countTurns, 1000 * 3);
+	 timer = setInterval(countTurns, 1000 * 4);
 }
 // this if for executed when visiting page
 if (clientTurnJSON.currentTurn > 0) {
@@ -44,8 +44,10 @@ function initialLoading() {
 
 // update client on each turn
 function countTurns() {
-	if (turn == clientTurnJSON.totalTurns)
+	if (turn > clientTurnJSON.totalTurns){
 		clearInterval(timer);
+		alert('game ended');
+	}
 	if (clientTurnJSON.currentTurn > 0)
 		canRequestData();
 }
@@ -82,6 +84,7 @@ function updateNewStockPrices() {
 		dataType: 'json',
 		contentType: 'application/json',
 		success: function(newStocksData) {
+			console.log(newStocksData);
 			$.each(newStocksData, function(k, v) {
 				updateStockPrice(v);
 			});

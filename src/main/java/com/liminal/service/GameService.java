@@ -73,7 +73,8 @@ public class GameService {
 		game.setPlayersJSON(gameData.getPlayers());
 		
 		GameController gameController = new GameController(game);
-		game.setId(gameController.getMaxGameId()); //get from db
+		// Db handling
+		game.setId(gameController.getMaxGameId());
 		gameController.initialLoading(game);
 		gameController.saveGameToDB();
 		
@@ -95,6 +96,7 @@ public class GameService {
 		GameController gameController = new GameController(game);
 		gameController.loadStocksFromDB();
 		gameController.startTimer();
+		gameController.getGameDAO().updateStatus(game);
 						
 		// create a timer object, only first player can access this service, for tomorrow
 		ClientTurn ct = new ClientTurn();
@@ -111,10 +113,10 @@ public class GameService {
 	@Path("/{gameid}/getNewPrice")	
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<Stock> getMarketTrend(@PathParam("gameid") int gameid, List<Stock> stocks) {
+	public List<Stock> getNewPrices(@PathParam("gameid") int gameid, List<Stock> stocks) {
 		Game game = gameSingleton.getGame(gameid);
 		GameController gc = new GameController(game);
-		for (Stock s : game.getStocks())
+		for (Stock s : stocks)
 			gc.getUpdatedStock(s);
 		return stocks;
 	}
@@ -169,7 +171,7 @@ public class GameService {
 			return game.getPlayersJSON();
 		return null;
 	}
-	
+
 	// this will end a game
 	@POST
 	@Path("/{gameid}/end")

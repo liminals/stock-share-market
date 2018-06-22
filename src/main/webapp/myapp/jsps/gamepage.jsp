@@ -25,8 +25,8 @@
 	<h3 id="currentTurn">Current Turns</h3>
 	<h4>Stocks</h4>
 	
-	<!-- <button onclick="updateNewStockPrices()">Update</button> -->
-	<button onclick="canRequestData()">Update</button>
+	<button onclick="updateNewStockPrices()">Update</button> 
+	<!-- <button onclick="canRequestData()">Update</button>  -->
 	<button onclick="countTurns()">Next</button>
 	<div id="stockDashboard">
 		<div id="searchStockDiv">
