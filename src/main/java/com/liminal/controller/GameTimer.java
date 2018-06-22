@@ -29,16 +29,16 @@ public class GameTimer {
 			
 			//update the turn
 			game.setCurrentTurn(currentTurn + 1);
-			gameController.getGameDAO().updateCurrentTurn(game);
-			System.out.println("[" + game.getId() + "]" + "[NEW][TURN]" + game.getCurrentTurn());
+			
 			if (game.getCurrentTurn() > game.getTurns()) {
-				System.out.println("cancelling");
 				System.out.println("[" + game.getId() + "]" + "[ENDED]" + game.getCurrentTurn());
 				game.setStatus(Game.STATUS.ENDED.toString());
 				gameController.getGameDAO().updateStatus(game);
 				cancel();
 			} else {
+				System.out.println("[" + game.getId() + "]" + "[NEW][TURN]" + game.getCurrentTurn());
 				gameController.updateStocksPrice(game.getStocks());
+				gameController.getGameDAO().updateCurrentTurn(game);
 			}
 		}
 	};

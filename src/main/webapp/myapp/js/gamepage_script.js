@@ -44,12 +44,18 @@ function initialLoading() {
 
 // update client on each turn
 function countTurns() {
-	if (turn > clientTurnJSON.totalTurns){
-		clearInterval(timer);
-		alert('game ended');
-	}
-	if (clientTurnJSON.currentTurn > 0)
-		canRequestData();
+	var url = serviceUrl + 'rest/game/' + clientTurnJSON.gameId + '/isEnded';
+	$.ajax(url, {
+		type: 'get',
+		success: function(data) {
+			if (data == 'true') {
+				clearInterval(timer);
+				alert('game ended');
+			} else {
+				canRequestData();
+			}
+		}
+	});
 }
 
 $('#searchStock').on('input propertychange paste', function() {

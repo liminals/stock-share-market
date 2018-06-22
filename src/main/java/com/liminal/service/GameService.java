@@ -152,12 +152,10 @@ public class GameService {
 	public boolean canRequest(@PathParam("gameid") int gameid, @PathParam("turn") int turn) {
 		Game game = gameSingleton.getGame(gameid);
 		if (game != null) {
-			if (game.getStatus().equalsIgnoreCase(Game.STATUS.STARTED.toString())) {
-				if (turn == game.getCurrentTurn()) {
-					return false;
-				} else {
-					return true;
-				}
+			if (turn == game.getCurrentTurn()) {
+				return false;
+			} else {
+				return true;
 			}
 		}
 		return false;
@@ -171,7 +169,17 @@ public class GameService {
 			return game.getPlayersJSON();
 		return null;
 	}
-
+	
+	@GET
+	@Path("/{gameid}/isEnded")
+	public boolean isEnded(@PathParam("gameid") int gameid) {
+		Game game = gameSingleton.getGame(gameid);
+		if(game.getStatus().equalsIgnoreCase(Game.STATUS.ENDED.toString())) {
+			return true;
+		}
+		return false;
+	}
+	
 	// this will end a game
 	@POST
 	@Path("/{gameid}/end")
