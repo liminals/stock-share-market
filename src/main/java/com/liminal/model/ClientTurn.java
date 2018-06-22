@@ -4,7 +4,18 @@ public class ClientTurn {
 	private int gameId;
 	private int totalTurns;
 	private int currentTurn;
+	private String type;
+	public enum TYPE {
+		CLIENT, HOST
+	}
 	
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public int getGameId() {
 		return gameId;
 	}

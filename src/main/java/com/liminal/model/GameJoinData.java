@@ -6,7 +6,7 @@ public class GameJoinData {
 	private String status;
 	private String status_message;
 	public enum STATUS {
-		JOINED, ACCEPTED, REJECTED, REQUESTING, WAITING_FOR_START
+		JOINED, ACCEPTED, REJECTED, REQUESTING, WAITING_FOR_START, GAME_STARTED
 	}
 	public enum MESSAGE {
 		PLAYER_WITH_SAME_NAME_EXISTS, GAME_NOT_AVAILABLE

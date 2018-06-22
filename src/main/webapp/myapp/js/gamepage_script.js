@@ -3,7 +3,8 @@ var totalTurns;
 var timer = setInterval(countTurns, 1000 * 3);
 var allStocksJSON;
 var labelData = [];
-var gameJSON;
+var gameJSON;	// ClientTurn object
+
 
 //loads the initial stock data from database, only one time
 function loadInitailStocks() {
@@ -31,13 +32,14 @@ function initialLoading() {
 if (gameJSON.currentTurn > 0) {
 	initialLoading();
 } else {
-	alert('Please wait until the host starts the game');
+	alert('Please wait until the host starts the game!!!');
 }
 
 function countTurns() {
 	if (turn == gameJSON.totalTurns)
 		clearInterval(timer);
-	canRequestData();
+	if (gameJSON.currentTurn > 0)
+		canRequestData();
 }
 
 $('#searchStock').on('input propertychange paste', function() {
@@ -124,6 +126,26 @@ function canRequestData() {
 			console.log('error');
 		}
 	})
+}
+
+
+function isGameStarted(){
+	var url = serviceUrl + 'rest/game/isStarted';
+	var gameData = JSON.stringify(gameJSON);
+	$.ajax(url, {
+		type: 'post',
+		dataType: 'json',
+		data: gameData,
+		contentType: 'application/json',
+		success: function(gameData) {
+			gameJSON = gameData;
+		}
+	});
+}
+
+if(gameJSON.type == 'CLIENT'){
+	console.log('client');
+	isGameStarted();
 }
 
 function updateTurn() {

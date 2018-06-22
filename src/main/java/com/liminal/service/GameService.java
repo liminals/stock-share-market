@@ -45,6 +45,16 @@ public class GameService {
 		return gameJoinData;
 	}
 	
+	@POST
+	@Path("/isStarted")
+	public GameJoinData isStarted(GameJoinData data){
+		Game game = gameSingleton.getGame(data.getGameId());
+		if (game.getStatus().equalsIgnoreCase(Game.STATUS.STARTED.toString())){
+			data.setStatus(GameJoinData.STATUS.GAME_STARTED.toString());
+		}
+		return data;
+	}
+	
 	// this will host a game
 	@POST
 	@Path("/create")

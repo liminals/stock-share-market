@@ -48,7 +48,7 @@ public class JoinHostedGame extends HttpServlet {
 		if (serviceResponse.getStatus() == 200){
 			GameJoinData resData = (GameJoinData) serviceResponse.readEntity(GameJoinData.class);
 			if (resData.getStatus().equalsIgnoreCase(GameJoinData.STATUS.ACCEPTED.toString())) {
-				request.getSession().setAttribute("GameJoinData", resData);
+				request.getSession().setAttribute("GameJoined", resData);
 				resData.setStatus(GameJoinData.STATUS.WAITING_FOR_START.toString());
 				request.getRequestDispatcher("myapp/jsps/gamepage.jsp").forward(request, response);
 			} else {

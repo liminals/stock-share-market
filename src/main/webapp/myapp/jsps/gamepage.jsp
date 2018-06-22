@@ -40,21 +40,23 @@
 	</div>
 	
 	<% 	ct = (ClientTurn)request.getSession().getAttribute("CurrentGame"); 
-		gjd = (GameJoinData)request.getSession().getAttribute("GameJoinData");
+		gjd = (GameJoinData)request.getSession().getAttribute("GameJoined");
 	%>
 	
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/Chart.bundle.min.js"%>"></script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/jquery-3.3.1.min.js"%>"></script>
 	<script type="text/javascript">
+		var player;	//can be host or client
 		<% 	if (ct != null) {
+				ct.setType(ClientTurn.TYPE.HOST.toString());
 				jo = new JSONObject(ct);
-			} else if (gjd != null) {
+		} else if (gjd != null) {
 				ClientTurn jct = new ClientTurn();
 				jct.setGameId(gjd.getGameId());
 				jct.setCurrentTurn(0);
+				jct.setType(ClientTurn.TYPE.CLIENT.toString());
 				jo = new JSONObject(jct);
-			}
-		%>
+		} %>
 		var gameJSON = <%= jo%>
 		var serviceUrl = "<%= serviceUrl%>";
 	</script>
