@@ -23,6 +23,7 @@
 <body id="mainBG">
 	<h1>Liminals</h1>
 	<h2>Stock-Share-Market Simulation Game</h2>
+<<<<<<< HEAD
 	<div>
 		<!-- initial visit by player -->
 		<% if (request.getSession().getAttribute("HostedGame") == null && request.getSession().getAttribute("GameJoinData") == null) { %>
@@ -101,5 +102,12 @@
 			loadHostedGameInfo(hostedGameInfo);
 		</script>
 	<%	} %>
+=======
+	<h2>Coming Soon!</h2>
+
+	<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/Main" %>" method="post">
+		<input type="submit" value="Play!!!!">
+	</form>
+>>>>>>> origin/master
 </body>
 </html>
