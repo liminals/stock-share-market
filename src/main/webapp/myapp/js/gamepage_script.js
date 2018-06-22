@@ -1,9 +1,22 @@
 var turn;
 var totalTurns;
-var timer = setInterval(countTurns, 1000 * 3);
+var timer;
 var allStocksJSON;
 var labelData = [];
-var gameJSON;	// ClientTurn object
+var clientTurnJSON;	// ClientTurn object, used by both client and server
+
+// this if for game host only
+if (clientTurnJSON.currentTurn > 0) {
+	 timer = setInterval(countTurns, 1000 * 3);
+}
+// this if for executed when visiting page
+if (clientTurnJSON.currentTurn > 0) {
+	// for host
+	initialLoading();
+} else {
+	// for client
+	alert('Please wait until the host starts the game!!!');
+}
 
 
 //loads the initial stock data from database, only one time
@@ -20,25 +33,20 @@ function loadInitailStocks() {
 		}
 	});
 }
-// this is a iife
+
+// this should executed when game starts
 function initialLoading() {
-	turn = gameJSON.currentTurn;
+	turn = clientTurnJSON.currentTurn;
 	$('#currentTurn').text('Current Turn: ' + turn);
 	labelData.push(turn);
 	loadInitailStocks();
 };
 
-// above
-if (gameJSON.currentTurn > 0) {
-	initialLoading();
-} else {
-	alert('Please wait until the host starts the game!!!');
-}
-
+// update client on each turn
 function countTurns() {
-	if (turn == gameJSON.totalTurns)
+	if (turn == clientTurnJSON.totalTurns)
 		clearInterval(timer);
-	if (gameJSON.currentTurn > 0)
+	if (clientTurnJSON.currentTurn > 0)
 		canRequestData();
 }
 
@@ -65,7 +73,7 @@ $('#searchStock').on('input propertychange paste', function() {
 // update the price of a single stock
 // need to be automatic delete this
 function updateNewStockPrices() {
-	var gameid = gameJSON.gameId;
+	var gameid = clientTurnJSON.gameId;
 	var updatePriceStock = serviceUrl + 'rest/game/' + gameid + '/getNewPrice';
 	var stocksJSON = JSON.stringify(allStocksJSON);
 	$.ajax(updatePriceStock, {
@@ -88,7 +96,7 @@ function updateNewStockPrices() {
 
 // check for events
 function checkForEvents() {
-	var eventUrl = serviceUrl + 'rest/game/' +  gameJSON.gameId + '/event';
+	var eventUrl = serviceUrl + 'rest/game/' +  clientTurnJSON.gameId + '/event';
 	$.ajax(eventUrl, {
 		type: 'get',
 		dataType: 'json',
@@ -111,7 +119,7 @@ function checkForEvents() {
 }
 
 function canRequestData() {
-	var url = serviceUrl + 'rest/game/' + gameJSON.gameId + '/turn/' + gameJSON.currentTurn;
+	var url = serviceUrl + 'rest/game/' + clientTurnJSON.gameId + '/turn/' + clientTurnJSON.currentTurn;
 	$.ajax(url, {
 		type: 'get',
 		dataType: 'json',
@@ -131,7 +139,7 @@ function canRequestData() {
 
 function isGameStarted(){
 	var url = serviceUrl + 'rest/game/isStarted';
-	var gameData = JSON.stringify(gameJSON);
+	var gameData = JSON.stringify(clientTurnJSON);
 	$.ajax(url, {
 		type: 'post',
 		dataType: 'json',
@@ -139,29 +147,38 @@ function isGameStarted(){
 		contentType: 'application/json',
 		success: function(gameData) {
 			console.log(gameData);
-			gameJSON = gameData;
+			clientTurnJSON = gameData;
+			if (clientTurnJSON.game_status == 'STARTED') {
+				clearInterval(isStartTimer);
+				console.log('timer ended');
+				initialLoading();
+				timer = setInterval(countTurns, 1000 * 3);
+			}
+		},
+		error: function() {
+			console.log('error when checking game status');
 		}
 	});
 }
 var isStartTimer;
-if(gameJSON.type == 'CLIENT'){
+if(clientTurnJSON.type == 'CLIENT'){
 	console.log('client');
-	isStartTimer = setInterval(isGameStarted(), 1000 * 3);
+	isStartTimer = setInterval(isGameStarted, 1000 * 5);
 }
 
 function updateTurn() {
-	var turnUrl = serviceUrl + 'rest/game/' + gameJSON.gameId +'/updateTurn';
-	var gameData = JSON.stringify(gameJSON);
+	var turnUrl = serviceUrl + 'rest/game/' + clientTurnJSON.gameId +'/updateTurn';
+	var gameData = JSON.stringify(clientTurnJSON);
 	$.ajax(turnUrl, {
 		type: 'post',
 		dataType: 'json',
 		data: gameData,
 		contentType: 'application/json',
 		success: function(gameData) {
-			gameJSON = gameData;
+			clientTurnJSON = gameData;
 			console.log(gameData);
-			if (turn != gameJSON.currentTurn){
-				turn = gameJSON.currentTurn;
+			if (turn != clientTurnJSON.currentTurn){
+				turn = clientTurnJSON.currentTurn;
 				$('#currentTurn').text('Current Turn: ' + turn);
 				labelData.push(turn);
 			}

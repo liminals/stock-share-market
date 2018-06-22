@@ -47,10 +47,14 @@ public class GameService {
 	
 	@POST
 	@Path("/isStarted")
-	public GameJoinData isStarted(GameJoinData data){
+	public ClientTurn isStarted(ClientTurn data){
 		Game game = gameSingleton.getGame(data.getGameId());
 		if (game.getStatus().equalsIgnoreCase(Game.STATUS.STARTED.toString())){
-			data.setStatus(GameJoinData.STATUS.GAME_STARTED.toString());
+			data.setGame_status(ClientTurn.GAME_STATUS.STARTED.toString());
+			data.setTotalTurns(game.getTurns());
+			data.setCurrentTurn(game.getCurrentTurn());
+		} else {
+			data.setGame_status(ClientTurn.GAME_STATUS.YET_TO_START.toString());
 		}
 		return data;
 	}
@@ -92,6 +96,7 @@ public class GameService {
 		ct.setCurrentTurn(game.getCurrentTurn());
 		ct.setTotalTurns(game.getTurns());
 		ct.setPlayer(game.getCreatedBy());
+		ct.setGame_status(ClientTurn.GAME_STATUS.STARTED.toString());
 		return ct;
 	}
 	

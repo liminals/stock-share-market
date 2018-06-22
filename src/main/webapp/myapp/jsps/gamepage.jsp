@@ -50,15 +50,17 @@
 		<% 	if (ct != null) {
 				ct.setType(ClientTurn.TYPE.HOST.toString());
 				jo = new JSONObject(ct);
-		} else if (gjd != null) {
+		
+			} else if (gjd != null) {
 				ClientTurn jct = new ClientTurn();
 				jct.setGameId(gjd.getGameId());
 				jct.setCurrentTurn(0);
 				jct.setType(ClientTurn.TYPE.CLIENT.toString());
 				jct.setPlayer(gjd.getPlayerName());
 				jo = new JSONObject(jct);
-		} %>
-		var gameJSON = <%= jo%>
+			}
+		%>
+		var clientTurnJSON = <%= jo%>
 		var serviceUrl = "<%= serviceUrl%>";
 	</script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/gamepage_script.js"%>"></script>

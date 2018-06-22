@@ -2,11 +2,11 @@ package com.liminal.model;
 
 public class GameJoinData {
 	private int gameId;
-	private String playerName;
+	private String player;
 	private String status;
 	private String status_message;
 	public enum STATUS {
-		JOINED, ACCEPTED, REJECTED, REQUESTING, WAITING_FOR_START, GAME_STARTED
+		JOINED, ACCEPTED, REJECTED, REQUESTING, WAITING_FOR_START
 	}
 	public enum MESSAGE {
 		PLAYER_WITH_SAME_NAME_EXISTS, GAME_NOT_AVAILABLE
@@ -31,10 +31,10 @@ public class GameJoinData {
 		this.gameId = gameId;
 	}
 	public String getPlayerName() {
-		return playerName;
+		return player;
 	}
 	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
+		this.player = playerName;
 	}
 	
 	

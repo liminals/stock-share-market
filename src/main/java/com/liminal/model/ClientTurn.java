@@ -6,11 +6,21 @@ public class ClientTurn {
 	private int currentTurn;
 	private String type;
 	private String player;
+	private String game_status;
 	public enum TYPE {
 		CLIENT, HOST
 	}
+	public enum GAME_STATUS {
+		YET_TO_START, STARTED, ENDED
+	}
 	
 	
+	public String getGame_status() {
+		return game_status;
+	}
+	public void setGame_status(String game_status) {
+		this.game_status = game_status;
+	}
 	public String getPlayer() {
 		return player;
 	}
