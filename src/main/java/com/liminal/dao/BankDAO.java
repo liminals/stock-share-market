@@ -98,4 +98,17 @@ public class BankDAO {
 			ex.printStackTrace();
 		}
 	}
+	
+	public void setAccountForGame(BankAccount account) {
+		String sql = "update bankaccount set current_balance=?, transactions=? where name=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setFloat(1, 1000.0000f);
+			pstmt.setString(2, null);
+			pstmt.setString(3, account.getName());
+			pstmt.executeUpdate();
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
 }

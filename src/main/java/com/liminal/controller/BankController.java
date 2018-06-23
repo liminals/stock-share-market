@@ -18,13 +18,13 @@ public class BankController {
 	public void setAccount(BankAccount account) {
 		this.account = account;
 	}
-
+	
+	/////////////////////////// DB actions
 	public void createAccount(String name) {
 		boolean found = bankDAO.checkAccount(name);
 		if(!found) {
 			BankAccount account = new BankAccount();
 			account.setName(name);
-			account.setCurrent_balance(1000);
 			setAccount(account);
 			bankDAO.createAccount(account);
 		} else {
@@ -43,5 +43,10 @@ public class BankController {
 	// returns the updated balance from database
 	public void getBalance() {
 		this.bankDAO.getBalance(account);
+	}
+	
+	// setup the bank account for each game at the DB
+	public void setAccountForGame() {
+		this.bankDAO.setAccountForGame(account);
 	}
 }
