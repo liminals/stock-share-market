@@ -49,7 +49,7 @@
 			<span id="selectedGame"></span>
 			<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/JoinHostedGame" %>" method="post">
 				<input type="text" id="joinGameId" name="gameId" placeholder="Enter game id from above">
-				<input type="text" name="username" placeholder="Player Name">
+				<input type="hidden" name="username" value="<%= p.getUsername() %>">
 				<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
 				<input type="submit" value="Join" id="joinGame">
 			</form>
@@ -60,19 +60,11 @@
 			<div id="gamesInfoArea"></div>
 			<br />
 			<% gjd = (GameJoinData) request.getSession().getAttribute("GameJoinData");%>
-			<% if (gjd.getStatus_message().equalsIgnoreCase(GameJoinData.MESSAGE.PLAYER_WITH_SAME_NAME_EXISTS.toString())) { %>
-				<h4>Please use another username</h4>
-				<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/JoinHostedGame" %>" method="post">
-					<input type="text" id="joinGameId" name="gameId" value="<%= gjd.getGameId()%>">
-					<input type="text" name="username" placeholder="Player Name">
-					<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
-					<input type="submit" value="Join" id="joinGame">
-				</form>
-			<% } else { %>
+			<% if (gjd.getStatus_message().equalsIgnoreCase(GameJoinData.MESSAGE.GAME_NOT_AVAILABLE.toString())) { %>
 				<h4>Please enter a valid game id</h4>
 				<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/JoinHostedGame" %>" method="post">
 					<input type="text" id="joinGameId" name="gameId" placeholder="Enter game id from above">
-					<input type="text" name="username" value="<%= gjd.getPlayerName()%>">
+					<input type="hidden" name="username" value="<%= p.getUsername() %>">
 					<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
 					<input type="submit" value="Join" id="joinGame">
 				</form>
