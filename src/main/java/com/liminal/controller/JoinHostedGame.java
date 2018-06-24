@@ -36,7 +36,8 @@ public class JoinHostedGame extends HttpServlet {
 		int gameId = Integer.parseInt(request.getParameter("gameId"));
 		String name = request.getParameter("username");
 		String serviceUrl = request.getParameter("serviceUrl");
-		String accountUrl = serviceUrl + "bank/setAccount/";
+		String bankAccountUrl = serviceUrl + "bank/setAccount/";
+		String brokerAccountUrl = serviceUrl + "broker/setAccount/";
 		
 		String targetUrl = serviceUrl + "game/join";
 		GameJoinData data = new GameJoinData();
@@ -53,9 +54,13 @@ public class JoinHostedGame extends HttpServlet {
 				request.getSession().setAttribute("GameJoined", resData);
 				
 				//setup player account for game
-				accountUrl += resData.getPlayerName();
+				bankAccountUrl += resData.getPlayerName();
 				Client accountReq = ClientBuilder.newClient();
-				Response res = accountReq.target(accountUrl).request().post(Entity.json(""));
+				Response res = accountReq.target(bankAccountUrl).request().post(Entity.json(""));
+				
+				brokerAccountUrl += resData.getPlayerName();
+				Client brokerAccountReq = ClientBuilder.newClient();
+				Response res2 = brokerAccountReq.target(brokerAccountUrl).request().post(Entity.json(""));
 						
 				resData.setStatus(GameJoinData.STATUS.WAITING_FOR_START.toString());
 				request.getRequestDispatcher("myapp/jsps/gamepage.jsp").forward(request, response);

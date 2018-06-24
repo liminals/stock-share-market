@@ -40,9 +40,11 @@ public class RegisterPlayer extends HttpServlet {
 		String verify = request.getParameter("verify");
 		String serviceUrl = request.getParameter("serviceUrl");
 		String targetUrl = serviceUrl + "player/register";
-		String accountUrl = serviceUrl + "bank/createAccount/";
+		String bankAccountUrl = serviceUrl + "bank/createAccount/";
+		String brokerAccountUrl = serviceUrl + "broker/createAccount/";
 		
 		Client createAccount;
+		Client brokerAccount;
 		
 		if (verify.equalsIgnoreCase(password)) {
 			Player p = new Player();
@@ -58,9 +60,15 @@ public class RegisterPlayer extends HttpServlet {
 				int playerId = resPlayer.getId();
 				if (playerId > 0) {
 					
-					accountUrl += resPlayer.getUsername();
+					bankAccountUrl += resPlayer.getUsername();
+					brokerAccountUrl += resPlayer.getUsername();
+					
 					createAccount = ClientBuilder.newClient();
-					Response res = createAccount.target(accountUrl).request().post(Entity.json(""));
+					brokerAccount = ClientBuilder.newClient();
+					
+					Response res = createAccount.target(bankAccountUrl).request().post(Entity.json(""));
+					Response res2 = brokerAccount.target(brokerAccountUrl).request().post(Entity.json(""));
+					
 					if (res.getStatus() == 200) {
 						request.setAttribute("Registration", "Player successfully created!");
 						request.getRequestDispatcher("index.jsp").forward(request, response);
