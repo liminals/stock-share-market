@@ -25,3 +25,4 @@ Download them, and Please set the PATH variables accordingly. Configure Maven an
 - In the Edit Configuration window select Skip Tests
 - After 'Build Success', Right click on project > Run as > Run on server
 - Choose Tomcat8 on localhost, Then Finish
+
