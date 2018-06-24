@@ -37,10 +37,10 @@ public class BrokerService {
 	}
 
 	@POST
-	@Path("/buy/{player}")
+	@Path("/buy/{gameid}/{player}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public BrokerTransaction buyStocks(BrokerTransaction transaction, @PathParam("player") String player) {
+	public BrokerTransaction buyStocks(BrokerTransaction transaction, @PathParam("player") String player, @PathParam("gameid") int gameid) {
 		bankController = new BankController();
 		controller = new BrokerController();
 		
@@ -49,6 +49,22 @@ public class BrokerService {
 		
 		BrokerAccount account = controller.getAccountFromDB(player);
 		controller.setAccount(account);
-		return controller.buy(transaction);
+		return controller.buy(transaction, gameid);
+	}
+	
+	@POST
+	@Path("/sell/{gameid}/{player}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public BrokerTransaction sellStocks(BrokerTransaction transaction, @PathParam("player") String player, @PathParam("gameid") int gameid) {
+		bankController = new BankController();
+		controller = new BrokerController();
+		
+		BankAccount bankAccount = bankController.getAccountFromDB(player);
+		controller.setBankAccount(bankAccount);
+		
+		BrokerAccount account = controller.getAccountFromDB(player);
+		controller.setAccount(account);
+		return controller.sell(transaction, gameid);
 	}
 }
