@@ -4,8 +4,8 @@ var timer;
 var allStocksJSON;
 var labelData = [];
 var clientTurnJSON;	// ClientTurn object, used by both client and server
-var stockSelect = $("#stocks"); // select box
-
+var stockBuySelect = $("#selectBuy"); // select box
+console.log('done');
 // this if for game host only
 if (clientTurnJSON.currentTurn > 0) {
 	 timer = setInterval(countTurns, 1000 * 4);
@@ -221,6 +221,6 @@ function getBalance() {
 // populate the select box for transactions
 function populateSelectBox() {
 	$.each(allStocksJSON, function(key, value) {
-		stockSelect.append('<option value=' + value.id + '>' + value.name + '</option>');
+		stockBuySelect.append('<option value=' + value.id + '>' + value.name + '</option>');
 	});
 }

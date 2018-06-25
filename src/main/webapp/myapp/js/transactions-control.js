@@ -1,5 +1,5 @@
 /*allStocksJSON;
-var stockSelect = $("#stocks");
+var stockBuySelect = $("#selectBuy");
 clientTurnJSON*/
 var portfolioJson;
 var buttonBuy = $("#buttonBuy");
@@ -30,7 +30,7 @@ function clearFields() {
 
 // populate the stock details
 // below in the UI
-stockSelect.change(function() {
+stockBuySelect.change(function() {
 	console.log(this.value);
 	clearFields();
 	buttonBuy.prop('disabled', true);

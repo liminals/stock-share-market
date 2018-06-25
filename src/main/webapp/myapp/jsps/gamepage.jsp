@@ -41,7 +41,7 @@
 		</div>
 		
 		<div id="stockTransaction">
-			<select id="stocks"></select>
+			<select id="selectBuy"></select>
 			<div id="stockDetails">
 				<h4 id="stockname"></h4>
 				<p id="stockprice">
