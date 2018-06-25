@@ -130,4 +130,23 @@ public class BrokerDAO {
 		}
 		return port;
 	}
+	
+	public List<BrokerTransaction> getTransactions(String name) {
+		String sql = "select transactions from brokeraccount where name=?";
+		List<BrokerTransaction> transactions = new ArrayList<>();
+		Gson g = new Gson();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Type lsTransactions = new TypeToken<List<BrokerTransaction>>() {}.getType();
+				String transJson = rs.getString(1);
+				transactions = g.fromJson(transJson, lsTransactions);
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return transactions;
+	}
 }

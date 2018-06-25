@@ -94,7 +94,7 @@ public class BrokerController {
 		Portfolio p = getPortfolio(portfolios, req.getStock());
 		
 		if (checkIsPriceMatches(lsStocks, req)) {
-			if (p.getQty() > req.getQty()) {
+			if (p.getQty() >= req.getQty()) {
 				BrokerTransaction transaction = new BrokerTransaction();
 				transaction.setTurn(req.getTurn());
 				transaction.setStock(req.getStock());
@@ -113,9 +113,10 @@ public class BrokerController {
 				// remove from portfolio
 				if (p.getQty() == req.getQty()) {
 					portfolios.remove(p);
+				} else {
+					// update in portfolio
+					editInPortfolio(transaction, p);
 				}
-				// update in portfolio
-				editInPortfolio(transaction, p);
 				account.setPortfolio(portfolios);
 				
 				brokerDAO.updateTransactions(this.account);
@@ -128,6 +129,12 @@ public class BrokerController {
 				req.setStatus(BrokerTransaction.STATUS.INSUFFICIENT_STOCKS.toString());
 				return req;
 			}
+			brokerDAO.updateTransactions(this.account);
+			
+			BankTransaction bt = createBankTransaction(transaction);
+			float newBankBalance = bankAccount.getCurrent_balance() + bt.getAmount();
+			updateBankAccount(bt, newBankBalance);
+			return transaction;
 		} else {
 			req.setStatus(BrokerTransaction.TYPE.SELL.toString());
 			req.setStatus(BrokerTransaction.STATUS.PRICE_DO_NOT_MATCH.toString());
@@ -258,5 +265,9 @@ public class BrokerController {
 	
 	public List<Portfolio> getPortfolioFromDB(String player) {
 		return this.brokerDAO.getPortfolio(player);
+	}
+	
+	public List<BrokerTransaction> getTransactionsFromDB(String player) {
+		return this.brokerDAO.getTransactions(player);
 	}
 }

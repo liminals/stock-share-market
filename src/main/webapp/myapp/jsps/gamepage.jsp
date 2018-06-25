@@ -26,7 +26,7 @@
 		<h3 id="playerName"></h3>
 		<h3 id="currentBalance"></h3>
 		<h3 id="currentTurn">Current Turn:</h3>
-		<h3 id="totalTurns"> Total Turns !!!!:</h3>
+		<h3 id="totalTurns"> Total Turns :</h3>
 		<h4>Stocks</h4>
 		
 		<div id="stockDashboard">
@@ -72,6 +72,8 @@
 		</div>
 		<br/>
 		<div id="portfolioDiv"></div>
+		<br>
+		<div id="transactionHistory"></div>
 	</div>
 	
 	
