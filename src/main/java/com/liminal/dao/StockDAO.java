@@ -16,17 +16,7 @@ public class StockDAO {
 	private ResultSet rs;
 
 	public StockDAO() {
-		String url = "jdbc:mysql://localhost:3306/liminal_final";
-		String user = "root";
-		String password = "root";
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection(url, user, password);
-		} catch(SQLException ex) {
-			ex.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		conn = DBConnection.connDB();
 	}
 	
 	// initial return of all the stocks
