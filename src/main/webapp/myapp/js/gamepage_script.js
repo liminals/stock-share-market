@@ -6,17 +6,13 @@ var clientTurnJSON;	// ClientTurn object, used by both client and server
 var stockBuySelect = $("#selectBuy"); // select box
 var winner;
 
-// this if for game host only
-if (clientTurnJSON.currentTurn > 0) {
-	 timer = setInterval(countTurns, 1000 * 3);
-}
-// this if for executed when visiting page
-if (clientTurnJSON.currentTurn > 0) {
-	// for host
-	getBalance();
+// for host
+if (clientTurnJSON.type == 'HOST') {
 	initialLoading();
+	getBalance();
+	timer = setInterval(countTurns, 1000 * 3);
+// for client
 } else {
-	// for client
 	if(clientTurnJSON.type == 'CLIENT'){
 		$("#playerName").text('Player : ' + clientTurnJSON.player);
 		console.log('client');
@@ -74,24 +70,28 @@ function loadInitailStocks() {
 
 // this should executed when game starts
 function initialLoading() {
-	/*if (clientTurnJSON.type == 'CLIENT') {
+	if (clientTurnJSON.type == 'CLIENT') {
 		turn = clientTurnJSON.currentTurn;
+		$("#playerName").text('Player : ' + clientTurnJSON.player);
+		$("#totalTurns").html('Total Turns: ' + clientTurnJSON.totalTurns);
+		$('#currentTurn').text('Current Turn: ' + turn);
+		labelData.push(turn);
+		loadInitailStocks();
 	} else {
 		var url = serviceUrl + 'rest/game/' + clientTurnJSON.gameId+ '/getTurn';
 		$.ajax(url, {
 			type: 'get',
 			success: function(data) {
-				console.log('turn receivd ' + data);
-				turn = data;
+				clientTurnJSON.currentTurn = data;
+				turn = clientTurnJSON.currentTurn;
+				$("#playerName").text('Player : ' + clientTurnJSON.player);
+				$("#totalTurns").html('Total Turns: ' + clientTurnJSON.totalTurns);
+				$('#currentTurn').text('Current Turn: ' + turn);
+				labelData.push(turn);
+				loadInitailStocks();
 			}
 		})
-	}*/
-	turn = clientTurnJSON.currentTurn;
-	$("#playerName").text('Player : ' + clientTurnJSON.player);
-	$("#totalTurns").html('Total Turns: ' + clientTurnJSON.totalTurns);
-	$('#currentTurn').text('Current Turn: ' + turn);
-	labelData.push(turn);
-	loadInitailStocks();
+	}
 };
 
 // update client on each turn
