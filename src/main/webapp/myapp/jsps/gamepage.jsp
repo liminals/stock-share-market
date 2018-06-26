@@ -112,25 +112,48 @@
 				</div>
 			</div>
 				<br/>
-				<div id="stockSell">
-					Sell : <select id="selectSell"></select>
-					<button id="buttonSell">Sell</button>
-					<div id="sellStockDetails">
-						<h4 id="portfolioname"></h4>
-						Qty : <p id="portfolioqty">
-						Value : <p id="portfoliovalue">
+			<div class="row">
+				<div class="col">
+					<div id="stockSell">
+					<div class="form-group">
+						Sell : <select id="selectSell" class="form-control"></select>
 					</div>
-					<div id="sellTransactionFields">
-						<label>Sell Qty : </label>  
-						<input type="text" id="sellQty">
+					<div class="form-group">
+						<button id="buttonSell" class="form-control btn btn-warning">Sell</button>
+					</div>
+						<div id="sellStockDetails">
+							<h4 id="portfolioname"></h4>
+							Qty : <p id="portfolioqty">
+							Value : <p id="portfoliovalue">
+						</div>
+						<div id="sellTransactionFields">
+							<label>Sell Qty : </label>
+							<div class="form-group">  
+								<input type="text" id="sellQty" class="fomr-control">
+							</div>
+						</div>
 					</div>
 				</div>
-				<span id="latestTransaction"></span>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col">
+					<span id="latestTransaction"></span>
+				</div>
+			</div>
 			</div>
 			<br/>
-			<div id="portfolioDiv"></div>
+			<div class="row">
+				<div class="col">
+					<div id="portfolioDiv"></div>
+				</div>
+			</div>
 			<br>
-			<div id="transactionHistory"></div>
+			<div class="row">
+				<div class="col">
+					<div id="transactionHistory"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 

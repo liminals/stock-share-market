@@ -50,7 +50,6 @@ function clearFields() {
 // populate the stock details
 // below in the UI
 stockBuySelect.change(function() {
-	console.log(this.value);
 	clearFields();
 	buttonBuy.prop('disabled', true);
 	buttonSell.prop('disabled', true);
@@ -97,7 +96,6 @@ function updateStockDataForSell(value) {
 $('#transactionQty').on('input propertychange paste', function() {
 	var qty = $.trim($(this).val());
 	var reg = new RegExp('^[0-9]+$');
-	console.log(qty);
 	if (qty != '' && parseInt(qty) > 0 && reg.test(qty)) {
 		buttonBuy.prop('disabled', false);
 		$('#transactionValue').val(parseInt(qty) * parseFloat(stockprice.text()));
@@ -152,6 +150,8 @@ buttonBuy.on('click', function(){
 			}
 		}
 	});
+	buttonBuy.prop('disabled', true);
+	buyTransactionFields.css('display', 'none');
 });
 
 
@@ -180,7 +180,6 @@ buttonSell.on('click', function() {
 	var url = serviceUrl + 'rest/broker/sell/' + gameid + '/' + player;
 	
 	var reqJson = JSON.stringify(reqData);
-	console.log(reqData);
 	
 	$.ajax(url, {
 		type: 'post',
@@ -190,9 +189,9 @@ buttonSell.on('click', function() {
 		success: function(data) {
 			clearFields();
 			if (data.status == 'PRICE_DO_NOT_MATCH') {
-				alert('Transaction Failed!. Price doesn' + "'" + 't match.')
+				sellTransactionFields.css('display', 'none');
 			} else if (data.status == 'INSUFFICIENT_STOCKS') {
-				alert('Transaction Failed!. You don' + + "'" + 't have specified stock quantity!');
+				alert('Transaction Failed!. You do not have specified stock quantity!');
 			} else {
 				// update transaction info
 				updateLatestTransactionUI(data);
@@ -202,13 +201,16 @@ buttonSell.on('click', function() {
 			}
 		}
 	});
+	buttonSell.prop('disabled', true);
+	sellTransactionFields.css('display', 'none');
 });
 
 
 // updates the last transaction in the UI
 function updateLatestTransactionUI(data) {
 	var trnsValue = data.qty * parseFloat(data.price);
-	var html = '<p>';
+	var html = '<h5>Latest Transaction</h5>';
+	html += '<div class="alert alert-primary" role="alert">';
 	
 	if (data.type == 'BUY') {
 		html += 'Bought ';
@@ -219,5 +221,6 @@ function updateLatestTransactionUI(data) {
 	html += data.stock + ' stocks at ';
 	html += data.price + ' for ';
 	html += trnsValue + ' !';
+	html += '</div>'
 	$('#latestTransaction').html(html);
 }

@@ -29,9 +29,15 @@ public class FinishGame extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String service = request.getParameter("serviceUrl");
 		HttpSession sess = request.getSession();
-		sess.removeAttribute("HostedGame");
-		sess.removeAttribute("CurrentGame");
-		sess.removeAttribute("GameJoined");
+		if (sess.getAttribute("HostedGame") != null)
+			sess.removeAttribute("HostedGame");
+		if (sess.getAttribute("CurrentGame") != null)
+			sess.removeAttribute("CurrentGame");
+		if (sess.getAttribute("GameJoined") != null)
+			sess.removeAttribute("GameJoined");
+		if (sess.getAttribute("GameJoinData") != null)
+			sess.removeAttribute("GameJoinData");
+		
 		response.sendRedirect(request.getContextPath() + "/myapp/jsps/loggedin.jsp");
 	}
 

@@ -39,7 +39,6 @@ function checkIfGameAlreadyHosted(recievedGame, hostedGames) {
 		}
 	});
 	if (found == 0) {
-		console.log('pushing ' + recievedGame);
 		hostedGames.push(recievedGame);
 		loadGamesUI(hostedGames);
 	}
@@ -73,7 +72,6 @@ function loadGamesInfo(data) {
 	var html = '<ul>Game ' + data.id;
 	html += '<li>Turns: ' + data.turns + '</li>';
 	html += '<ul>Players: ';
-	console.log(data);
 	var players = JSON.parse(data.playersJSON);
 	$.each(players, function(k, v){
 		html += '<li>' + v + '</li>';
@@ -88,11 +86,9 @@ function checkIfPlayerJoined(player, playersJson) {
 	$.each(playersJson, function(k, value) {
 		if (player == value) {
 			found = 1;
-			console.log('found');
 		}
 	});
 	if (found == 0) {
-		console.log('pushing ' + player);
 		joinedPlayers.push(player);
 	}
 }
@@ -102,10 +98,8 @@ $('#joinGameId').on('input propertychange paste', function() {
 	var reg = new RegExp('^[0-9]+$');
 	if(typedValue != '') {
 		if (reg.test(typedValue)) {
-			console.log('matches');
 			$('#joinGame').prop('disabled', false);
 		} else {
-			console.log('not matches');
 			$('#joinGame').prop('disabled', true);
 		}
 	} else {
@@ -118,10 +112,8 @@ $('#turnsId').on('input propertychange paste', function() {
 	var reg = new RegExp('^[0-9]+$');
 	if(typedValue != '') {
 		if (reg.test(typedValue)) {
-			console.log('matches');
 			$('#hostGame').prop('disabled', false);
 		} else {
-			console.log('not matches');
 			$('#hostGame').prop('disabled', true);
 		}
 	} else {

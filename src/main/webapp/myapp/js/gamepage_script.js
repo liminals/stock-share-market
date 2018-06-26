@@ -34,7 +34,6 @@ function isGameStarted(){
 		data: gameData,
 		contentType: 'application/json',
 		success: function(gameData) {
-			console.log(gameData);
 			clientTurnJSON = gameData;
 			if (clientTurnJSON.game_status == 'STARTED') {
 				clearInterval(isStartTimer);
@@ -148,13 +147,11 @@ function updateNewStockPrices() {
 		dataType: 'json',
 		contentType: 'application/json',
 		success: function(newStocksData) {
-			console.log(newStocksData);
 			$.each(newStocksData, function(k, v) {
 				updateStockPrice(v);
 			});
 		},
 		error: function(error) {
-			console.log(error);
 			console.log('An error occured!');
 		}
 	});
@@ -174,7 +171,6 @@ function checkForEvents() {
 				ul += '<li> duration: ' + data.duration + '</li>';
 				ul += '</ul>';
 				$('#eventDetails').html(ul);
-				console.log(data);
 			} else {
 				$('#eventDetails').html('');
 			}
@@ -197,7 +193,6 @@ function canRequestData() {
 				updateNewStockPrices();
 				checkWinner();
 			}
-			console.log(data);
 		},
 		error: function() {
 			console.log('error');
@@ -217,7 +212,6 @@ function updateTurn() {
 		contentType: 'application/json',
 		success: function(gameData) {
 			clientTurnJSON = gameData;
-			console.log(gameData);
 			if (turn != clientTurnJSON.currentTurn){
 				turn = clientTurnJSON.currentTurn;
 				$('#currentTurn').text('Current Turn: ' + turn);
@@ -255,7 +249,6 @@ function checkWinner() {
 	$.ajax(url, {
 		type: 'get',
 		success: function(data) {
-			console.log(data);
 			winner = data;
 			$('#currentWinner').text('Current Winner : ' + data);
 		}
