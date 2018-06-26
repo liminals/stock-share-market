@@ -40,8 +40,19 @@ function isGameStarted(){
 				console.log('timer ended');
 				initialLoading();
 				timer = setInterval(countTurns, 1000 * 3);
-			} else  {
+			} else if (clientTurnJSON.game_status == 'YET_TO_START') {
 				alert('Please wait until the host starts the game!!!');
+			} else {
+				alert('Game No longer hosted!');
+				var url = serviceUrl + 'GameEnded';
+				$.ajax(url, {
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						clearInterval(isStartTimer);
+						window.location = data.url;
+					}
+				});
 			}
 		},
 		error: function() {

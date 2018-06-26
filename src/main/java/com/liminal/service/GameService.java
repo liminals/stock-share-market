@@ -11,8 +11,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.json.JSONObject;
-
 import com.liminal.controller.GameController;
 import com.liminal.controller.GameTimer;
 import com.liminal.dao.GameSingleton;
@@ -21,7 +19,6 @@ import com.liminal.model.Event;
 import com.liminal.model.Game;
 import com.liminal.model.GameHostingData;
 import com.liminal.model.GameJoinData;
-import com.liminal.model.Player;
 import com.liminal.model.Stock;
 
 @Singleton
@@ -61,6 +58,8 @@ public class GameService {
 			data.setGame_status(ClientTurn.GAME_STATUS.STARTED.toString());
 			data.setTotalTurns(game.getTurns());
 			data.setCurrentTurn(game.getCurrentTurn());
+		} else if (game.getStatus().equalsIgnoreCase(Game.STATUS.ENDED.toString())) {
+			data.setGame_status(ClientTurn.GAME_STATUS.ENDED.toString());
 		} else {
 			data.setGame_status(ClientTurn.GAME_STATUS.YET_TO_START.toString());
 		}
