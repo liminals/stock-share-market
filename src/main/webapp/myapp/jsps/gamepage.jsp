@@ -37,37 +37,30 @@
 	<% if ((p != null && ghd != null && ct != null) || (p != null && gjd != null)) { %>
 	
 	<div class="container">
-		<div class="row">
-			<div class="col">
-				<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/FinishGame"%>" method="post">
-					<input type="hidden" value=<%= serviceUrl%> name="serviceUrl">
-					<input type="submit" value="Finish" disabled="true" id="leaveGame">
-				</form>
-			</div>
-		</div>
 		<div id="container">
 		<div class="row">
-			<h1>Game Page</h1>
-		</div>
-		<div class="row">
-			<div class="col">
-				<h4 id="playerName"></h4>
-			</div>
-			<div class="col">
-				<h4 id="currentBalance"></h4>
+		<div class="col-md-12">
+			<h1 align="center">Game Page</h1>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col">
+			<div class="col-md-12">
+			<center>
+				<h4 align="center" id="playerName"></h4>
+				<h4 align="center" id="currentBalance"></h4>
 				<h4 id="currentTurn">Current Turn:</h4>
-			</div>
-			<div class="col">
 				<h4 id="totalTurns"> Total Turns :</h4>
-			</div>
-			<div class="col">
 				<h4 id="currentWinner"></h4>
+				<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/FinishGame"%>" method="post">
+					<input type="hidden" value=<%= serviceUrl%> name="serviceUrl">
+					<input class="button btn" type="submit" value="Finish" disabled="true" id="leaveGame">
+				</form>
+				</center>
 			</div>
+			
 		</div>
+		
+		<br>
 		<div class="row">
 			<div class="col">
 				<div id="stockDashboard">

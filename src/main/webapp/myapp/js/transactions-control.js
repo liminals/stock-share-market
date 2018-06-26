@@ -152,6 +152,7 @@ buttonBuy.on('click', function(){
 	});
 	buttonBuy.prop('disabled', true);
 	buyTransactionFields.css('display', 'none');
+	buyStockdetails.css('display', 'none');
 });
 
 
@@ -203,6 +204,7 @@ buttonSell.on('click', function() {
 	});
 	buttonSell.prop('disabled', true);
 	sellTransactionFields.css('display', 'none');
+	sellStockdetails.css('display', 'none');
 });
 
 

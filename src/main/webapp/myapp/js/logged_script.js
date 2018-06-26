@@ -111,7 +111,8 @@ $('#turnsId').on('input propertychange paste', function() {
 	var typedValue = $.trim($(this).val());
 	var reg = new RegExp('^[0-9]+$');
 	if(typedValue != '') {
-		if (reg.test(typedValue)) {
+		var val = parseInt(typedValue);
+		if (reg.test(typedValue) && val > 3 && val < 40) {
 			$('#hostGame').prop('disabled', false);
 		} else {
 			$('#hostGame').prop('disabled', true);

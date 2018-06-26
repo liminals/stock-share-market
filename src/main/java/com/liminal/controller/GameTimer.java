@@ -32,6 +32,7 @@ public class GameTimer {
 			
 			if (game.getCurrentTurn() > game.getTurns()) {
 				System.out.println("[" + game.getId() + "]" + "[ENDED]" + game.getCurrentTurn());
+				gameController.chooseWinner();
 				game.setStatus(Game.STATUS.ENDED.toString());
 				gameController.getGameDAO().updateStatus(game);
 				cancel();

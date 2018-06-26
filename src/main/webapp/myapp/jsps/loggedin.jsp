@@ -32,12 +32,15 @@
 	<div class="container">
 	<div class="row">
 		<div class="col">
-			<h1>Liminals</h1>
+			<h1 align="center">Liminals</h1><h2 align="center">Stock-Share-Market Simulation Game</h2><h6 style="color:white;" align="right"><%= p.getUsername() %> <form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/LogoutPlayer" %>" method="post">
+			<input type="hidden" value="<%= serviceUrl%>" name="serviceUrl">
+			<input class="button btn-primary" type="submit" value="Logout">
+		</form></h6>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col">
-			<h2>Stock-Share-Market Simulation Game</h2>
+			
 		</div>
 	</div>
 	<div id="playerDetails" class="row">
@@ -53,7 +56,7 @@
 					<h3>Host a game</h3>
 					<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/HostGame" %>" method="post">
 						<div class="form-group">
-							<input type="text" class="form-control" name="turns" placeholder="Fixed turns in the game" id="turnsId">
+							<input type="text" class="form-control" name="turns" placeholder="More than 3 less than 40" id="turnsId">
 						</div>
 						<input type="hidden" name="createdBy" value="<%= p.getUsername() %>">
 						<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
@@ -106,10 +109,7 @@
 			%> 
 	</div>	
 		
-		<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/LogoutPlayer" %>" method="post">
-			<input type="hidden" value="<%= serviceUrl%>" name="serviceUrl">
-			<input type="submit" value="Logout">
-		</form>
+		
 		</div>
 		<!-- Game scripts -->
 		
