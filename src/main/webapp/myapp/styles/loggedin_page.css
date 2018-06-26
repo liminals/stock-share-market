@@ -1,11 +1,15 @@
-#mainBG {
-	background: green;
+body {
+    background-image: url("../img/index.jpg");
+    -webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+} 
+h1, h2, h3 {
+	color: white;
 }
-
-h1 {
-	text-align: center;	
-}
-
-h1, h2 {
-	color: red;
+.form-control {
+	background-color:#fff0;
 }

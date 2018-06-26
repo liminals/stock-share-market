@@ -9,7 +9,7 @@ import com.liminal.model.Game;
 public class GameTimer {
 	
 	private Timer timer;
-	private long timeout = 1000 * 10;
+	private long timeout = 1000 * 200;
 	private GameController gameController;
 	private Game game;
 	
@@ -46,6 +46,6 @@ public class GameTimer {
 	
 	public void startTimer() {
 		System.out.println("[" + game.getId() + "]" + "[GAME][STARTED]");
-		timer.scheduleAtFixedRate(updateTurnTask, 1000 * 10, timeout);
+		timer.scheduleAtFixedRate(updateTurnTask, 1000 * 200, timeout);
 	}
 }

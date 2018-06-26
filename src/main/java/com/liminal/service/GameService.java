@@ -44,8 +44,10 @@ public class GameService {
 			//return gameSingleton.checkForJoin(gameJoinData);
 			GameJoinData gjd = gameSingleton.checkForJoin(gameJoinData);
 			Game g = gameSingleton.getGame(gjd.getGameId());
-			GameController gc = new GameController(g);
-			gc.updatePlayersInDB();
+			if (g != null) {
+				GameController gc = new GameController(g);
+				gc.updatePlayersInDB();
+			}
 			return gjd;
 		}
 		return gameJoinData;

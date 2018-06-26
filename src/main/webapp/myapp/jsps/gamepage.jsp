@@ -18,9 +18,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Game Page</title>
-	<link rel="stylesheet" href="../styles/gamepage.css">
-	<link rel="stylesheet" href="<%= request.getContextPath() + "/myapp/styles/gamepage.css" %>">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+	<link rel="stylesheet" href="../styles/gamepage.css">
 </head>
 <body>
 	<%	
@@ -34,67 +33,109 @@
 		gjd = (GameJoinData) sess.getAttribute("GameJoined");
 		String serviceUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 	%>
-	<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/FinishGame"%>" method="post">
-		<input type="hidden" value=<%= serviceUrl%> name="serviceUrl">
-		<input type="submit" value="Finish" disabled="true" id="leaveGame">
-	</form>
 			<!-- this is for host                   || this is for players who join -->
 	<% if ((p != null && ghd != null && ct != null) || (p != null && gjd != null)) { %>
-	<div id="container">
-		<h1>Game Page</h1>
-		<h3 id="playerName"></h3>
-		<h3 id="currentBalance"></h3>
-		<h3 id="currentTurn">Current Turn:</h3>
-		<h3 id="totalTurns"> Total Turns :</h3>
-		<h3 id="currentWinner"></h3>
-		<h4>Stocks</h4>
-		
-		<div id="stockDashboard">
-			<div id="searchStockDiv">
-				<label>Search Stocks </label>
-				<input type="text" id="searchStock">
-				<div id="searchResults"></div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/FinishGame"%>" method="post">
+					<input type="hidden" value=<%= serviceUrl%> name="serviceUrl">
+					<input type="submit" value="Finish" disabled="true" id="leaveGame">
+				</form>
 			</div>
-			<span id="eventDetails">
-			</span>
-			<canvas id="stockGraph"></canvas>
 		</div>
-		
-		<div id="stockTransaction">
-			<div id="stockBuy">
-				Buy : <select id="selectBuy"></select>
-				<button id="buttonBuy">Buy</button>
-				<div id="buyStockDetails">
-					<h4 id="stockname"></h4>
-					Price : <p id="stockprice">
+		<div id="container">
+		<div class="row">
+			<h1>Game Page</h1>
+		</div>
+		<div class="row">
+			<div class="col">
+				<h4 id="playerName"></h4>
+			</div>
+			<div class="col">
+				<h4 id="currentBalance"></h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<h4 id="currentTurn">Current Turn:</h4>
+			</div>
+			<div class="col">
+				<h4 id="totalTurns"> Total Turns :</h4>
+			</div>
+			<div class="col">
+				<h4 id="currentWinner"></h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div id="stockDashboard">
+						<div id="searchStockDiv">
+							<label>Search Stocks </label>
+							<input type="text" id="searchStock">
+							<div id="searchResults"></div>
+						</div>
+						<span id="eventDetails">
+						</span>
+						<canvas id="stockGraph"></canvas>
 				</div>
-				<div id="buyTransactionFields">
-					<label>Value : </label> 
-					<input type="text" id="transactionValue" disabled="true"> 
-					<input type="text" id="transactionQty">
+			</div>
+		</div>
+		<br>
+			<div id="stockTransaction">
+			<div class="row">
+				<div class="col">
+					<div id="stockBuy">
+					<div class="form-group">
+						Buy : <select class="form-control" id="selectBuy"></select>
+					</div>
+					<div class="form-group">
+						<button id="buttonBuy" class="form-control btn btn-primary">Buy</button>
+					</div>
+						<div id="buyStockDetails">
+							<h4 id="stockname"></h4>
+							Price : <p id="stockprice">
+						</div>
+						<div id="buyTransactionFields">
+							<div class="form-group">
+								<label class="form-label">Value : </label>
+							</div> 
+							<div class="form-group">
+								<input type="text" id="transactionValue" disabled="true" class="form-control">
+							</div> 
+							<div class="form-group"> 
+								<input type="text" id="transactionQty" class="form-control">
+							</div> 
+						</div>
+					</div>
 				</div>
+			</div>
+				<br/>
+				<div id="stockSell">
+					Sell : <select id="selectSell"></select>
+					<button id="buttonSell">Sell</button>
+					<div id="sellStockDetails">
+						<h4 id="portfolioname"></h4>
+						Qty : <p id="portfolioqty">
+						Value : <p id="portfoliovalue">
+					</div>
+					<div id="sellTransactionFields">
+						<label>Sell Qty : </label>  
+						<input type="text" id="sellQty">
+					</div>
+				</div>
+				<span id="latestTransaction"></span>
 			</div>
 			<br/>
-			<div id="stockSell">
-				Sell : <select id="selectSell"></select>
-				<button id="buttonSell">Sell</button>
-				<div id="sellStockDetails">
-					<h4 id="portfolioname"></h4>
-					Qty : <p id="portfolioqty">
-					Value : <p id="portfoliovalue">
-				</div>
-				<div id="sellTransactionFields">
-					<label>Sell Qty : </label>  
-					<input type="text" id="sellQty">
-				</div>
-			</div>
-			<span id="latestTransaction"></span>
+			<div id="portfolioDiv"></div>
+			<br>
+			<div id="transactionHistory"></div>
 		</div>
-		<br/>
-		<div id="portfolioDiv"></div>
-		<br>
-		<div id="transactionHistory"></div>
 	</div>
+
+
+
 	<!-- when a game host access this url without starting the game -->
 	<% 	} else if (p != null && ghd != null && ct == null)  {
 			response.sendRedirect(request.getContextPath() + "/myapp/jsps/HostGame.jsp");

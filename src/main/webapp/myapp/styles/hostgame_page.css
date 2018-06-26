@@ -1,6 +1,3 @@
-h1 {
-	color: red;
-}
 body {
     background-image: url("../img/index.jpg");
     -webkit-background-size: cover;
@@ -9,7 +6,16 @@ body {
   	background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+} 
+h1, h2, h3 {
+	color: white;
 }
-form-control {
-	background-color:#fff0;
+
+#gameInfo {
+	color: black;
+}
+#hostedGameInfoArea {
+	border: 2px white solid;
+	background: #dce0e5;
+	opacity: 0.97;
 }

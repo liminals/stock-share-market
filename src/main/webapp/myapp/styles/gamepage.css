@@ -1,13 +1,5 @@
-body {
-	background: #799456;
-}
-
-h1 {
-	color: red;
-}
-
 #stockDashboard {
-	width: 1024px;
+	width: 1000px;
 	margin: 0 auto;
 	border: 1px solid black;
 }
@@ -20,6 +12,12 @@ h1 {
 #stockGraph {
 	margin-top: 3px;
 	border-top: 1px solid black;
-	width: 400px;
-	height: 400px;
+}
+
+#leaveGame {
+	padding: 0;
+	margin-top: 5px;
+	border: none;
+	background: none;
+	font-size: 1.1em;	
 }

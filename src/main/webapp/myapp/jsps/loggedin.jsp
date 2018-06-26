@@ -21,71 +21,96 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Stock-Share-Market</title>
-	<link rel="stylesheet" href="../styles/loggedin_page.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+	<link rel="stylesheet" href="../styles/loggedin_page.css">
 </head>
 <body id="mainBG">
 	<% if (p == null) {
 		response.sendRedirect("./../../index.jsp");
 	} else {
 	%>
-		<h1>Liminals</h1>
-		<h2>Stock-Share-Market Simulation Game</h2>
-		
-		<div id="playerDetails">
+	<div class="container">
+	<div class="row">
+		<div class="col">
+			<h1>Liminals</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<h2>Stock-Share-Market Simulation Game</h2>
+		</div>
+	</div>
+	<div id="playerDetails" class="row">
+		<div class="col">
 			<h2> Welcome : <%= p.getUsername() %></h2>
 		</div>
+	</div>
 		<div id="container">
 			<!-- initial visit by player -->
 			<% if (request.getSession().getAttribute("HostedGame") == null && request.getSession().getAttribute("GameJoinData") == null) { %>
-			<div>
-				<h3>Host a game</h3>
-				<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/HostGame" %>" method="post">
-					<input type="text" name="turns" placeholder="Fixed turns in the game">
-					<input type="hidden" name="createdBy" value="<%= p.getUsername() %>">
-					<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
-					<input type="submit" value="Host">
-				</form>
+			<div class="row">
+				<div class="col">
+					<h3>Host a game</h3>
+					<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/HostGame" %>" method="post">
+						<div class="form-group">
+							<input type="text" class="form-control" name="turns" placeholder="Fixed turns in the game" id="turnsId">
+						</div>
+						<input type="hidden" name="createdBy" value="<%= p.getUsername() %>">
+						<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
+						<div class="form-group">
+							<input type="submit" value="Host" class="form-control btn btn-primary" id="hostGame">
+						</div>
+					</form>
+				</div>
 			</div>
-			<div>
-				<h3>Join a game</h3>
+			<div class="row">
+				<div class="col">
+					<h3>Join a game</h3>
+					<span id="selectedGame"></span>
+					<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/JoinHostedGame" %>" method="post">
+						<div class="form-group">
+							<input type="text" id="joinGameId" name="gameId" placeholder="Enter game id from below" class="form-control">
+						</div>
+						<input type="hidden" name="username" value="<%= p.getUsername() %>">
+						<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
+						<div class="form-group">
+							<input type="submit" value="Join" id="joinGame" class="form-control btn btn-primary">
+						</div>
+					</form>
+				</div>
+			</div>
+			<div styles="margin-top: 5px;">
 				<div id="gamesInfoArea"></div>
-				<br />
-				<span id="selectedGame"></span>
-				<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/JoinHostedGame" %>" method="post">
-					<input type="text" id="joinGameId" name="gameId" placeholder="Enter game id from above">
-					<input type="hidden" name="username" value="<%= p.getUsername() %>">
-					<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
-					<input type="submit" value="Join" id="joinGame">
-				</form>
 			</div>
-			
 			<!-- players joins a hosted game -->
 			<% } else if (request.getSession().getAttribute("GameJoinData") != null && request.getSession().getAttribute("HostedGame") == null) {%>
-				<div id="gamesInfoArea"></div>
-				<br />
 				<% gjd = (GameJoinData) request.getSession().getAttribute("GameJoinData");%>
 				<% if (gjd.getStatus_message().equalsIgnoreCase(GameJoinData.MESSAGE.GAME_NOT_AVAILABLE.toString())) { %>
 					<h4>Please enter a valid game id</h4>
 					<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/JoinHostedGame" %>" method="post">
-						<input type="text" id="joinGameId" name="gameId" placeholder="Enter game id from above">
+						<div class="fomr-group">
+							<input type="text" id="joinGameId" name="gameId" placeholder="Enter game id from below" class="form-control btn btn-primary">
+						</div>
 						<input type="hidden" name="username" value="<%= p.getUsername() %>">
 						<input type="hidden" name="serviceUrl" value=<%= serviceUrl%>>
-						<input type="submit" value="Join" id="joinGame">
+						<div class="fomr-group">
+							<input type="submit" value="Join" id="joinGame" class="form-control btn btn-primary">
+						</div>
 					</form>
+					<br />
+					<div id="gamesInfoArea"></div>
 				<% } %>
 			<% } else if (request.getSession().getAttribute("GameJoinData") == null && request.getSession().getAttribute("HostedGame") != null) {
 					response.sendRedirect(request.getContextPath() + "/myapp/jsps/HostGame.jsp");
 			   } 
 			%> 
-		</div>	
+	</div>	
 		
 		<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/LogoutPlayer" %>" method="post">
 			<input type="hidden" value="<%= serviceUrl%>" name="serviceUrl">
 			<input type="submit" value="Logout">
 		</form>
-		
-		
+		</div>
 		<!-- Game scripts -->
 		
 		<script type="text/javascript">

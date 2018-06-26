@@ -70,7 +70,8 @@ function initGraph() {
 			        	fontSize: 20 
 			        }
 				}]            
-			}  
+			},
+			responsive: true
 	};
 	myChart = new Chart(ctx, {
 	    type: 'line',

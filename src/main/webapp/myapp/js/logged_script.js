@@ -4,7 +4,8 @@ var selectedGame;
 var hostedGames = [];
 var joinedPlayers = [];
 
-$('#joinGame').prop('disabled', 'true');
+$('#joinGame').prop('disabled', true);
+$('#hostGame').prop('disabled', true);
 
 // this will check for games being hosted real time
 function checkGames() {
@@ -45,29 +46,27 @@ function checkIfGameAlreadyHosted(recievedGame, hostedGames) {
 }
 
 function loadGamesUI(gamesData) {
-	var html = '<div id=' + "gamesHosted" + '>';
-	html += '<ul>';
-	$.each(gamesData, function(key, value) {
+	var html = '<div class="row">';
+	$.each(gamesData, function(k, value){
 		var json = JSON.stringify(value);
-		html += '<li>Game : ' + value.id; + '<li>';
-		html += '<ul><li>Turns : ' + value.turns; + '</li>';
-		html += '<li><ul>Players';
-		
+		html += '<div class="col-md-3">';
+		html += 	'<div class="card" style="width: 15rem;">';
+		html += 			'<div class="card-body">';
+		html += 			'<h5 class="card-title">' + 'Game ' + value.id + '</h5>';
+		html += 			'<p class="card-text"> Game hosted by ' + value.createdBy;
+		html += 			'<p class="card-text">Current Players';
+		html += 			'<ul class="list-group">';
 		var players = JSON.parse(value.playersJSON);
 		$.each(players, function(k, v) {
-			html += '<li>' + v + '</li>';
+			html += 			'<li class="list-group-item">' + v + '</li>';
 		});
-		html += '</ul></li>';
-		html += '</ul>';
-	})
+		html += 			'</ul>';
+		html += 		'</div>';
+		html += 	'</div>';
+		html += '</div>';
+	});
 	html += '</div>';
 	$("#gamesInfoArea").html(html);
-	$('#gamesHosted').on('change', function() {
-		var values = JSON.parse(this.value);
-		selectedGame = this.value;
-		loadGamesInfo(values);
-		// $('#joinGame').prop('disabled', false);
-	});
 }
 
 function loadGamesInfo(data) {
@@ -111,5 +110,21 @@ $('#joinGameId').on('input propertychange paste', function() {
 		}
 	} else {
 		$('#joinGame').prop('disabled', true);
+	}
+});
+
+$('#turnsId').on('input propertychange paste', function() {
+	var typedValue = $.trim($(this).val());
+	var reg = new RegExp('^[0-9]+$');
+	if(typedValue != '') {
+		if (reg.test(typedValue)) {
+			console.log('matches');
+			$('#hostGame').prop('disabled', false);
+		} else {
+			console.log('not matches');
+			$('#hostGame').prop('disabled', true);
+		}
+	} else {
+		$('#hostGame').prop('disabled', true);
 	}
 });

@@ -7,28 +7,51 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Hosting Game</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+	<link rel="stylesheet" href="../styles/hostgame_page.css">
 </head>
 <body>
-<!-- player hosts a game -->
-<%!GameHostingData ghd; %>
+	<!-- player hosts a game -->
+	<%!GameHostingData ghd; %>
 	<% 
 		String serviceUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/rest/";
 		HttpSession s = request.getSession();
 	if (s.getAttribute("CurrentPlayer") != null && s.getAttribute("HostedGame") != null && s.getAttribute("CurrentGame") == null) { %>
 			<% ghd = (GameHostingData) s.getAttribute("HostedGame");%>
-			<h3>Currently Hosting</h3>
-			<div id="hostedGameInfoArea">
-				<div id="gameInfo"></div>
-				<div id="joinedPlayers"></div>
+			<div class="container">
+				<div class="row justify-content-center">
+					<h2>Currently Hosting</h3>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div id="hostedGameInfoArea">
+							<div id="gameInfo"></div>
+							<div id="joinedPlayers"></div>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col">
+						<form action="<%="http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/StartHostedGame"%>" method="post">
+							<input type="hidden" name="serviceUrl" value=<%=serviceUrl%>>
+							<div class="form-group">
+								<input type="submit" value="Start" class="form-control btn btn-success">
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<form action="<%="http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/StopHostedGame"%>" method="post">
+							<input type="hidden" name="serviceUrl" value=<%=serviceUrl%>>
+							<div class="form-group">
+								<input type="submit" value="Stop" class="form-control btn btn-danger">
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
-			<form action="<%="http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/StartHostedGame"%>" method="post">
-				<input type="hidden" name="serviceUrl" value=<%=serviceUrl%>>
-				<input type="submit" value="Start">
-			</form>
-			<form action="<%="http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/StopHostedGame"%>" method="post">
-				<input type="hidden" name="serviceUrl" value=<%=serviceUrl%>>
-				<input type="submit" value="Stop">
-			</form>
 	<%	// game host access this page
 		} else if (s.getAttribute("CurrentPlayer") != null && s.getAttribute("HostedGame") != null && s.getAttribute("CurrentGame") != null) {
 			response.sendRedirect(request.getContextPath() + "/myapp/jsps/gamepage.jsp");

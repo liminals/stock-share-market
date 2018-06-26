@@ -70,8 +70,8 @@ public class RegisterPlayer extends HttpServlet {
 					Response res2 = brokerAccount.target(brokerAccountUrl).request().post(Entity.json(""));
 					
 					if (res.getStatus() == 200) {
-						request.setAttribute("Registration", "Player successfully created!");
-						request.getRequestDispatcher("index.jsp").forward(request, response);
+						// request.getRequestDispatcher("index.jsp").forward(request, response);
+						response.sendRedirect(request.getContextPath() + "/index.jsp");
 					}
 				} else {
 					request.setAttribute("RegisterErrorMessage", "Player with same username exists");
