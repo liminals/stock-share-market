@@ -14,15 +14,21 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 </head>
 <body>
+	<% 	HttpSession sess = request.getSession();
+		Player p = (Player) sess.getAttribute("CurrentPlayer");
+	%>
 	<h1>Liminals</h1>
 	<h2>Welcome user!</h2>
 	<div id="container">
 	
+	<% if (p == null) { %>
 	<!-- initial visit && register success -->
 	<% if (request.getAttribute("RegisterErrorMessage") == null && request.getAttribute("LoginErrorMessage") == null) {%>
 		<% if (request.getAttribute("Registration") != null) { %>
 			<span id="successMessage"><%= request.getAttribute("Registration") %></span>
-		<% } %>
+		<% 
+			request.removeAttribute("RegisterErrorMessage");
+		} %>
 		<div id="createAccount">
 			<h2 id="headings">Create Account</h2>
 			<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/RegisterPlayer" %>" method="post">
@@ -76,6 +82,10 @@
 			</div>	
 		<% } %>
 	</div>
+	<%  } else {
+			response.sendRedirect(request.getContextPath() + "/myapp/jsps/loggedin.jsp");
+		}
+	%>
 	
 	<!-- Game scripts -->
 	

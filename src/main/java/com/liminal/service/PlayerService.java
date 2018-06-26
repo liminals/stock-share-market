@@ -24,4 +24,11 @@ public class PlayerService {
 		controller.loginPlayer();
 		return player;
 	}
+	
+	@POST
+	@Path("/logout")
+	public void logoutPlayer(Player player) {
+		PlayerController controller = new PlayerController(player);
+		controller.logoutPlayer();
+	}
 }

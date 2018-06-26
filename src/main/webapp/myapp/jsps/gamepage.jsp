@@ -1,12 +1,17 @@
+<%@page import="com.liminal.model.GameHostingData"%>
+<%@page import="com.liminal.model.Player"%>
 <%@page import="com.liminal.model.GameJoinData"%>
 <%@page import="com.liminal.controller.JoinHostedGame"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.liminal.model.ClientTurn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%! ClientTurn ct; 
+<%! 
+	ClientTurn ct; 
+	GameHostingData ghd;
 	GameJoinData gjd;
 	JSONObject jo;
+	Player p;
 %>
 <!DOCTYPE html>
 <html>
@@ -18,9 +23,19 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 </head>
 <body>
-	<%
+	<%	
+		HttpSession sess = request.getSession();
+		// for logged in player
+		p = (Player) sess.getAttribute("CurrentPlayer");
+		// if host
+		ghd = (GameHostingData) sess.getAttribute("HostedGame");
+		ct = (ClientTurn) sess.getAttribute("CurrentGame"); 
+		// if client
+		gjd = (GameJoinData) sess.getAttribute("GameJoined");
 		String serviceUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 	%>
+			<!-- this is for host                   || this is for players who join -->
+	<% if ((p != null && ghd != null && ct != null) || (p != null && gjd != null)) { %>
 	<div id="container">
 		<h1>Game Page</h1>
 		<h3 id="playerName"></h3>
@@ -76,19 +91,20 @@
 		<br>
 		<div id="transactionHistory"></div>
 	</div>
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	<% 	ct = (ClientTurn)request.getSession().getAttribute("CurrentGame"); 
-		gjd = (GameJoinData)request.getSession().getAttribute("GameJoined");
+	<!-- when a game host access this url without starting the game -->
+	<% 	} else if (p != null && ghd != null && ct == null)  {
+			response.sendRedirect(request.getContextPath() + "/myapp/jsps/HostGame.jsp");
+			// if player only logged in
+		} else if (p != null) {
+			response.sendRedirect(request.getContextPath() + "/myapp/jsps/loggedin.jsp");
+			// if player not logged in
+		} else {
+			response.sendRedirect(request.getContextPath() + "/index.jsp");
+		}
 	%>
+	
+	
+	
 	
 	
 	<!-- Game scripts -->

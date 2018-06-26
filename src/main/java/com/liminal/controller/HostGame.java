@@ -67,7 +67,8 @@ public class HostGame extends HttpServlet {
 			Response res2 = brokerAccountReq.target(brokerAccountUrl).request().post(Entity.json(""));
 			
 			request.getSession().setAttribute("HostedGame", serviceResponse.readEntity(GameHostingData.class));
-			request.getRequestDispatcher("myapp/jsps/loggedin.jsp").forward(request, response);
+			// request.getRequestDispatcher("myapp/jsps/loggedin.jsp").forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/myapp/jsps/HostGame.jsp");
 		}
 	}
 

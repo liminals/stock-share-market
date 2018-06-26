@@ -49,4 +49,9 @@ public class PlayerController {
 			player.setId(-1);
 		}
 	}
+	
+	public void logoutPlayer() {
+		player.setStatus(Player.STATUS.LOGED_OUT.toString());
+		playerDAO.updateStatus(player);
+	}
 }

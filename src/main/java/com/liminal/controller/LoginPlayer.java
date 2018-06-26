@@ -59,11 +59,11 @@ public class LoginPlayer extends HttpServlet {
 				request.setAttribute("Username", resPlayer.getUsername());
 				request.getRequestDispatcher("index.jsp").forward(request, response);
 			} else {
-				HttpSession session = request.getSession(false);
+				HttpSession session = request.getSession();
 				//save message in session
 				session.setAttribute("CurrentPlayer", resPlayer);
 				response.sendRedirect(request.getContextPath() + "/myapp/jsps/loggedin.jsp");
-				
+							
 				// request.setAttribute("CurrentPlayer", resPlayer);
 				// request.getRequestDispatcher("index.jsp").forward(request, response);
 			}

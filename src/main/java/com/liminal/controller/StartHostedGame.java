@@ -51,7 +51,8 @@ public class StartHostedGame extends HttpServlet {
 		
 		if (serviceResponse.getStatus() == 200) {
 			request.getSession().setAttribute("CurrentGame", serviceResponse.readEntity(ClientTurn.class));
-			request.getRequestDispatcher("myapp/jsps/gamepage.jsp").forward(request, response);
+			// request.getRequestDispatcher("myapp/jsps/gamepage.jsp").forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/myapp/jsps/gamepage.jsp");
 		}
 	}
 

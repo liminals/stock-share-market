@@ -50,9 +50,7 @@ public class JoinHostedGame extends HttpServlet {
 		
 		if (serviceResponse.getStatus() == 200){
 			GameJoinData resData = (GameJoinData) serviceResponse.readEntity(GameJoinData.class);
-			if (resData.getStatus().equalsIgnoreCase(GameJoinData.STATUS.ACCEPTED.toString())) {
-				request.getSession().setAttribute("GameJoined", resData);
-				
+			if (resData.getStatus().equalsIgnoreCase(GameJoinData.STATUS.ACCEPTED.toString())) {			
 				//setup player account for game
 				bankAccountUrl += resData.getPlayerName();
 				Client accountReq = ClientBuilder.newClient();
@@ -63,7 +61,9 @@ public class JoinHostedGame extends HttpServlet {
 				Response res2 = brokerAccountReq.target(brokerAccountUrl).request().post(Entity.json(""));
 						
 				resData.setStatus(GameJoinData.STATUS.WAITING_FOR_START.toString());
-				request.getRequestDispatcher("myapp/jsps/gamepage.jsp").forward(request, response);
+				// request.getRequestDispatcher("myapp/jsps/gamepage.jsp").forward(request, response);
+				request.getSession().setAttribute("GameJoined", resData);
+				response.sendRedirect(request.getContextPath() + "/myapp/jsps/gamepage.jsp");
 			} else {
 				request.getSession().setAttribute("GameJoinData", resData);
 				request.getRequestDispatcher("myapp/jsps/loggedin.jsp").forward(request, response);

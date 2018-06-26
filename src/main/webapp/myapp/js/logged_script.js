@@ -1,5 +1,4 @@
 var timer = setInterval(checkGames, 1000 * 3);
-var checkPlayersTimer = setInterval(checkForPlayers, 1000 * 3);
 
 var selectedGame;
 var hostedGames = [];
@@ -7,6 +6,7 @@ var joinedPlayers = [];
 
 $('#joinGame').prop('disabled', 'true');
 
+// this will check for games being hosted real time
 function checkGames() {
 	var url = serviceUrl + 'game/getGames';
 	$.ajax(url, {
@@ -84,39 +84,6 @@ function loadGamesInfo(data) {
 	$("#selectedGame").html(html);
 }
 
-function loadHostedGameInfo(data) {
-	var html = '<ul>Game ' + data.id;
-	html += '<li>Turns: ' + data.turns + '</li>';
-	html += '</ul>'
-	$("#gameInfo").html(html);
-	loadJoinedPlayers(data.players);
-}
-
-function loadJoinedPlayers(data) {
-	var html2 = '<ul>Players';
-	var players = JSON.parse(data);
-	$.each(players, function(k, v) {
-		html2 += '<li>' + v + '</li>';
-	});
-	html2 += '</ul>';
-	$("#joinedPlayers").html(html2);
-}
-
-function checkForPlayers() {
-	if (typeof hostedGameInfo !== 'undefined'){
-		var url = serviceUrl + 'game/' + hostedGameInfo.id + '/checkForPlayers';
-		$.ajax(url, {
-			type: 'get',
-			success: function(data) {
-				loadJoinedPlayers(data);
-			},
-			error: function() {
-				console.log('error in loading');
-			}
-		});
-	}
-}
-
 function checkIfPlayerJoined(player, playersJson) {
 	var found = 0;
 	$.each(playersJson, function(k, value) {
@@ -128,7 +95,6 @@ function checkIfPlayerJoined(player, playersJson) {
 	if (found == 0) {
 		console.log('pushing ' + player);
 		joinedPlayers.push(player);
-		//loadJoinedPlayers(joinedPlayers);
 	}
 }
 
