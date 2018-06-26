@@ -9,7 +9,7 @@ Download them, and Please set the PATH variables accordingly. Configure Maven an
 - [apache tomcat 8.5](http://tomcat.apache.org/download-80.cgi)
 - [Maven](https://maven.apache.org/download.cgi)
 - [Git](https://git-scm.com/downloads)
-- Bootstar 4
+- Bootstarp 4
 
 
 ### How to import 
