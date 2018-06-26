@@ -116,6 +116,17 @@ public class GameService {
 	}
 	
 	@POST
+	@Path("/stop")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void stopGame(GameHostingData data) {
+		Game game = gameSingleton.getGame(data.getId());
+		GameController gc = new GameController(game);
+		game.setStatus(Game.STATUS.ENDED.toString());
+		gc.getGameDAO().updateStatus(game);
+	}
+	
+	@POST
 	@Path("{gameid}/getStock")
 	public List<Stock> getStocks(@PathParam("gameid") int gameid) {
 		Game game = gameSingleton.getGame(gameid);

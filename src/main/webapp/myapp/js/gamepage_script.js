@@ -103,6 +103,7 @@ function countTurns() {
 			if (data == 'true') {
 				clearInterval(timer);
 				alert('game ended');
+				$('#leaveGame').prop('disabled', false);
 				if (winner != clientTurnJSON.player) {
 					alert(winner + ' wins the game!!')
 				} else {

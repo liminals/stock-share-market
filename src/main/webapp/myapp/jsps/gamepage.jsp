@@ -34,6 +34,10 @@
 		gjd = (GameJoinData) sess.getAttribute("GameJoined");
 		String serviceUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 	%>
+	<form action="<%= "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/FinishGame"%>" method="post">
+		<input type="hidden" value=<%= serviceUrl%> name="serviceUrl">
+		<input type="submit" value="Finish" disabled="true" id="leaveGame">
+	</form>
 			<!-- this is for host                   || this is for players who join -->
 	<% if ((p != null && ghd != null && ct != null) || (p != null && gjd != null)) { %>
 	<div id="container">
