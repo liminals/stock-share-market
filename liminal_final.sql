@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
+CREATE DATABASE  IF NOT EXISTS `liminal_final` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `liminal_final`;
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: liminal_final
 -- ------------------------------------------------------
--- Server version	5.7.22-0ubuntu0.16.04.1
+-- Server version	5.7.14-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,6 +39,32 @@ CREATE TABLE `bankaccount` (
 LOCK TABLES `bankaccount` WRITE;
 /*!40000 ALTER TABLE `bankaccount` DISABLE KEYS */;
 /*!40000 ALTER TABLE `bankaccount` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `banktransaction`
+--
+
+DROP TABLE IF EXISTS `banktransaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `banktransaction` (
+  `turn` int(3) DEFAULT NULL,
+  `gameid` int(3) DEFAULT NULL,
+  `type` varchar(10) DEFAULT NULL,
+  `sender` varchar(20) DEFAULT NULL,
+  `receiver` varchar(20) DEFAULT NULL,
+  `name` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `banktransaction`
+--
+
+LOCK TABLES `banktransaction` WRITE;
+/*!40000 ALTER TABLE `banktransaction` DISABLE KEYS */;
+/*!40000 ALTER TABLE `banktransaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -188,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-26 21:16:16
+-- Dump completed on 2018-06-27  2:42:21
