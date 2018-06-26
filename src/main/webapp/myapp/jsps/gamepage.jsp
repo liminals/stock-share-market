@@ -27,7 +27,7 @@
 		HttpSession sess = request.getSession();
 		// for logged in player
 		p = (Player) sess.getAttribute("CurrentPlayer");
-		// if host
+		// if host: only host has a ClientTurn session object
 		ghd = (GameHostingData) sess.getAttribute("HostedGame");
 		ct = (ClientTurn) sess.getAttribute("CurrentGame"); 
 		// if client

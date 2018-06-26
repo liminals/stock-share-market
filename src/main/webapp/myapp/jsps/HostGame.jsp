@@ -14,7 +14,7 @@
 	<% 
 		String serviceUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/rest/";
 		HttpSession s = request.getSession();
-	if (s.getAttribute("CurrentPlayer") != null && s.getAttribute("HostedGame") != null) { %>
+	if (s.getAttribute("CurrentPlayer") != null && s.getAttribute("HostedGame") != null && s.getAttribute("CurrentGame") == null) { %>
 			<% ghd = (GameHostingData) s.getAttribute("HostedGame");%>
 			<h3>Currently Hosting</h3>
 			<div id="hostedGameInfoArea">
@@ -25,9 +25,16 @@
 				<input type="hidden" name="serviceUrl" value=<%=serviceUrl%>>
 				<input type="submit" value="Start">
 			</form>
-	<%
+	<%	// game host access this page
+		} else if (s.getAttribute("CurrentPlayer") != null && s.getAttribute("HostedGame") != null && s.getAttribute("CurrentGame") != null) {
+			response.sendRedirect(request.getContextPath() + "/myapp/jsps/gamepage.jsp");
+		// player access this page
 		} else if (s.getAttribute("CurrentPlayer") != null && s.getAttribute("HostedGame") == null) {
 			response.sendRedirect(request.getContextPath() + "/myapps/jsps/loggedin.jsp");
+		// joined client access this page while in game
+		} else if(s.getAttribute("CurrentPlayer") != null && s.getAttribute("GameJoinData") != null) {
+			response.sendRedirect(request.getContextPath() + "/myapp/jsps/gamepage.jsp");
+		// unsigned player
 		} else {
 			response.sendRedirect(request.getContextPath() + "/index.jsp");
 		}
