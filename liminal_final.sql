@@ -76,8 +76,8 @@ DROP TABLE IF EXISTS `brokeraccount`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `brokeraccount` (
   `name` varchar(30) NOT NULL,
-  `portfolio` varchar(3000) DEFAULT NULL,
-  `transactions` varchar(4000) DEFAULT NULL,
+  `portfolio` varchar(2000) DEFAULT NULL,
+  `transactions` varchar(10000) DEFAULT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -131,13 +131,13 @@ CREATE TABLE `game` (
   `currentTurn` int(3) NOT NULL,
   `status` varchar(15) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
-  `eventStream` varchar(500) NOT NULL,
-  `marketTrend` varchar(800) NOT NULL,
-  `sectorTrends` varchar(3000) NOT NULL,
-  `marketValue` varchar(500) NOT NULL,
-  `sectorValues` varchar(2000) NOT NULL,
+  `eventStream` varchar(1500) NOT NULL,
+  `marketTrend` varchar(1500) NOT NULL,
+  `sectorTrends` varchar(5000) NOT NULL,
+  `marketValue` varchar(1500) NOT NULL,
+  `sectorValues` varchar(4000) NOT NULL,
   `turns` int(3) DEFAULT NULL,
-  `stocks` varchar(2000) DEFAULT NULL,
+  `stocks` varchar(1000) DEFAULT NULL,
   `event` varchar(100) DEFAULT NULL,
   `winner` varchar(30) DEFAULT NULL,
   `players` varchar(1000) DEFAULT NULL,
@@ -216,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-27  2:42:21
+-- Dump completed on 2018-06-27  2:57:27

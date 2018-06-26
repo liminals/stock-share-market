@@ -25,4 +25,10 @@ Download them, and Please set the PATH variables accordingly. Configure Maven an
 - In the Edit Configuration window select Skip Tests
 - After 'Build Success', Right click on project > Run as > Run on server
 - Choose Tomcat8 on localhost, Then Finish
+- Setup database with the included liminal_final.sql file, which includes create database statement. No need to create database
+- Set database username password in DBConnection.java class
+
+### Specifics
+- A turn is 60 seconds
+- A game must have more than 3 turns upto 40
 
