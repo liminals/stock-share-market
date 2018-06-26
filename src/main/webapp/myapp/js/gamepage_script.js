@@ -222,6 +222,8 @@ function updateTurn() {
 				$('#currentTurn').text('Current Turn: ' + turn);
 				labelData.push(turn);
 				getBalance();
+				getLatestPortfolio();
+				getAllTransactions();
 			}
 		}
 	});

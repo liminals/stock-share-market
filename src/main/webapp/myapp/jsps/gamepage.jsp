@@ -132,6 +132,7 @@
 		var clientTurnJSON = <%= jo%>
 		var serviceUrl = "<%= serviceUrl%>";
 	</script>
+	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/transaction-functions.js"%>"></script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/gamepage_script.js"%>"></script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/chart-control.js"%>"></script>
 	<script type="text/javascript" src="<%=request.getContextPath() + "/myapp/js/transactions-control.js"%>"></script>
