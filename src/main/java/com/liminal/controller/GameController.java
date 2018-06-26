@@ -419,14 +419,16 @@ public class GameController {
 		List<Portfolio> lsPort = brokerDAO.getPortfolio(name);
 		
 		float portfolioworth = 0;
-		for (Portfolio p : lsPort) {
-			float latestStockPrice = getLatestStockValue(p.getName(), game.getStocks());
-			if (latestStockPrice == 0) {
-				portfolioworth += p.getValue();
-			} else {
-				portfolioworth += p.getQty() * latestStockPrice;
+		if (lsPort != null) {
+			for (Portfolio p : lsPort) {
+				float latestStockPrice = getLatestStockValue(p.getName(), game.getStocks());
+				if (latestStockPrice == 0) {
+					portfolioworth += p.getValue();
+				} else {
+					portfolioworth += p.getQty() * latestStockPrice;
+				}
+				
 			}
-			
 		}
 		assets = bank_balance + portfolioworth;
 		return assets;

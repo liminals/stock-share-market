@@ -97,14 +97,15 @@ public class GameService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ClientTurn startGame(GameHostingData gameHostingData) {
 		Game game = gameSingleton.getGame(gameHostingData.getId());
-		game.setStatus(Game.STATUS.STARTED.toString());
-		
-		GameController gameController = new GameController(game);
-		gameController.loadStocksFromDB();
-		gameController.startTimer();
-		gameController.getGameDAO().updateStatus(game);
+		if (game.getStatus().equalsIgnoreCase(Game.STATUS.YET_TO_START.toString())) {
+			game.setStatus(Game.STATUS.STARTED.toString());
+			GameController gameController = new GameController(game);
+			gameController.loadStocksFromDB();
+			gameController.startTimer();
+			gameController.getGameDAO().updateStatus(game);
+		}
 						
-		// create a timer object, only first player can access this service, for tomorrow
+		// create a timer object, only first player can access this service
 		ClientTurn ct = new ClientTurn();
 		ct.setGameId(game.getId());
 		ct.setCurrentTurn(game.getCurrentTurn());
@@ -112,6 +113,13 @@ public class GameService {
 		ct.setPlayer(game.getCreatedBy());
 		ct.setGame_status(ClientTurn.GAME_STATUS.STARTED.toString());
 		return ct;
+	}
+	
+	@POST
+	@Path("{gameid}/getStock")
+	public List<Stock> getStocks(@PathParam("gameid") int gameid) {
+		Game game = gameSingleton.getGame(gameid);
+		return game.getStocks();
 	}
 	
 	// this will return the updated price of stocks
@@ -184,6 +192,13 @@ public class GameService {
 			return true;
 		}
 		return false;
+	}
+	
+	@GET
+	@Path("/{gameid}/getTurn")
+	public int getTurn(@PathParam("gameid") int gameid) {
+		Game game = gameSingleton.getGame(gameid);
+		return game.getCurrentTurn();
 	}
 	
 	@GET

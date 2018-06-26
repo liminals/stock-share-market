@@ -1,4 +1,3 @@
-var turn;
 var totalTurns;
 var timer;
 var allStocksJSON;
@@ -9,7 +8,7 @@ var winner;
 
 // this if for game host only
 if (clientTurnJSON.currentTurn > 0) {
-	 timer = setInterval(countTurns, 1000 * 4);
+	 timer = setInterval(countTurns, 1000 * 3);
 }
 // this if for executed when visiting page
 if (clientTurnJSON.currentTurn > 0) {
@@ -18,15 +17,50 @@ if (clientTurnJSON.currentTurn > 0) {
 	initialLoading();
 } else {
 	// for client
-	alert('Please wait until the host starts the game!!!');
+	if(clientTurnJSON.type == 'CLIENT'){
+		$("#playerName").text('Player : ' + clientTurnJSON.player);
+		console.log('client');
+		isStartTimer = setInterval(isGameStarted, 1000 * 3);
+	}
+}
+
+//run by a client to check wether the game has been started by the host
+var isStartTimer;
+
+
+//run by a client to check wether the game has been started by the host
+function isGameStarted(){
+	var url = serviceUrl + 'rest/game/isStarted';
+	var gameData = JSON.stringify(clientTurnJSON);
+	$.ajax(url, {
+		type: 'post',
+		dataType: 'json',
+		data: gameData,
+		contentType: 'application/json',
+		success: function(gameData) {
+			console.log(gameData);
+			clientTurnJSON = gameData;
+			if (clientTurnJSON.game_status == 'STARTED') {
+				clearInterval(isStartTimer);
+				console.log('timer ended');
+				initialLoading();
+				timer = setInterval(countTurns, 1000 * 3);
+			} else  {
+				alert('Please wait until the host starts the game!!!');
+			}
+		},
+		error: function() {
+			console.log('error when checking game status');
+		}
+	});
 }
 
 
 //loads the initial stock data from database, only one time
 function loadInitailStocks() {
-	var allStocksURL = serviceUrl + 'rest/stock/all';
+	var allStocksURL = serviceUrl + 'rest/game/' + clientTurnJSON.gameId+ '/getStock';
 	$.ajax(allStocksURL, {
-		dataType : 'json',
+		type: 'post',
 		success : function(data) {
 			allStocksJSON = data;
 			loadJSONData();
@@ -40,6 +74,18 @@ function loadInitailStocks() {
 
 // this should executed when game starts
 function initialLoading() {
+	/*if (clientTurnJSON.type == 'CLIENT') {
+		turn = clientTurnJSON.currentTurn;
+	} else {
+		var url = serviceUrl + 'rest/game/' + clientTurnJSON.gameId+ '/getTurn';
+		$.ajax(url, {
+			type: 'get',
+			success: function(data) {
+				console.log('turn receivd ' + data);
+				turn = data;
+			}
+		})
+	}*/
 	turn = clientTurnJSON.currentTurn;
 	$("#playerName").text('Player : ' + clientTurnJSON.player);
 	$("#totalTurns").html('Total Turns: ' + clientTurnJSON.totalTurns);
@@ -156,39 +202,6 @@ function canRequestData() {
 			console.log('error');
 		}
 	})
-}
-
-//run by a client to check wether the game has been started by the host
-function isGameStarted(){
-	var url = serviceUrl + 'rest/game/isStarted';
-	var gameData = JSON.stringify(clientTurnJSON);
-	$.ajax(url, {
-		type: 'post',
-		dataType: 'json',
-		data: gameData,
-		contentType: 'application/json',
-		success: function(gameData) {
-			console.log(gameData);
-			clientTurnJSON = gameData;
-			if (clientTurnJSON.game_status == 'STARTED') {
-				clearInterval(isStartTimer);
-				console.log('timer ended');
-				initialLoading();
-				timer = setInterval(countTurns, 1000 * 3);
-			}
-		},
-		error: function() {
-			console.log('error when checking game status');
-		}
-	});
-}
-
-// run by a client to check wether the game has been started by the host
-var isStartTimer;
-if(clientTurnJSON.type == 'CLIENT'){
-	$("#playerName").text('Player : ' + clientTurnJSON.player);
-	console.log('client');
-	isStartTimer = setInterval(isGameStarted, 1000 * 3);
 }
 
 // both client and host
